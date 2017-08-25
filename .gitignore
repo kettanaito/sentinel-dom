@@ -1,0 +1,8 @@
+# Node modules
+node_modules
+
+# Build
+lib
+
+# Secret stuff
+internal
