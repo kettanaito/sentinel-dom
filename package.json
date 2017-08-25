@@ -1,0 +1,30 @@
+{
+  "name": "snapshot",
+  "version": "0.1.0",
+  "description": "Universal tracking kit of DOMElements",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kettanaito/snapshot.git"
+  },
+  "keywords": [
+    "tracking",
+    "tracking",
+    "kit",
+    "snapshot"
+  ],
+  "author": "Artem Zakharchenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kettanaito/snapshot/issues"
+  },
+  "homepage": "https://github.com/kettanaito/snapshot#readme",
+  "devDependencies": {
+    "eslint-loader": "^1.9.0",
+    "flow-bin": "^0.53.1",
+    "wepback": "^1.0.0"
+  }
+}
