@@ -13,3 +13,6 @@ lib
 yarn-debug.log*
 yarn-error.log*
 npm-*
+
+# Internal
+internal
