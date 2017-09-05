@@ -1,11 +1,15 @@
-# Node modules
+# Package managers
+.npm
 node_modules
-
-# Logs
-npm-*
+bower_components
+jspm_packages
 
 # Build
+.happypack
 lib
 
-# Secret stuff
-internal
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+npm-*
