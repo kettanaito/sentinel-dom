@@ -6,5 +6,9 @@
         "browsers": "last 2 versions"
       }
     }]
+  ],
+  "plugins": [
+    "transform-export-extensions",
+    "transform-flow-strip-types"
   ]
 }

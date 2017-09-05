@@ -1,6 +1,3 @@
-/**
- * Create library
- */
-export default function createLibrary() {
-  return this;
-}
+import TrackingKit from './TrackingKit';
+
+export default TrackingKit;

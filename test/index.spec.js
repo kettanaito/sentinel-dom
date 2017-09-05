@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import Library from '../src';
+import TrackingKit from '../src';
 
-describe('Library', () => {
+describe('Basics', () => {
   it('Can be imported', () => {
-    expect(Library).to.not.be.undefined;
+    expect(TrackingKit).to.not.be.undefined;
   });
 });
