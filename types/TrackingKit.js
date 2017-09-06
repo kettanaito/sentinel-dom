@@ -1,82 +1,32 @@
 /* @flow */
+import type { TClientRect } from './ClientRect';
+import type { TSnapshot } from './Snapshot';
 
 /**
- * Tracking target type definition
+ * Tracking target
  */
-export type TTrackingTargets = Array<HTMLElement> | HTMLElement;
-
-/**
- * A single snapshot definition
- */
-export type TSnapshot = {
-  /* Name of the snapshot for better debugging */
-  name?: string,
-
-  /* (Optional) Targets to track within the current snapshot */
-  targets?: TTrackingTargets,
-
-  /* (Optional) Custom boundaries to overwrite root boundaries */
-  bounds?: HTMLElement,
-
-  /* Offset width (px) to trigger the snapshot */
-  offsetX?: number,
-
-  /* Offset height (px) to trigger the snapshot */
-  offsetY?: number,
-
-  /* Width threshold (%) to consider element tracked */
-  thresholdX?: number,
-
-  /* Height threshold (%) to consider element tracked */
-  thresholdY?: number,
-
-  /* Whether the snapshot should be tracked only once */
-  once?: boolean,
-
-  /* Function to execute once tracking conditions are met */
-  callback: (args: TSnapshotCallbackArgs) => any
-}
-
-type TSnapshotCallbackArgs = {
-  DOMElement: Element
-}
-
-/**
- * Result object of a single taken snapshot
- */
-export type TSnapshotResult = {
-  visibleByX: boolean,
-  visibleByY: boolean,
-  matches: boolean
-}
+export type TTarget = Array<HTMLElement> | HTMLElement;
 
 /**
  * Tracking Kit options
  */
-export type TTrackingKitOptions = {
-  /* Targets in the DOM to track */
-  targets: TTrackingTargets,
-
-  /* Boundaries against which the targets are tracked */
-  bounds: HTMLElement,
-
-  /* Throttle delay */
-  throttle?: number,
-
-  /* Whether each snapshot should be tracked only once */
-  once?: boolean,
-
-  /* Collection of snapshots to apply */
-  snapshots: Array<TSnapshot>,
-
-  /* Run tracking in a debug mode */
-  debug?: boolean
+export type TTrackingOptions = {
+  targets: TTarget, // targets in the DOM to track
+  bounds: HTMLElement, // boundaries against which the targets are tracked
+  snapshots: Array<TSnapshot>, // collection of snapshots to apply
+  throttle?: number, // throttle delay between the tracking attempts
+  offsetX?: number, // horizontal offset (px) applied to the horizontal bleeding edge
+  offsetY?: number, // vertical offset (px) applied to the vertical bleeding edge
+  thresholdX?: number, // width threshold (%) to consider element tracked
+  thresholdY?: number, // height threshold (%) to consider element tracked
+  once?: boolean, // whether each snapshot should be tracked only once
+  debug?: boolean // perform tracking in a debug mode
 }
 
 /**
- * TrackingKit API
+ * Tracking kit public methods.
  * Object returned after tracking kit construction.
  */
-export type TTrackingKitAPI = {
-  trackVisibility: Function => void
+export type TPublicMethods = {
+  trackVisibility: Function => void // manually perform visibility tracking
 }

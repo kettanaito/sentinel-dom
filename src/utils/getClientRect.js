@@ -2,7 +2,7 @@
  * @flow
  * Get ClientRect
  */
-import type { TClientRect } from '../../types/TClientRect';
+import type { TClientRect } from '../../types/ClientRect';
 
 export function getClientRect(element: HTMLElement): TClientRect {
   const rect: ClientRect = element.getBoundingClientRect();

@@ -1,36 +1,28 @@
 /* @flow */
-import type { TClientRect } from '../types/TClientRect';
-import type {
-  TTrackingKitOptions,
-  TTrackingKitAPI,
-  TSnapshot,
-  TSnapshotResult
-} from '../types/TrackingKit';
-import { getClientRect } from './utils';
+import type { TClientRect } from '../types/ClientRect';
+import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
+import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
+import { ensureArray, getClientRect } from './utils';
 
 /**
  * Tracking kit
  */
 export default class TrackingKit {
-  options: TTrackingKitOptions;
+  options: TTrackingOptions;
 
-  constructor(options: TTrackingKitOptions): TTrackingKitAPI {
+  constructor(options: TTrackingOptions): TPublicMethods {
     this.options = options;
 
     /* Ensure targets are iterable */
-    if (!Array.isArray(options.targets)) {
-      this.options.targets = [options.targets];
-    }
+    this.options.targets = ensureArray(options.targets);
 
     /* Attach scroll event listener */
     window.addEventListener('scroll', this.trackVisibility, false);
 
     /* Define public API and return it */
-    const publicAPI: TTrackingKitAPI = {
+    return {
       trackVisibility: this.trackVisibility
     };
-
-    return publicAPI;
   }
 
   /**
@@ -40,33 +32,31 @@ export default class TrackingKit {
    * in the visible viewport. If not, no snapshots are taken.
    */
   trackVisibility(): void {
-    const options = this.options;
+    const { options } = this;
 
-    options.snapshots.forEach((snapshot) => {
-      const targetRect = snapshot.targetRect || options.targetRect;
-
+    options.snapshots.forEach((snapshot: TSnapshot) => {
       /* Determine if snapshot's bounds lie within the current viewport */
-      const snapshotBounds: HTMLElement = snapshot.bounds || options.bounds;
-      const snapshotRect: TClientRect = getClientRect(snapshotBounds);
+      const bounds: HTMLElement = snapshot.bounds || options.bounds;
+      const boundsRect: TClientRect = getClientRect(bounds);
 
-      /* Determine bounds' bleeding edges */
+      /**
+       * Determine bounds' bleeding edges.
+       * Keep bounds' bleeding edges absolute by adding current scroll position.
+       * Without this, bounds' bleeding edges will change relatively to the
+       * scroll position. This leads to wrong comparison between bounds and viewport.
+       */
       const boundsEdges = {
-        /**
-         * Keep bounds bleeding edges absolute by adding current scroll position.
-         * Without this, bounds bleeding edges will change relatively to the
-         * scroll position. This leads to wrong comparison between bounds and viewport.
-         */
-        x: snapshotRect.right - snapshotRect.width + window.scrollX,
-        y: snapshotRect.bottom - snapshotRect.height + window.scrollY
+        x: boundsRect.right - boundsRect.width + window.scrollX,
+        y: boundsRect.bottom - boundsRect.height + window.scrollY
       };
 
-      /* Determine current viewport's coordinates */
+      /**
+       * Determine current viewport's coordinates.
+       * Adding current scroll position to the viewport's rectangle ensures viewport
+       * mask is "moving" with the scroll. Otherwise, bounds would be analyzed toward
+       * the viewport's rectangle on the initial load.
+       */
       const viewport = {
-        /**
-         * Adding current scroll position to the viewport rectangle ensures viewport
-         * mask is "moving" with the scroll. Otherwise, bounds would be analyzed toward
-         * the viewport rectangle on the initial load.
-         */
         top: (window.innerHeight || window.documentElement.clientHeight) + window.scrollY,
         right: (window.innerWidth || window.documentElement.clientWidth) + window.scrollX
       };
@@ -80,67 +70,103 @@ export default class TrackingKit {
       );
 
       /**
-       * When bounds rectangle is not visible within the current viewport there is no
-       * need to analyze anything. Ignoring the tracking to save up resources.
+       * When bounds rectangle is not visible within the current viewport there is no need to
+       * analyze anything. Ignoring the tracking to save up resources.
        */
       if (!isBoundsVisible) {
         return;
       }
 
       /**
-       * When tracking the target relatively to the window, we need to take
-       * current scroll position by both axis into account.
+       * Get the target(s).
+       * Target(s) provided in the snapshot options have higher priority and
+       * overwrite the target(s) provided in the root options.
        */
-      if (snapshotBounds === window) {
-        targetRect.right += window.scrollX;
-        targetRect.bottom += window.scrollY;
-      }
+      const targets = snapshot.targets || options.targets;
 
-      /* Take a snapshot */
-      const snapshotResult = this.takeSnapshot({
-        name: snapshot.name,
-        targets: snapshot.targets || options.targets,
-        bounds: snapshotRect,
-        offsetX: snapshot.offsetX || options.offsetX,
-        offsetY: snapshot.offsetY || options.offsetY,
-        thresholdX: snapshot.thresholdX || options.thresholdX,
-        thresholdY: snapshot.thresholdY || options.thresholdY,
-        once: snapshot.once || options.once,
-        callback: snapshot.callback
+      /* Iterate through each target and make respective snapshots */
+      targets.forEach((target) => {
+        /* Get client rectangle of the target */
+        const targetRect: TClientRect = getClientRect(target);
+
+        /**
+         * When tracking relatively to the window, take the current
+         * scroll position by both axis into account.
+         */
+        if (bounds === window) {
+          targetRect.right += window.scrollX;
+          targetRect.bottom += window.scrollY;
+        }
+
+        /* Take a snapshot */
+        const snapshotSummary = this.takeSnapshot({
+          snapshot,
+          targetRect,
+          boundsRect
+        });
+
+        if (snapshotSummary.matches) {
+          /* Dispatch the callback once the snapshot matches */
+          snapshot.callback({ DOMElement: target });
+        }
       });
 
-      if (snapshotResult.matches) {
-        // Target is within the given bounds
-        snapshot.callback();
-      }
     });
   }
 
   /**
    * Take a snapshot
    */
-  takeSnapshot(snapshotOptions: TSnapshot): TSnapshotResult {
-    const { name, targetRect, bounds, thresholdX, thresholdY } = snapshotOptions;
+  takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
+    const { snapshot, targetRect, boundsRect } = snapshotOptions;
+    const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
 
-    /* Determine bleeding edges for each axis */
-    const horizontalEdge = (targetRect.right - (targetRect.width * (100 - thresholdX || 1) / 100));
-    const verticalEdge = (targetRect.bottom - (targetRect.height * (100 - thresholdY || 1) / 100));
+    /* Ensure offsets */
+    const offsets = {
+      x: offsetX || 0,
+      y: offsetY || 0
+    };
+
+    /* Ensure thresholds */
+    const thresholds = {
+      x: thresholdX || 100,
+      y: thresholdY || 100
+    };
+
+    /**
+     * Calculate expected dimensions.
+     * Threshold options affect the target's width and height to be visible in order to
+     * consider the snapshot successful.
+     */
+    const expectedWidth = (targetRect.width * (100 - thresholds.x || 1) / 100);
+    const expectedHeight = (targetRect.height * (100 - thresholds.y || 1) / 100);
+
+    /**
+     * Determine bleeding edges for each axis.
+     * Bleeding edge - is an imaginary line which lies within the target rectangle and which
+     * should appear within the given boundaries.
+     */
+    const edges = {
+      x: (targetRect.right - expectedWidth) + offsets.x,
+      y: (targetRect.bottom - expectedHeight) + offsets.y
+    };
 
     /* Determine if bleeding edges lie within the given boundaries */
-    const visibleByX = ((horizontalEdge <= bounds.right) && (horizontalEdge >= bounds.left));
-    const visibleByY = ((verticalEdge <= bounds.bottom) && (verticalEdge >= bounds.top));
+    const visible = {
+      byX: (edges.x <= boundsRect.right) && (edges.x >= boundsRect.left),
+      byY: (edges.y <= boundsRect.bottom) && (edges.y >= boundsRect.top)
+    };
 
     return {
-      visibleByX,
-      visibleByY,
-      matches: visibleByX && visibleByY
+      visible,
+      matches: (visible.byX && visible.byY)
     }
   }
 
   /**
    * Execute given function in debug mode only
    */
-  print(func: Function) {
+  debug(func: Function): void {
     if (this.options.debug) func();
   }
 }
