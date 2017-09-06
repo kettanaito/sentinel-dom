@@ -23,18 +23,6 @@ export type TSnapshotOptions = {
   boundsRect: TClientRect
 }
 
-// export type TSnapshotOptions = {
-//   name?: string,
-//   targetRect: TClientRect,
-//   boundsRect: TClientRect,
-//   offsetX?: number,
-//   offsetY?: number,
-//   thresholdX?: number,
-//   thresholdY?: number,
-//   once?: boolean,
-//   callback: (args: TSnapshotCallbackArgs) => any
-// }
-
 type TSnapshotCallbackArgs = {
   DOMElement: HTMLElement // reference to the DOMElement which became visible
 }
