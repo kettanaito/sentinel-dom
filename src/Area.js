@@ -86,16 +86,11 @@ export default class Area {
       left: (area.right < this.right) && (area.left < this.left)
     };
 
-    const deltaRect = {
+    return new Area({
       top: areaPos.top ? this.top : area.top,
       right: areaPos.left ? area.right : this.left,
       bottom: areaPos.top ? this.bottom : area.bottom,
       left: areaPos.left ? this.left : area.left
-    };
-
-    deltaRect.height = deltaRect.bottom - deltaRect.top;
-    deltaRect.width = deltaRect.right - deltaRect.left;
-
-    return new Area(deltaRect);
+    });
   }
 }
