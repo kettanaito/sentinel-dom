@@ -38,6 +38,8 @@
     "eslint-plugin-import": "^2.7.0",
     "flow": "^0.2.3",
     "istanbul": "^0.4.5",
+    "jsdom": "^11.2.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
     "webpack": "^3.5.5"
   }

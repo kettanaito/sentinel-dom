@@ -1,8 +1,8 @@
 /* @flow */
-import type { TClientRect } from '../types/ClientRect';
 import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
-import { ensureArray, getClientRect } from './utils';
+import Area from './Area';
+import { ensureArray } from './utils';
 
 /**
  * Tracking kit
@@ -35,9 +35,7 @@ export default class TrackingKit {
     window.addEventListener('scroll', this.trackVisibility, false);
 
     /* Return public methods */
-    return {
-      trackVisibility: this.trackVisibility
-    };
+    return this;
   }
 
   /**
@@ -49,27 +47,32 @@ export default class TrackingKit {
   trackVisibility = (): void => {
     const { options } = this;
 
+    const viewportArea = new Area(window);
+
     /* Debugging */
     this.debug(() => {
       console.log(' ');
       console.groupCollapsed('Tracking attempt');
       console.log('Tracking options:', options);
+      console.log('Viewport area;', viewportArea);
     });
-
-    const viewportRect = getClientRect(window);
 
     options.snapshots.forEach((snapshot: TSnapshot) => {
       /* Get bounds and their client rectangle */
       const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
       const isBoundsWindow = (bounds === window);
-      const boundsRect: TClientRect = isBoundsWindow ? viewportRect : getClientRect(bounds);
+      const boundsArea: Area = isBoundsWindow ? viewportArea : new Area(bounds);
 
       /**
        * Determine if current bounds lie within the visible viewport.
        * When bounds are {window}, there is no need to check, since it is always visible
        * in the viewport.
        */
-      const isBoundsVisible = isBoundsWindow || this.boundsInViewport(boundsRect, viewportRect);
+      let isBoundsVisible = isBoundsWindow;
+
+      if (!isBoundsVisible) {
+        isBoundsVisible = viewportArea.contains(boundsArea.toAbsolute(), { weak: true });
+      }
 
       /**
        * When bounds rectangle is not visible within the current viewport there is no need to
@@ -94,7 +97,7 @@ export default class TrackingKit {
       this.debug(() => {
         console.groupCollapsed('01 Snapshot attempt');
         console.log('Bounds:', bounds);
-        console.log('boundsRect:', boundsRect);
+        console.log('Bounds area:', boundsArea);
         console.log('Absolute tracking:', isBoundsWindow);
         console.log('Bounds in viewport:', isBoundsVisible);
         console.log('Targets:', targets);
@@ -121,29 +124,20 @@ export default class TrackingKit {
         }
 
         /* Get client rectangle of the target */
-        const targetRect: TClientRect = getClientRect(target);
-
-        /**
-         * When tracking relatively to the window, take the current
-         * scroll position by both axis into account.
-         */
-        // if (isBoundsWindow) {
-          targetRect.right += window.scrollX;
-          targetRect.top += window.scrollY;
-          targetRect.bottom += window.scrollY;
-        // }
+        const targetArea: Area = new Area(target);
 
         this.debug(() => {
             console.log('Current target:', target);
-            console.log('Target rectangle', targetRect);
+            console.log('Target area', targetArea);
           console.groupEnd();
         });
 
         /* Take a snapshot */
         const snapshotSummary = this.takeSnapshot({
           snapshot,
-          targetRect,
-          boundsRect: viewportRect
+          targetArea: targetArea.toAbsolute(),
+          boundsArea: isBoundsWindow ? boundsArea : boundsArea.toAbsolute(),
+          viewportArea
         });
 
         if (snapshotSummary.matches) {
@@ -172,13 +166,13 @@ export default class TrackingKit {
    * Take a snapshot
    */
   takeSnapshot = (snapshotOptions: TSnapshotOptions): TSnapshotSummary => {
-    const { snapshot, targetRect, boundsRect } = snapshotOptions;
+    const { snapshot, targetArea, viewportArea } = snapshotOptions;
     const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
 
     /* Ensure offsets */
     const offsets = {
-      x: offsetX || 0, // todo test offsets
-      y: offsetY || 0 // todo test offsets
+      x: offsetX || 0,
+      y: offsetY || 0
     };
 
     /* Ensure thresholds */
@@ -192,8 +186,13 @@ export default class TrackingKit {
      * Threshold options affect the target's width and height to be visible in order to
      * consider the snapshot successful.
      */
-    const expectedWidth = targetRect.width * ((thresholds.x || 100) / 100);
-    const expectedHeight = targetRect.height * ((thresholds.y || 100) / 100);
+    const expectedWidth = targetArea.width * ((thresholds.x || 100) / 100);
+    const expectedHeight = targetArea.height * ((thresholds.y || 100) / 100);
+
+    const targetPos = {
+      top: targetArea.bottom <= viewportArea.bottom,
+      left: targetArea.right <= viewportArea.right
+    };
 
     /**
      * Deltas.
@@ -203,27 +202,39 @@ export default class TrackingKit {
      * thresholds.
      */
     const deltas = {
-      x: (targetRect.right <= boundsRect.right)
-        ? boundsRect.right - targetRect.left
-        : targetRect.right - boundsRect.left,
-      y: (targetRect.bottom <= boundsRect.bottom)
-        ? targetRect.bottom - boundsRect.top
-        : boundsRect.bottom - targetRect.top
+      x: targetPos.left
+        ? targetArea.right - viewportArea.left
+        : viewportArea.right - targetArea.left,
+      y: targetPos.top
+        ? targetArea.bottom - viewportArea.top
+        : viewportArea.bottom - targetArea.top
     };
+
+    /* Create delta rectangle area */
+    const deltaArea = new Area({
+      top: targetPos.top ? viewportArea.top : targetArea.top,
+      right: targetPos.left ? targetArea.right : viewportArea.right,
+      bottom: targetPos.top ? targetArea.bottom : viewportArea.bottom,
+      left: targetPos.left ? targetArea.left : viewportArea.left,
+      height: deltas.y,
+      width: deltas.x
+    });
 
     /**
      * Determine if the target is visible by comparing its current deltas with the respective
      * expected dimensions (width and height).
      */
     const visible = {
-      byX: (deltas.x + offsets.x) >= expectedWidth,
-      byY: (deltas.y + offsets.y) >= expectedHeight
+      byX: (deltaArea.width + offsets.x) >= expectedWidth,
+      byY: (deltaArea.height + offsets.y) >= expectedHeight
     };
+
+    const deltaInViewport = viewportArea.contains(deltaArea);
 
     /* Compose a summary object */
     const snapshotSummary = {
       visible,
-      matches: (visible.byX && visible.byY)
+      matches: (visible.byX && visible.byY) && deltaInViewport
     };
 
     /* Debugging */
@@ -231,17 +242,19 @@ export default class TrackingKit {
       console.groupCollapsed(`03 Taking a snapshot${name ? ` "${name}"` : ''}...`);
         console.group('Snapshot options');
           console.log('Snapshot:', snapshot);
-          console.log('Target rectangle:', targetRect);
-          console.log('Bounds rectangle:', boundsRect);
+          console.log('Target rectangle:', targetArea);
           console.log('Offsets (px):', offsets);
           console.log('Thresholds (%):', thresholds);
+          console.log('Target position:', targetPos);
           console.log('Deltas:', deltas);
         console.groupEnd();
 
         console.group('Deltas');
           console.log('Expected width:', expectedWidth);
-          console.log('Horizontal delta (HD):', deltas.x);
           console.log('Expected height:', expectedHeight);
+          console.log('Delta area:', deltaArea);
+          console.log('deltaRect visible:', deltaInViewport);
+          console.log('Horizontal delta (HD):', deltas.x);
           console.log('Vertical delta (VD):', deltas.y);
         console.groupEnd();
 
@@ -262,45 +275,6 @@ export default class TrackingKit {
     });
 
     return snapshotSummary;
-  }
-
-  /**
-   * @summary Determine if given bounds lie within the given viewport.
-   * Viewport is provided explicitly because it is used elsewhere, outside this method.
-   * No need to re-declare variables.
-   */
-  boundsInViewport = (boundsRect: TClientRect, viewportRect: TClientRect): boolean => {
-    /**
-     * Determine bounds' bleeding edges.
-     * Keep bounds' bleeding edges absolute by adding current scroll position.
-     * Without this, bounds' bleeding edges will change relatively to the
-     * scroll position. This leads to wrong comparison between bounds and viewport.
-     */
-    const boundsEdges = {
-      x: boundsRect.right - boundsRect.width + window.scrollX,
-      y: boundsRect.bottom - boundsRect.height + window.scrollY
-    };
-
-    /* Compare the two to determine if bounds lie within the viewport */
-    const isBoundsVisible = (
-      /* When X or Y have negative coordinates, they cannot be within the viewport */
-      (boundsEdges.x >= 0) && (boundsEdges.y >= 0) &&
-
-      /* While their positive coordinates should lie within the viewport's boundaries */
-      (boundsEdges.x <= viewportRect.bottom) && (boundsEdges.y <= viewportRect.right)
-    );
-
-    this.debug(() => {
-      console.groupCollapsed('00 Determine bounds visibility...');
-        console.log('Scroll position X:', window.scrollX);
-        console.log('Scroll position Y:', window.scrollY);
-        console.log('Viewport rectangle:', viewportRect);
-        console.log('Bounds rectangle:', boundsRect);
-        console.log('Bounds edges:', boundsEdges);
-      console.groupEnd();
-    });
-
-    return isBoundsVisible;
   }
 
   /**

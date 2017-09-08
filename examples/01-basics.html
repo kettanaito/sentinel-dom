@@ -24,7 +24,7 @@
     <h3>Behind the scenes</h3>
     <p>The benefit of using custom boundaries is that no tracking is performed if the boundaries lie beyond the current viewport. This can significantly save resources when performing heavy tracking.</p>
     <div id="target-02-bounds" class="bounds">
-      <div class="target target-02" style="margin: 200px 0 0 -250px"></div>
+      <div class="target target-02" style="margin: 200px 0 0 -250px; margin: 0"></div>
     </div>
   </section>
 
@@ -32,7 +32,7 @@
     <h2 id="unique-impressions">Unique impressions</h2>
     <p>One of the frequent requirements toward any visibility tracking is to be able to handle a view or impression only once. Achieve this delightfully setting <code>once: true</code>.</p>
     <h3>Behind the scenes</h3>
-    <p>There is a custom logic dedicated to handling unique impressions. In simple words, once the target it tracked the first time, it sets a certain internal flag, which prevents further tracking related to the target to be performed. So once the traget is tracked, it gets omitted from the further tracking operations completely.</p>
+    <p>There is a custom logic dedicated to handling unique impressions. In simple words, once the target it tracked the first time, it sets a certain internal flag, which prevents further tracking related to the target to be performed. So once the traget is tracked, it gets omitted from the further tracking operations completely, saving up the resources.</p>
     <div class="bounds">
       <div class="target"></div>
     </div>
@@ -54,7 +54,8 @@
   </script>
 
   <script id="example-02">
-    new Snapshot.TrackingKit({
+    window.tracker = new Snapshot.TrackingKit({
+      debug: true,
       targets: document.getElementsByClassName('target-02'),
       bounds: document.getElementById('target-02-bounds'),
       snapshots: [

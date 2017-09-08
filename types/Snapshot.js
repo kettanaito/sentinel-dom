@@ -1,6 +1,7 @@
 /* @flow */
 import type { TClientRect } from './ClientRect';
 import type { TTarget } from './TrackingKit';
+import Area from '../src/Area';
 
 /**
  * A single snapshot definition
@@ -19,8 +20,8 @@ export type TSnapshot = {
 
 export type TSnapshotOptions = {
   snapshot: TSnapshot,
-  targetRect: TClientRect,
-  boundsRect: TClientRect
+  targetArea: Area,
+  viewportArea: Area
 }
 
 type TSnapshotCallbackArgs = {

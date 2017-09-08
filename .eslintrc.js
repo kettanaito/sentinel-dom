@@ -16,7 +16,7 @@ module.exports = {
     /* General */
     'indent': [0, 2],
     'no-trailing-spaces': 1,
-    'no-console': 1,
+    'no-console': 0,
     'no-const-assign': 2, // forbid reassigning const
     'no-var': 2, // forbid using var
     'no-unused-vars': 1,
