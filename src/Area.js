@@ -3,10 +3,7 @@
  * Area
  * Area is a helper class built on top of native ClientRect with a few useful methods.
  */
-
-type TContainOptions = {
-  weak?: boolean
-}
+import type { TContainOptions } from '../types/Area';
 
 const defaultContainOptions = {
   weak: false

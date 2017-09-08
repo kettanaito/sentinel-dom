@@ -4,6 +4,11 @@ import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Sna
 import Area from './Area';
 import { ensureArray } from './utils';
 
+const defaultOptions = {
+  bounds: window,
+  throttle: 1000
+};
+
 /**
  * Tracking kit
  */
@@ -12,11 +17,6 @@ export default class TrackingKit {
   options: TTrackingOptions;
 
   constructor(options: TTrackingOptions): TPublicMethods {
-    const defaultOptions = {
-      bounds: window,
-      throttle: 1000
-    };
-
     this.options = {
       ...defaultOptions,
       ...options,
