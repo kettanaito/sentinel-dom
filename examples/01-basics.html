@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Basics</title>
+  <link rel="stylesheet" href="styles/base.css" />
+</head>
+<body>
+  <script src="../lib/index.js"></script>
+
+  <h1>Basics</h1>
+  <section>
+    <h2 id="absolute-tracking">Absolute tracking</h2>
+    <p>By default, targets are tracked against the window. While this is suitable for most cases, it is highly recommended to provide a custom boundaries to increase the tracking performance.</p>
+    <div id="target-01" class="target"></div>
+    <!-- <pre data-example="example-01"></pre> -->
+  </section>
+
+  <section>
+    <h2 id="relative-tracking">Relative tracking</h2>
+    <p>You can track the target relatively to the custom boundaries (i.e. parent DOMElement). Simply pass the container's DOMElement reference in the <code>bounds</code> option.</p>
+    <h3>Behind the scenes</h3>
+    <p>The benefit of using custom boundaries is that no tracking is performed if the boundaries lie beyond the current viewport. This can significantly save resources when performing heavy tracking.</p>
+    <div id="target-02-bounds" class="bounds">
+      <div class="target target-02" style="margin: 200px 0 0 -250px"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="unique-impressions">Unique impressions</h2>
+    <p>One of the frequent requirements toward any visibility tracking is to be able to handle a view or impression only once. Achieve this delightfully setting <code>once: true</code>.</p>
+    <h3>Behind the scenes</h3>
+    <p>There is a custom logic dedicated to handling unique impressions. In simple words, once the target it tracked the first time, it sets a certain internal flag, which prevents further tracking related to the target to be performed. So once the traget is tracked, it gets omitted from the further tracking operations completely.</p>
+    <div class="bounds">
+      <div class="target"></div>
+    </div>
+  </section>
+
+  <script id="example-01">
+    new Snapshot.TrackingKit({
+      targets: document.getElementById('target-01'),
+      snapshots: [
+        {
+          name: 'Box becomes visible',
+          once: true,
+          callback({ DOMElement }) {
+            DOMElement.classList.add('tracked');
+          }
+        }
+      ]
+    });
+  </script>
+
+  <script id="example-02">
+    new Snapshot.TrackingKit({
+      targets: document.getElementsByClassName('target-02'),
+      bounds: document.getElementById('target-02-bounds'),
+      snapshots: [
+        {
+          name: 'Box becomes visible',
+          once: true,
+          callback({ DOMElement }) {
+            DOMElement.classList.add('tracked');
+          }
+        }
+      ]
+    });
+  </script>
+
+  <script>
+    const examplePlaceholders = Array.from(document.querySelectorAll('[data-example]'));
+    examplePlaceholders.forEach((DOMElement) => {
+      const scriptContent = document.getElementById(DOMElement.dataset.example);
+      DOMElement.innerHTML = scriptContent.innerHTML;
+    });
+  </script>
+</body>
+</html>

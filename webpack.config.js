@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: packageJson.main,
-    library: packageJson.name,
+    library: packageJson.libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -16,7 +16,20 @@ module.exports = {
       {
         test: /\.jsx?$/i,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true
+            }
+          },
+          {
+            loader: 'eslint-loader',
+            options: {
+              failOnError: true
+            }
+          }
+        ]
       }
     ]
   }

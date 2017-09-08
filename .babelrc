@@ -9,6 +9,8 @@
   ],
   "plugins": [
     "transform-export-extensions",
+    "transform-object-rest-spread",
+    "transform-class-properties",
     "transform-flow-strip-types"
   ]
 }

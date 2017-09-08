@@ -12,7 +12,7 @@ export type TTarget = Array<HTMLElement> | HTMLElement;
  */
 export type TTrackingOptions = {
   targets: TTarget, // targets in the DOM to track
-  bounds: HTMLElement, // boundaries against which the targets are tracked
+  bounds?: window | HTMLElement, // boundaries against which the targets are tracked
   snapshots: Array<TSnapshot>, // collection of snapshots to apply
   throttle?: number, // throttle delay between the tracking attempts
   offsetX?: number, // horizontal offset (px) applied to the horizontal bleeding edge

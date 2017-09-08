@@ -1,5 +1,5 @@
 /**
  * Utilities
  */
-export getClientRect from './getClientRect';
 export ensureArray from './ensureArray';
+export getClientRect from './getClientRect';

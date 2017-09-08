@@ -1,3 +1,1 @@
-import TrackingKit from './TrackingKit';
-
-export default TrackingKit;
+export TrackingKit from './TrackingKit';
