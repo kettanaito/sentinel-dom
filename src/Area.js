@@ -1,7 +1,7 @@
 /**
  * @flow weak
  * Area
- * Area is an alias for native ClientRect with a few utility methods on top of it.
+ * Area is a helper class built on top of native ClientRect with a few useful methods.
  */
 
 type TContainOptions = {
@@ -48,8 +48,8 @@ export default class Area {
   }
 
   /**
-   * Convert relative client rectangle to the absolute one.
-   * Achieved by adding current scroll position.
+   * Convert the relative coordinates of a client rectangle into the absolute ones.
+   * This is achieved by adding a current scroll position.
    */
   toAbsolute = (): Area => {
     this.top += window.scrollY;
@@ -61,15 +61,23 @@ export default class Area {
   }
 
   /**
-   * Check if current Area contains the given Area or coordinates object.
+   * @summary Check if current area contains the given area or coordinates object.
    */
   contains = (area: Area | Object, options: TContainOptions): boolean => {
     const { weak } = { ...defaultContainOptions, ...options };
     const parentRect = this;
 
     return weak ? (
+      /**
+       * Weak mode means that the provided area should not necessarily be in the parent
+       * rectangle completely. Even partial presence will resolve.
+       */
       (area.left <= parentRect.right) && (area.top <= parentRect.bottom)
     ) : (
+      /**
+       * Strong (default) mode, on the other hand, means that the area should completely lie
+       * within the parent rectangle. Only then it should resolve.
+       */
       (parentRect.top <= area.top) &&
       (parentRect.right >= area.right) &&
       (parentRect.bottom >= area.bottom) &&
@@ -77,10 +85,27 @@ export default class Area {
     );
   }
 
+  /**
+   * @summary Get the intersection area between the current area and the provided one.
+   */
   intersect = (area: Area): Area => {
     /* When current area completely contains the provided area, return the area */
     if (this.contains(area)) return area;
 
+    /**
+     * Area position.
+     * To properly calculate intersection, it is needed to handle 4 different scenarios of
+     * the area position:
+     *
+     * - area lies completely within the parent rectangle
+     * - area's bottom - within, while top part - beyond
+     * - area's top - within, while bottom part - beyond
+     * - area's right - within, while left part - beyond
+     * - area's left - within, while the right part - beyond
+     *
+     * In each of these scenarios coordinates of the intersected area will be inherited from
+     * a different source (area or parent rectangle).
+     */
     const areaPos = {
       top: (area.bottom < this.bottom) && (area.top < this.top),
       left: (area.right < this.right) && (area.left < this.left)
