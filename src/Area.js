@@ -41,8 +41,8 @@ export default class Area {
     this.right = rect.right || rect.left + rect.width;
     this.bottom = rect.bottom || rect.top + rect.height;
     this.left = rect.left;
-    this.height = rect.height;
-    this.width = rect.width;
+    this.height = rect.height || rect.bottom - rect.top;
+    this.width = rect.width || rect.right - rect.left;
 
     return this;
   }
@@ -63,18 +63,39 @@ export default class Area {
   /**
    * Check if current Area contains the given Area or coordinates object.
    */
-  contains = (childRect: Area | Object, options: TContainOptions): boolean => {
+  contains = (area: Area | Object, options: TContainOptions): boolean => {
     const { weak } = { ...defaultContainOptions, ...options };
     const parentRect = this;
 
-    return (
-      (childRect.left >= 0) && (childRect.top >= 0) &&
-      (weak ? (
-        childRect.left <= parentRect.right && childRect.top <= parentRect.bottom
-      ) : (
-        (childRect.left <= parentRect.right) && (childRect.left >= parentRect.left) &&
-        (childRect.top <= parentRect.bottom) && (childRect.top >= parentRect.top)
-      ))
+    return weak ? (
+      (area.left <= parentRect.right) && (area.top <= parentRect.bottom)
+    ) : (
+      (parentRect.top <= area.top) &&
+      (parentRect.right >= area.right) &&
+      (parentRect.bottom >= area.bottom) &&
+      (parentRect.left <= area.left)
     );
+  }
+
+  intersect = (area: Area): Area => {
+    /* When current area completely contains the provided area, return the area */
+    if (this.contains(area)) return area;
+
+    const areaPos = {
+      top: (area.bottom < this.bottom) && (area.top < this.top),
+      left: (area.right < this.right) && (area.left < this.left)
+    };
+
+    const deltaRect = {
+      top: areaPos.top ? this.top : area.top,
+      right: areaPos.left ? area.right : this.left,
+      bottom: areaPos.top ? this.bottom : area.bottom,
+      left: areaPos.left ? this.left : area.left
+    };
+
+    deltaRect.height = deltaRect.bottom - deltaRect.top;
+    deltaRect.width = deltaRect.right - deltaRect.left;
+
+    return new Area(deltaRect);
   }
 }

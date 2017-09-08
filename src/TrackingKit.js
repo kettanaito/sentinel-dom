@@ -47,6 +47,7 @@ export default class TrackingKit {
   trackVisibility = (): void => {
     const { options } = this;
 
+    /* Get the area of current viewport */
     const viewportArea = new Area(window);
 
     /* Debugging */
@@ -54,7 +55,7 @@ export default class TrackingKit {
       console.log(' ');
       console.groupCollapsed('Tracking attempt');
       console.log('Tracking options:', options);
-      console.log('Viewport area;', viewportArea);
+      console.log('Viewport area:', viewportArea);
     });
 
     options.snapshots.forEach((snapshot: TSnapshot) => {
@@ -71,7 +72,7 @@ export default class TrackingKit {
       let isBoundsVisible = isBoundsWindow;
 
       if (!isBoundsVisible) {
-        isBoundsVisible = viewportArea.contains(boundsArea.toAbsolute(), { weak: true });
+        isBoundsVisible = viewportArea.contains(boundsArea, { weak: true });
       }
 
       /**
@@ -128,7 +129,7 @@ export default class TrackingKit {
 
         this.debug(() => {
             console.log('Current target:', target);
-            console.log('Target area', targetArea);
+            console.log('Target area:', targetArea);
           console.groupEnd();
         });
 
@@ -166,7 +167,7 @@ export default class TrackingKit {
    * Take a snapshot
    */
   takeSnapshot = (snapshotOptions: TSnapshotOptions): TSnapshotSummary => {
-    const { snapshot, targetArea, viewportArea } = snapshotOptions;
+    const { snapshot, targetArea, boundsArea, viewportArea } = snapshotOptions;
     const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
 
     /* Ensure offsets */
@@ -189,52 +190,31 @@ export default class TrackingKit {
     const expectedWidth = targetArea.width * ((thresholds.x || 100) / 100);
     const expectedHeight = targetArea.height * ((thresholds.y || 100) / 100);
 
-    const targetPos = {
-      top: targetArea.bottom <= viewportArea.bottom,
-      left: targetArea.right <= viewportArea.right
-    };
+    /**
+     * Get intersection delta area.
+     * Delta (intersection) area is an area of the target which currently lies within the
+     * boundaries of bounds rectangle. When tracking relatively to the custom boundaries,
+     * only the intersected areas should be tracked.
+     */
+    const deltaArea = boundsArea.intersect(targetArea);
 
     /**
-     * Deltas.
-     * Delta is an amount (px) of visible portion of the target. The reason for introducing
-     * deltas is because when scrolling from bottom to top element would appear visible by
-     * bottom coordinates comparison, while this is not true relatively to the provided
-     * thresholds.
+     * Determine if delta area's dimensions match expected dimensions
+     * affected by offsets and thresholds.
      */
-    const deltas = {
-      x: targetPos.left
-        ? targetArea.right - viewportArea.left
-        : viewportArea.right - targetArea.left,
-      y: targetPos.top
-        ? targetArea.bottom - viewportArea.top
-        : viewportArea.bottom - targetArea.top
-    };
-
-    /* Create delta rectangle area */
-    const deltaArea = new Area({
-      top: targetPos.top ? viewportArea.top : targetArea.top,
-      right: targetPos.left ? targetArea.right : viewportArea.right,
-      bottom: targetPos.top ? targetArea.bottom : viewportArea.bottom,
-      left: targetPos.left ? targetArea.left : viewportArea.left,
-      height: deltas.y,
-      width: deltas.x
-    });
-
-    /**
-     * Determine if the target is visible by comparing its current deltas with the respective
-     * expected dimensions (width and height).
-     */
-    const visible = {
+    const deltaMatches = {
       byX: (deltaArea.width + offsets.x) >= expectedWidth,
       byY: (deltaArea.height + offsets.y) >= expectedHeight
     };
 
+    /* Determine if achieved delta lies within the current viewport */
     const deltaInViewport = viewportArea.contains(deltaArea);
 
     /* Compose a summary object */
     const snapshotSummary = {
-      visible,
-      matches: (visible.byX && visible.byY) && deltaInViewport
+      deltaMatches,
+      deltaInViewport,
+      matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport
     };
 
     /* Debugging */
@@ -245,27 +225,24 @@ export default class TrackingKit {
           console.log('Target rectangle:', targetArea);
           console.log('Offsets (px):', offsets);
           console.log('Thresholds (%):', thresholds);
-          console.log('Target position:', targetPos);
-          console.log('Deltas:', deltas);
         console.groupEnd();
 
         console.group('Deltas');
           console.log('Expected width:', expectedWidth);
           console.log('Expected height:', expectedHeight);
+          console.log('Bounds absolute area:', boundsArea);
           console.log('Delta area:', deltaArea);
-          console.log('deltaRect visible:', deltaInViewport);
-          console.log('Horizontal delta (HD):', deltas.x);
-          console.log('Vertical delta (VD):', deltas.y);
+          console.log('Delta in viewport:', deltaInViewport);
         console.groupEnd();
 
         console.group('Horizontal visibility');
-          console.log('Expects', deltas.x, '(HD) >=', expectedWidth, '(expectedWidth)');
-          console.log('Visible horizontally:', visible.byX);
+          console.log('Expects', deltaArea.width, '(HD) >=', expectedWidth, '(expectedWidth)');
+          console.log('deltaMatches horizontally:', deltaMatches.byX);
         console.groupEnd();
 
         console.group('Vertical visibility');
-          console.log('Expects', deltas.y, '(VD) >=', expectedHeight, '(expectedHeight)');
-          console.log('Visible vertically:', visible.byY);
+          console.log('Expects', deltaArea.height, '(VD) >=', expectedHeight, '(expectedHeight)');
+          console.log('deltaMatches vertically:', deltaMatches.byY);
         console.groupEnd();
 
         console.group('Snapshot summary');

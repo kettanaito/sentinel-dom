@@ -14,7 +14,7 @@
   <section>
     <h2 id="absolute-tracking">Absolute tracking</h2>
     <p>By default, targets are tracked against the window. While this is suitable for most cases, it is highly recommended to provide a custom boundaries to increase the tracking performance.</p>
-    <div id="target-01" class="target"></div>
+    <div id="target-absolute" class="target"></div>
     <!-- <pre data-example="example-01"></pre> -->
   </section>
 
@@ -23,8 +23,8 @@
     <p>You can track the target relatively to the custom boundaries (i.e. parent DOMElement). Simply pass the container's DOMElement reference in the <code>bounds</code> option.</p>
     <h3>Behind the scenes</h3>
     <p>The benefit of using custom boundaries is that no tracking is performed if the boundaries lie beyond the current viewport. This can significantly save resources when performing heavy tracking.</p>
-    <div id="target-02-bounds" class="bounds">
-      <div class="target target-02" style="margin: 200px 0 0 -250px; margin: 0"></div>
+    <div id="target-relative-bounds" class="bounds">
+      <div id="target-relative" class="target" style="margin-left: -200px;"></div>
     </div>
   </section>
 
@@ -40,7 +40,7 @@
 
   <script id="example-01">
     new Snapshot.TrackingKit({
-      targets: document.getElementById('target-01'),
+      targets: document.getElementById('target-absolute'),
       snapshots: [
         {
           name: 'Box becomes visible',
@@ -55,13 +55,12 @@
 
   <script id="example-02">
     window.tracker = new Snapshot.TrackingKit({
-      debug: true,
-      targets: document.getElementsByClassName('target-02'),
-      bounds: document.getElementById('target-02-bounds'),
+      targets: document.getElementById('target-relative'),
+      bounds: document.getElementById('target-relative-bounds'),
       snapshots: [
         {
-          name: 'Box becomes visible',
-          once: true,
+          name: 'Becomes visible',
+          thresholdX: 20,
           callback({ DOMElement }) {
             DOMElement.classList.add('tracked');
           }

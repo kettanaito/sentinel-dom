@@ -21,6 +21,7 @@ export type TSnapshot = {
 export type TSnapshotOptions = {
   snapshot: TSnapshot,
   targetArea: Area,
+  boundsArea: Area,
   viewportArea: Area
 }
 
@@ -32,9 +33,10 @@ type TSnapshotCallbackArgs = {
  * Result object of a single taken snapshot
  */
 export type TSnapshotSummary = {
-  visible: {
+  deltaMatches: {
     byX: boolean, // whether the target is visible horizontally
     byY: boolean // whether the target is visible vertically
   },
+  deltaInViewport: boolean,
   matches: boolean // whether the target is fully visible (horizontally and vertically)
 }
