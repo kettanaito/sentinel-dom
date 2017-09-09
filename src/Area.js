@@ -120,14 +120,18 @@ export default class Area {
      * a different source (area or parent rectangle).
      */
     const areaPos = {
-      top: (area.bottom < this.bottom) && (area.top < this.top),
-      left: (area.right < this.right) && (area.left < this.left)
+      above: (area.bottom < this.bottom) && (area.top < this.top),
+      left: (area.right < this.right) && (area.left < this.left),
+      within: {
+        x: (area.left > this.left) && (area.right < this.right),
+        y: (area.top > this.top) && (area.bottom < this.bottom)
+      }
     };
 
     return new Area({
-      top: areaPos.top ? this.top : area.top,
-      right: areaPos.left ? area.right : this.right,
-      bottom: areaPos.top ? area.bottom : this.bottom,
+      top: areaPos.above ? this.top : area.top,
+      right: (areaPos.left || areaPos.within.x) ? area.right : this.right,
+      bottom: (areaPos.above || areaPos.within.y) ? area.bottom : this.bottom,
       left: areaPos.left ? this.left : area.left
     });
   }
