@@ -38,10 +38,26 @@ export default class Area {
     this.right = rect.right || rect.left + rect.width;
     this.bottom = rect.bottom || rect.top + rect.height;
     this.left = rect.left;
-    this.height = rect.height || rect.bottom - rect.top;
-    this.width = rect.width || rect.right - rect.left;
+
+    /* Ensure dimensions */
+    this.height = rect.height || this.bottom - this.top;
+    this.width = rect.width || this.right - this.left;
 
     return this;
+  }
+
+  /**
+   * Get only client rectangle of the area.
+   */
+  getClientRect = (): Object => {
+    return {
+      top: this.top,
+      right: this.right,
+      bottom: this.bottom,
+      left: this.left,
+      height: this.height,
+      width: this.width
+    };
   }
 
   /**
@@ -58,7 +74,7 @@ export default class Area {
   }
 
   /**
-   * @summary Check if current area contains the given area or coordinates object.
+   * Check if current area contains the given area or coordinates object.
    */
   contains = (area: Area | Object, options: TContainOptions): boolean => {
     const { weak } = { ...defaultContainOptions, ...options };
@@ -83,7 +99,7 @@ export default class Area {
   }
 
   /**
-   * @summary Get the intersection area between the current area and the provided one.
+   * Get the intersection area between the current area and the provided one.
    */
   intersect = (area: Area): Area => {
     /* When current area completely contains the provided area, return the area */
@@ -110,8 +126,8 @@ export default class Area {
 
     return new Area({
       top: areaPos.top ? this.top : area.top,
-      right: areaPos.left ? area.right : this.left,
-      bottom: areaPos.top ? this.bottom : area.bottom,
+      right: areaPos.left ? area.right : this.right,
+      bottom: areaPos.top ? area.bottom : this.bottom,
       left: areaPos.left ? this.left : area.left
     });
   }
