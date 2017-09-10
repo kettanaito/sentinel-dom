@@ -20,7 +20,10 @@ export type TTrackingOptions = {
   thresholdX?: number, // width threshold (%) to consider element tracked
   thresholdY?: number, // height threshold (%) to consider element tracked
   once?: boolean, // whether each snapshot should be tracked only once
-  debug?: boolean // perform tracking in a debug mode
+  debug?: boolean, // perform tracking in a debug mode
+
+  /* Private */
+  iterableTargets: Array<HTMLElement>,
 }
 
 /**

@@ -1,10 +1,11 @@
-/* @flow */
+/* @flow weak */
 import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
+import { hasValidProps } from './props';
 import Area from './Area';
 import { ensureArray } from './utils';
 
-const defaultOptions = {
+const defaultOptions: Object = {
   bounds: window,
   throttle: 1000
 };
@@ -13,16 +14,19 @@ const defaultOptions = {
  * Tracking kit
  */
 export default class TrackingKit {
-  pool: Array<HTMLElement>;
   options: TTrackingOptions;
+  pool: Array<HTMLElement>;
 
   constructor(options: TTrackingOptions): TPublicMethods {
+    /* Verify that passed options/props are valid */
+    hasValidProps(options);
+
     this.options = {
       ...defaultOptions,
       ...options,
 
       /* Ensure targets are iterable */
-      targets: ensureArray(options.targets),
+      iterableTargets: ensureArray(options.targets),
 
       /* Ensure snapshots have iterable targets */
       snapshots: this.ensureSnapshotTargets(options.snapshots)
@@ -48,7 +52,7 @@ export default class TrackingKit {
     const { options } = this;
 
     /* Get the area of current viewport */
-    const viewportArea = new Area(window);
+    const viewportArea: Area = new Area(window);
 
     /* Debugging */
     this.debug(() => {
@@ -61,7 +65,7 @@ export default class TrackingKit {
     options.snapshots.forEach((snapshot: TSnapshot) => {
       /* Get bounds and their client rectangle */
       const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
-      const isBoundsWindow = (bounds === window);
+      const isBoundsWindow: boolean = (bounds === window);
       const boundsArea: Area = isBoundsWindow ? viewportArea : new Area(bounds);
 
       /**
@@ -69,7 +73,7 @@ export default class TrackingKit {
        * When bounds are {window}, there is no need to check, since it is always visible
        * in the viewport.
        */
-      let isBoundsVisible = isBoundsWindow;
+      let isBoundsVisible: boolean = isBoundsWindow;
 
       if (!isBoundsVisible) {
         isBoundsVisible = viewportArea.contains(boundsArea, { weak: true });
@@ -91,8 +95,8 @@ export default class TrackingKit {
        * Target(s) provided in the snapshot options have higher priority and
        * overwrite the target(s) provided in the root options.
        */
-      const targets = snapshot.targets || options.targets;
-      const once = Boolean(snapshot.once || options.once);
+      const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
+      const once: boolean = Boolean(snapshot.once || options.once);
 
       /* Debugging */
       this.debug(() => {
@@ -101,13 +105,13 @@ export default class TrackingKit {
         console.log('Bounds area:', boundsArea);
         console.log('Absolute tracking:', isBoundsWindow);
         console.log('Bounds in viewport:', isBoundsVisible);
-        console.log('Targets:', targets);
+        console.log('Iterable targets:', iterableTargets);
         console.log('Unique impressions:', once);
         console.groupEnd();
       });
 
       /* Iterate through each target and make respective snapshots */
-      targets.forEach((target: HTMLElement) => {
+      iterableTargets.forEach((target: HTMLElement) => {
         /* Debugging */
         this.debug(() => {
           console.groupCollapsed('02 Iterating through targets...');
@@ -134,7 +138,7 @@ export default class TrackingKit {
         });
 
         /* Take a snapshot */
-        const snapshotSummary = this.takeSnapshot({
+        const snapshotSummary: TSnapshotSummary = this.takeSnapshot({
           snapshot,
           targetArea: targetArea.toAbsolute(),
           boundsArea: isBoundsWindow ? boundsArea : boundsArea.toAbsolute(),
@@ -171,13 +175,13 @@ export default class TrackingKit {
     const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
 
     /* Ensure offsets */
-    const offsets = {
+    const offsets: Object = {
       x: offsetX || 0,
       y: offsetY || 0
     };
 
     /* Ensure thresholds */
-    const thresholds = {
+    const thresholds: Object = {
       x: thresholdX || 100,
       y: thresholdY || 100
     };
@@ -187,8 +191,8 @@ export default class TrackingKit {
      * Threshold options affect the target's width and height to be visible in order to
      * consider the snapshot successful.
      */
-    const expectedWidth = targetArea.width * ((thresholds.x || 100) / 100);
-    const expectedHeight = targetArea.height * ((thresholds.y || 100) / 100);
+    const expectedWidth: number = targetArea.width * ((thresholds.x || 100) / 100);
+    const expectedHeight: number = targetArea.height * ((thresholds.y || 100) / 100);
 
     /**
      * Get intersection delta area.
@@ -196,22 +200,22 @@ export default class TrackingKit {
      * boundaries of bounds rectangle. When tracking relatively to the custom boundaries,
      * only the intersected areas should be tracked.
      */
-    const deltaArea = boundsArea.intersect(targetArea);
+    const deltaArea: Area = boundsArea.intersect(targetArea);
 
     /**
      * Determine if delta area's dimensions match expected dimensions
      * affected by offsets and thresholds.
      */
-    const deltaMatches = {
+    const deltaMatches: Object = {
       byX: (deltaArea.width + offsets.x) >= expectedWidth,
       byY: (deltaArea.height + offsets.y) >= expectedHeight
     };
 
     /* Determine if achieved delta lies within the current viewport */
-    const deltaInViewport = viewportArea.contains(deltaArea);
+    const deltaInViewport: boolean = viewportArea.contains(deltaArea);
 
     /* Compose a summary object */
-    const snapshotSummary = {
+    const snapshotSummary: TSnapshotSummary = {
       deltaMatches,
       deltaInViewport,
       matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport
@@ -259,10 +263,10 @@ export default class TrackingKit {
    */
   ensureSnapshotTargets = (snapshots: Array<TSnapshot>): Array<TSnapshot> => {
     return snapshots.map((snapshot: TSnapshot): TSnapshot => {
-      const nextSnapshot = Object.assign({}, snapshot);
+      const nextSnapshot: Object = Object.assign({}, snapshot);
 
       if (nextSnapshot.targets) {
-        nextSnapshot.targets = ensureArray(nextSnapshot.targets);
+        nextSnapshot.iterableTargets = ensureArray(nextSnapshot.targets);
       }
 
       return nextSnapshot;

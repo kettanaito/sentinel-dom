@@ -15,7 +15,10 @@ export type TSnapshot = {
   thresholdX?: number, // width threshold (%) to consider element tracked
   thresholdY?: number, // height threshold (%) to consider element tracked
   once?: boolean, // whether the snapshot should be tracked only once
-  callback: (args: TSnapshotCallbackArgs) => any // callback function after successful snapshot
+  callback: (args: TSnapshotCallbackArgs) => any, // callback function after successful snapshot
+
+  /* Private */
+  iterableTargets: Array<HTMLElement>
 }
 
 export type TSnapshotOptions = {

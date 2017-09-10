@@ -27,6 +27,7 @@ module.exports = {
     'no-else-return': 0,
     'no-plusplus': 0,
     'global-require': 0,
+    'valid-typeof': 0,
 
     /* Blocks */
     'array-bracket-spacing': 2,

@@ -1,5 +1,5 @@
 /**
- * @flow weak
+ * @flow
  * Area
  * Area is a helper class built on top of native ClientRect with a few useful methods.
  */
@@ -76,25 +76,25 @@ export default class Area {
   /**
    * Check if current area contains the given area or coordinates object.
    */
-  contains = (area: Area | Object, options: TContainOptions): boolean => {
+  contains = (area: Area | Object, options?: TContainOptions): boolean => {
     const { weak } = { ...defaultContainOptions, ...options };
-    const parentRect = this;
+    const parentArea: Area = this;
 
     return weak ? (
       /**
        * Weak mode means that the provided area should not necessarily be in the parent
        * rectangle completely. Even partial presence will resolve.
        */
-      (area.left <= parentRect.right) && (area.top <= parentRect.bottom)
+      (area.left <= parentArea.right) && (area.top <= parentArea.bottom)
     ) : (
       /**
        * Strong (default) mode, on the other hand, means that the area should completely lie
        * within the parent rectangle. Only then it should resolve.
        */
-      (parentRect.top <= area.top) &&
-      (parentRect.right >= area.right) &&
-      (parentRect.bottom >= area.bottom) &&
-      (parentRect.left <= area.left)
+      (parentArea.top <= area.top) &&
+      (parentArea.right >= area.right) &&
+      (parentArea.bottom >= area.bottom) &&
+      (parentArea.left <= area.left)
     );
   }
 

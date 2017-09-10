@@ -1,9 +1,8 @@
 /**
  * @flow
- * Ensure Array.
  * @summary Ensure given variable is encapsulated in the Array (and, therefore, iterable).
  */
-export default function ensureArray(variable: Array<any> | any): Array<any> {
+export default function ensureArray(variable: Array<mixed> | mixed): Array<mixed> {
   /* Bypass arrays */
   if (Array.isArray(variable)) return variable;
 
