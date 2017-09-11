@@ -70,14 +70,9 @@ export default class TrackingKit {
 
       /**
        * Determine if current bounds lie within the visible viewport.
-       * When bounds are {window}, there is no need to check, since it is always visible
-       * in the viewport.
+       * When bounds are {window}, there is no need to check, since it is a viewport itself.
        */
-      let isBoundsVisible: boolean = isBoundsWindow;
-
-      if (!isBoundsVisible) {
-        isBoundsVisible = viewportArea.contains(boundsArea, { weak: true });
-      }
+      const isBoundsVisible: boolean = isBoundsWindow || viewportArea.contains(boundsArea, { weak: true });
 
       /**
        * When bounds rectangle is not visible within the current viewport there is no need to
