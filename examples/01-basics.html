@@ -68,7 +68,7 @@
   </section>
 
   <script id="example-01">
-    new Sentinel.TrackingKit({
+    new Sentinel.Tracker({
       targets: document.getElementById('target-absolute'),
       snapshots: [
         {
@@ -83,7 +83,7 @@
   </script>
 
   <script id="example-02">
-    new Sentinel.TrackingKit({
+    new Sentinel.Tracker({
       targets: document.getElementsByClassName('target-relative'),
       bounds: document.getElementById('target-relative-bounds'),
       snapshots: [
@@ -99,7 +99,7 @@
   </script>
 
   <script id="example-03">
-    var manualTracker = new Sentinel.TrackingKit({
+    var manualTracker = new Sentinel.Tracker({
       targets: document.getElementsByClassName('target-manual'),
       manual: true,
       snapshots: [
@@ -110,7 +110,8 @@
         }
       ]
     });
-    document.getElementById('manual-trigger').addEventListener('click', manualTracker.trackVisibility);
+
+    document.getElementById('manual-trigger').addEventListener('click', manualTracker.track);
   </script>
 
   <script>

@@ -1,4 +1,4 @@
 /**
  * Library exports.
  */
-export TrackingKit from './TrackingKit';
+export Tracker from './Tracker';

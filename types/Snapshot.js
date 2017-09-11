@@ -1,6 +1,6 @@
 /* @flow */
 import type { TClientRect } from './ClientRect';
-import type { TTarget } from './TrackingKit';
+import type { TTarget } from './Tracker';
 import Area from '../src/Area';
 
 /**

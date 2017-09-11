@@ -8,7 +8,7 @@ import type { TSnapshot } from './Snapshot';
 export type TTarget = Array<HTMLElement> | HTMLElement;
 
 /**
- * Tracking Kit options
+ * Tracker options
  */
 export type TTrackingOptions = {
   targets: TTarget, // targets in the DOM to track
@@ -32,5 +32,5 @@ export type TTrackingOptions = {
  * Object returned after tracking kit construction.
  */
 export type TPublicMethods = {
-  trackVisibility: Function => void // manually perform visibility tracking
+  track: Function => void // manually perform visibility tracking
 }

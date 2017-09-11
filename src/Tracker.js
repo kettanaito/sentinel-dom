@@ -1,5 +1,5 @@
 /* @flow weak */
-import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
+import type { TTrackingOptions, TPublicMethods } from '../types/Tracker';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
@@ -11,9 +11,9 @@ const defaultOptions: Object = {
 };
 
 /**
- * Tracking kit
+ * Tracker.
  */
-export default class TrackingKit {
+export default class Tracker {
   options: TTrackingOptions;
   pool: Array<HTMLElement>;
 
@@ -37,7 +37,7 @@ export default class TrackingKit {
 
     if (!options.manual) {
       /* Attach scroll event listener */
-      window.addEventListener('scroll', throttle(this.trackVisibility, options.throttle), false);
+      window.addEventListener('scroll', throttle(this.track, options.throttle), false);
     }
 
     /* Return public methods */
@@ -45,12 +45,12 @@ export default class TrackingKit {
   }
 
   /**
-   * Track visibility
+   * Track visibility.
    * This method provides sequential tracking of targets by described snapshots.
    * In order to increase its performance, first it determines if relative bounds are
    * in the visible viewport. If not, no snapshots are taken.
    */
-  trackVisibility = (): void => {
+  track = (): void => {
     const { options } = this;
 
     /* Get the area of current viewport */
