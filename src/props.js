@@ -4,7 +4,13 @@ export function hasValidProps(props) {
   validateProps(props, {
     targets: {
       required: true,
-      expect: value => (value instanceof HTMLCollection) || (value instanceof HTMLElement),
+      expect: (value) => {
+        return (
+          value instanceof HTMLCollection ||
+          value instanceof HTMLElement ||
+          Array.isArray(value)
+        );
+      },
       message: ({ propName, receivedProp }) => `Expected property "${propName}" to be an instance of HTMLElement, or an HTMLCollection, but got: ${receivedProp}.`
     },
     bounds: {
