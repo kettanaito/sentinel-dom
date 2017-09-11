@@ -1,13 +1,13 @@
 {
-  "name": "snapshot",
-  "libraryName": "Snapshot",
-  "version": "0.0.1",
+  "name": "sentinel-dom",
+  "libraryName": "Sentinel",
+  "version": "0.5.0",
   "description": "Visibility tracking done right.",
   "source": "src/index.js",
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack --watch",
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
     "flow": "flow",
     "test": "mocha --compilers js:babel-core/register",
     "test:coverage": "instanbul cover _mocha -- --compilers js:babel-core/register",

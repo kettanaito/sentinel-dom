@@ -2,6 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const packageJson = require('./package.json');
 
+const environment = process.env.NODE_ENV;
+const PRODUCTION = (environment === 'production');
+
 module.exports = {
   entry: path.resolve(__dirname, packageJson.source),
   output: {
@@ -11,6 +14,12 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'process.env.NODE_ENV': JSON.stringify(environment)
+    }),
+    PRODUCTION && new webpack.optimize.UglifyJsPlugin()
+  ].filter(Boolean),
   module: {
     rules: [
       {
@@ -26,7 +35,7 @@ module.exports = {
           {
             loader: 'eslint-loader',
             options: {
-              failOnError: true
+              failOnError: PRODUCTION
             }
           }
         ]
