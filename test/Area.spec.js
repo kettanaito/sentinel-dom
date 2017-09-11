@@ -20,38 +20,38 @@ describe('Area', () => {
     expect(parentArea.contains(partArea, { weak: true })).to.be.true;
   });
 
-  it('interesect: area within the parent', () => {
+  it('intersect: area within the parent', () => {
     const AWithin = new Area({ top: 125, right: 175, bottom: 175, left: 125 });
     const intersection = AParent.intersect(AWithin);
 
-    expect(intersection.getClientRect()).to.deep.equal(AWithin.getClientRect());
+    expect(intersection).to.deep.equal(AWithin);
   });
 
-  it('interesect: area bottom left', () => {
+  it('intersect: area bottom left', () => {
     const ABottomLeft = new Area({ top: 150, right: 150, bottom: 250, left: 50 });
     const intersection = AParent.intersect(ABottomLeft);
 
-    expect(intersection.getClientRect()).to.deep.equal({
+    expect(intersection).to.deep.equal(new Area({
       top: ABottomLeft.top,
       right: ABottomLeft.right,
       bottom: AParent.bottom,
       left: AParent.left,
       height: AParent.bottom - ABottomLeft.top,
       width: ABottomLeft.right - AParent.left
-    });
+    }));
   });
 
   it('intersect: area top right', () => {
     const ATopRight = new Area({ top: 50, right: 250, bottom: 150, left: 150 });
     const intersection = AParent.intersect(ATopRight);
 
-    expect(intersection.getClientRect()).to.deep.equal({
+    expect(intersection).to.deep.equal(new Area({
       top: AParent.top,
       right: AParent.right,
       bottom: ATopRight.bottom,
       left: ATopRight.left,
       height: ATopRight.bottom - AParent.top,
       width: AParent.right - ATopRight.left
-    });
+    }));
   });
 });

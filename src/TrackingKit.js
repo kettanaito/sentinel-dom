@@ -3,7 +3,7 @@ import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
-import { ensureArray } from './utils';
+import { ensureArray, ensureSnapshotTargets } from './utils';
 
 const defaultOptions: Object = {
   bounds: window,
@@ -29,7 +29,7 @@ export default class TrackingKit {
       iterableTargets: ensureArray(options.targets),
 
       /* Ensure snapshots have iterable targets */
-      snapshots: this.ensureSnapshotTargets(options.snapshots)
+      snapshots: ensureSnapshotTargets(options.snapshots)
     };
 
     /* Pool of already tracked elements */
@@ -256,21 +256,6 @@ export default class TrackingKit {
     });
 
     return snapshotSummary;
-  }
-
-  /**
-   * Ensure snapshots' targets are iterable.
-   */
-  ensureSnapshotTargets = (snapshots: Array<TSnapshot>): Array<TSnapshot> => {
-    return snapshots.map((snapshot: TSnapshot): TSnapshot => {
-      const nextSnapshot: Object = Object.assign({}, snapshot);
-
-      if (nextSnapshot.targets) {
-        nextSnapshot.iterableTargets = ensureArray(nextSnapshot.targets);
-      }
-
-      return nextSnapshot;
-    });
   }
 
   /**
