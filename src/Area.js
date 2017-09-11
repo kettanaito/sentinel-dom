@@ -61,16 +61,17 @@ export default class Area {
   }
 
   /**
-   * Convert the relative coordinates of a client rectangle into the absolute ones.
-   * This is achieved by adding a current scroll position.
+   * Compose a new Area based on the current one, which takes scroll position into account
+   * when calculating its coordinates. Explicitly returns a new instance of Area to prevent
+   * unexpected mutations of the values of the original (source) Area.
    */
   toAbsolute = (): Area => {
-    this.top += window.scrollY;
-    this.right += window.scrollX;
-    this.bottom += window.scrollY;
-    this.left += window.scrollX;
-
-    return this;
+    return new Area({
+      top: this.top + window.scrollY,
+      right: this.right + window.scrollX,
+      bottom: this.bottom + window.scrollY,
+      left: this.left + window.scrollX
+    });
   }
 
   /**
@@ -120,8 +121,8 @@ export default class Area {
      * a different source (area or parent rectangle).
      */
     const areaPos = {
-      above: (area.bottom < this.bottom) && (area.top < this.top),
       left: (area.right < this.right) && (area.left < this.left),
+      above: (area.bottom < this.bottom) && (area.top < this.top),
       within: {
         x: (area.left > this.left) && (area.right < this.right),
         y: (area.top > this.top) && (area.bottom < this.bottom)
