@@ -2,7 +2,7 @@
   "name": "sentinel-dom",
   "libraryName": "Sentinel",
   "version": "0.5.0",
-  "description": "Visibility tracking done right.",
+  "description": "Lightweight and powerful visibility tracker for DOM elements.",
   "source": "src/index.js",
   "main": "lib/index.js",
   "scripts": {
@@ -11,15 +11,20 @@
     "flow": "flow",
     "test": "mocha --compilers js:babel-core/register",
     "test:coverage": "instanbul cover _mocha -- --compilers js:babel-core/register",
-    "prepublish": "npm run test && npm run build"
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kettanaito/npm-template.git"
   },
   "keywords": [
-    "npm",
-    "template"
+    "sentinel",
+    "sentinel-dom",
+    "visible",
+    "visibility",
+    "tracker",
+    "tracking",
+    "DOMElement"
   ],
   "license": "MIT",
   "devDependencies": {
