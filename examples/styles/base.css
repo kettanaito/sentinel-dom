@@ -2,8 +2,18 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Helvetica, 'Segoe UI', Arial, sans-serif;
   font-size: 16px;
   font-weight: 200;
-  max-width: 750px;
+  max-width: 755px;
   margin: auto;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid .bounds {
+  margin: 0;
 }
 
 section + section {
@@ -31,11 +41,18 @@ h2 {
 
 h3 {
   font-weight: 500;
-  margin-top: 2rem;
+  margin: 2rem 0 1rem;
 }
 
 p {
   line-height: 1.5rem;
+}
+
+button {
+  border: 0;
+  border-radius: 3px;
+  background-color: gold;
+  padding: .35rem 1rem;
 }
 
 /* Code */
@@ -69,8 +86,8 @@ code {
 .target {
   background-color: rgba(173, 216, 230, .1);
   border: 2px dashed rgb(173, 216, 230);
-  height: 250px;
-  width: 250px;
+  height: 220px;
+  width: 220px;
 
   display: inline-flex;
   align-items: center;
@@ -80,12 +97,19 @@ code {
   z-index: 5;
 }
 
+.target + .target {
+  margin-top: 1rem;
+}
+
 .target:after {
   background-color: rgba(119, 136, 153, .75);
-  content: "Target";
+  content: "Target" "\A" attr(data-label);
+  white-space: pre;
+  text-align: right;
 }
 
 .target.tracked {
+  animation: pop .45s;
   background-color: rgba(144, 238, 144, .4);
   border-color: lightgreen;
 }
@@ -100,16 +124,24 @@ code {
   font-size: 3.5rem;
 }
 
+@keyframes pop {
+  0% { transform: scale(.85); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
 .bounds {
   background-color: rgba(240, 128, 128, .035);
   border: 2px dashed lightcoral;
-  padding: 1.5rem;
+  padding: 2.5rem 1.5rem 1.5rem;
   position: relative;
+  max-width: 250px;
+  margin: auto;
   z-index: 0;
 }
 
 .bounds:after {
-  content: 'Boundaries';
+  content: 'Bounds';
   background-color: lightcoral;
   color: #fff;
 }

@@ -13,8 +13,10 @@
   <h1>Basics</h1>
   <section>
     <h2 id="absolute-tracking">Absolute tracking</h2>
-    <p>By default, targets are tracked against the window. While this is suitable for most cases, it is highly recommended to provide a custom boundaries to increase the tracking performance.</p>
-    <div id="target-absolute" class="target"></div>
+    <p>By default, targets are tracked against the window. While this is suitable for most cases, it is highly recommended to provide custom boundaries to increase the tracking performance.</p>
+    <center>
+      <div id="target-absolute" class="target"></div>
+    </center>
     <!-- <pre data-example="example-01"></pre> -->
   </section>
 
@@ -23,9 +25,36 @@
     <p>You can track the target relatively to the custom boundaries (i.e. parent DOMElement). Simply pass the container's DOMElement reference in the <code>bounds</code> option.</p>
     <h3>Behind the scenes</h3>
     <p>The benefit of using custom boundaries is that no tracking is performed if the boundaries lie beyond the current viewport. This can significantly save resources when performing heavy tracking.</p>
-    <div id="target-relative-bounds" class="bounds">
-      <div id="target-relative" class="target" style="margin-left: -200px;"></div>
+    <div class="grid">
+      <div>
+        <div class="target target-relative" data-label="outside bounds"></div>
+      </div>
+      <div id="target-relative-bounds" class="bounds">
+        <div class="target target-relative" data-label="within bounds"></div>
+        <div class="target target-relative" data-label="within bounds"></div>
+      </div>
+      <div>
+        <div class="target target-relative" data-label="outside bounds"></div>
+      </div>
     </div>
+  </section>
+
+  <section>
+    <h2 id="unique-impressions">Manual tracking</h2>
+    <p>You can store an initialized instance of a tracker to access its public methods at any time. This is particularly useful when the tracking cannot fully rely on scroll event and should also be performed manually (i.e. on carousel slide change).</p>
+    <p><strong>Note:</strong> A <code>manual</code> property is set to "true" only for illustrational purposes (so that scrolling would not trigger visibility check). Provide it <strong>only</strong> when you need to disable tracking on scroll explicitly. It is perfectly fine to have both scroll and manual tracking at the same time.</p>
+    <div class="grid">
+      <div>
+        <div class="target target-manual"></div>
+      </div>
+      <div>
+        <div class="target target-manual"></div>
+      </div>
+      <div>
+        <div class="target target-manual"></div>
+      </div>
+    </div>
+    <button id="manual-trigger">Track</button>
   </section>
 
   <section>
@@ -39,7 +68,7 @@
   </section>
 
   <script id="example-01">
-    new Snapshot.TrackingKit({
+    new Sentinel.TrackingKit({
       targets: document.getElementById('target-absolute'),
       snapshots: [
         {
@@ -54,8 +83,8 @@
   </script>
 
   <script id="example-02">
-    window.tracker = new Snapshot.TrackingKit({
-      targets: document.getElementById('target-relative'),
+    new Sentinel.TrackingKit({
+      targets: document.getElementsByClassName('target-relative'),
       bounds: document.getElementById('target-relative-bounds'),
       snapshots: [
         {
@@ -67,6 +96,21 @@
         }
       ]
     });
+  </script>
+
+  <script id="example-03">
+    var manualTracker = new Sentinel.TrackingKit({
+      targets: document.getElementsByClassName('target-manual'),
+      manual: true,
+      snapshots: [
+        {
+          callback({ DOMElement}) {
+            DOMElement.classList.add('tracked');
+          }
+        }
+      ]
+    });
+    document.getElementById('manual-trigger').addEventListener('click', manualTracker.trackVisibility);
   </script>
 
   <script>

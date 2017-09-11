@@ -20,6 +20,7 @@ export type TTrackingOptions = {
   thresholdX?: number, // width threshold (%) to consider element tracked
   thresholdY?: number, // height threshold (%) to consider element tracked
   once?: boolean, // whether each snapshot should be tracked only once
+  manual?: boolean, // enable manual tracking mode
   debug?: boolean, // perform tracking in a debug mode
 
   /* Private */

@@ -35,8 +35,10 @@ export default class TrackingKit {
     /* Pool of already tracked elements */
     this.pool = [];
 
-    /* Attach scroll event listener */
-    window.addEventListener('scroll', throttle(this.trackVisibility, this.options.throttle), false);
+    if (!options.manual) {
+      /* Attach scroll event listener */
+      window.addEventListener('scroll', throttle(this.trackVisibility, options.throttle), false);
+    }
 
     /* Return public methods */
     return this;
@@ -165,7 +167,7 @@ export default class TrackingKit {
   /**
    * Take a snapshot
    */
-  takeSnapshot = (snapshotOptions: TSnapshotOptions): TSnapshotSummary => {
+  takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
     const { snapshot, targetArea, boundsArea, viewportArea } = snapshotOptions;
     const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
 
