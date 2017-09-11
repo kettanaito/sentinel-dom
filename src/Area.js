@@ -58,7 +58,7 @@ export default class Area {
  * when calculating its coordinates. Explicitly returns a new instance of Area to prevent
  * unexpected mutations of the values of the original (source) Area.
  */
-Area.prototype.toAbsolute = function(): Area {
+Area.prototype.toAbsolute = function (): Area {
   return new Area({
     top: this.top + window.scrollY,
     right: this.right + window.scrollX,
@@ -70,7 +70,7 @@ Area.prototype.toAbsolute = function(): Area {
 /**
  * Check if current area contains the given area or coordinates object.
  */
-Area.prototype.contains = function(area: Area | Object, options?: TContainOptions): boolean {
+Area.prototype.contains = function (area: Area | Object, options?: TContainOptions): boolean {
   const { weak } = { ...defaultContainOptions, ...options };
   const parentArea: Area = this;
 
@@ -95,7 +95,7 @@ Area.prototype.contains = function(area: Area | Object, options?: TContainOption
 /**
  * Get the intersection area between the current area and the provided one.
  */
-Area.prototype.intersect = function(area: Area): Area {
+Area.prototype.intersect = function (area: Area): Area {
   /* When current area completely contains the provided area, return the area */
   if (this.contains(area)) return area;
 

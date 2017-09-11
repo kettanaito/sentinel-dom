@@ -93,7 +93,7 @@ module.exports = {
     'prefer-rest-params': 1,
     'prefer-spread': 1,
     'space-before-blocks': 2,
-    'space-before-function-paren': 0,
+    'space-before-function-paren': 2,
     'wrap-iife': 2,
 
     /* Arrow function */

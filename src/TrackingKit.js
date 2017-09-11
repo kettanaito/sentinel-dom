@@ -3,11 +3,11 @@ import type { TTrackingOptions, TPublicMethods } from '../types/TrackingKit';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
-import { ensureArray, ensureSnapshotTargets } from './utils';
+import { throttle, ensureArray, ensureSnapshotTargets } from './utils';
 
 const defaultOptions: Object = {
   bounds: window,
-  throttle: 1000
+  throttle: 250
 };
 
 /**
@@ -36,7 +36,7 @@ export default class TrackingKit {
     this.pool = [];
 
     /* Attach scroll event listener */
-    window.addEventListener('scroll', this.trackVisibility, false);
+    window.addEventListener('scroll', throttle(this.trackVisibility, this.options.throttle), false);
 
     /* Return public methods */
     return this;
