@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kettanaito/npm-template.git"
+    "url": "git+https://github.com/kettanaito/sentinel-dom.git"
   },
   "keywords": [
     "sentinel",
