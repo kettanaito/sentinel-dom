@@ -73,13 +73,16 @@ export default class Tracker {
       /* Get bounds and their client rectangle */
       const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
       const isBoundsWindow: boolean = (bounds === window);
-      const boundsArea: Area = isBoundsWindow ? viewportArea : new Area(bounds);
+      const boundsArea: Area = isBoundsWindow ? viewportArea : new Area(bounds, { absolute: true });
 
       /**
        * Determine if current bounds lie within the visible viewport.
        * When bounds are {window}, there is no need to check, since it is a viewport itself.
        */
-      const isBoundsVisible: boolean = isBoundsWindow || viewportArea.contains(boundsArea, { weak: true });
+      const isBoundsVisible: boolean = (
+        isBoundsWindow ||
+        viewportArea.contains(boundsArea, { weak: true })
+      );
 
       /**
        * When bounds rectangle is not visible within the current viewport there is no need to
@@ -146,7 +149,7 @@ export default class Tracker {
         const snapshotSummary: TSnapshotSummary = this.takeSnapshot({
           snapshot,
           targetArea: targetArea.toAbsolute(),
-          boundsArea: isBoundsWindow ? boundsArea : boundsArea.toAbsolute(),
+          boundsArea,
           viewportArea
         });
 

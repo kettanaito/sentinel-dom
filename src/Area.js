@@ -3,7 +3,11 @@
  * Area.
  * Area is a helper class built on top of the native ClientRect with a few useful methods.
  */
-import type { TContainOptions } from '../types/Area';
+import type { TOptions, TContainOptions } from '../types/Area';
+
+const defaultOptions = {
+  absolute: false
+};
 
 const defaultContainOptions = {
   weak: false
@@ -24,7 +28,8 @@ export default class Area {
   containsEdge: Function;
   intersect: Function;
 
-  constructor(pointer: window | HTMLElement | Object): Area {
+  constructor(pointer: window | HTMLElement | Object, options?: TOptions): Area {
+    const { absolute } = { ...defaultOptions, ...options };
     let rect;
 
     if (pointer === window) {
@@ -50,7 +55,7 @@ export default class Area {
     this.height = rect.height || this.bottom - this.top;
     this.width = rect.width || this.right - this.left;
 
-    return this;
+    return absolute ? this.toAbsolute() : this;
   }
 
   /**
