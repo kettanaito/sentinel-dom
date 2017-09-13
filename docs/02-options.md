@@ -55,8 +55,12 @@ Lets say you would like to track the element only when at least 70% of its heigh
 
 > **NOTE:** Treshold options **do not accept negative values**.
 
-### `callback({ DOMElement }): Function`
+### `callback: Function(args: TCallbackArgs): any`
 Callback function which is called after the snapshot is considered successful (the target is visible within the bounds).
 
 Callback function has the following arguments:
-* `DOMElement: HTMLElement` DOM element of the tracked target.
+```js
+type TCallbackArgs = {
+  DOMElement: HTMLElement // a reference to the visible element in the DOM
+}
+```
