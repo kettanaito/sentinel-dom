@@ -14,6 +14,8 @@ export type TSnapshot = {
   offsetY?: number, // vertical offset (px) applied to the vertical bleeding edge
   thresholdX?: number, // width threshold (%) to consider element tracked
   thresholdY?: number, // height threshold (%) to consider element tracked
+  edgeX?: number,
+  edgeY?: number,
   once?: boolean, // whether the snapshot should be tracked only once
   callback: (args: TSnapshotCallbackArgs) => any, // callback function after successful snapshot
 
@@ -36,10 +38,5 @@ type TSnapshotCallbackArgs = {
  * Result object of a single taken snapshot
  */
 export type TSnapshotSummary = {
-  deltaMatches: {
-    byX: boolean, // whether the target is visible horizontally
-    byY: boolean // whether the target is visible vertically
-  },
-  deltaInViewport: boolean,
-  matches: boolean // whether the target is fully visible (horizontally and vertically)
+  matches: boolean // whether the target satisfies the provided tracking criterias
 }

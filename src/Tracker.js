@@ -3,7 +3,7 @@ import type { TTrackingOptions, TPublicMethods } from '../types/Tracker';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
-import { throttle, ensureArray, ensureSnapshotTargets } from './utils';
+import { isset, throttle, ensureArray, ensureSnapshotTargets } from './utils';
 
 const defaultOptions: Object = {
   bounds: window,
@@ -169,13 +169,35 @@ export default class Tracker {
    */
   takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
     const { snapshot, targetArea, boundsArea, viewportArea } = snapshotOptions;
-    const { name, offsetX, offsetY, thresholdX, thresholdY } = snapshot;
+    const { name, offsetX, offsetY, thresholdX, thresholdY, edgeX, edgeY } = snapshot;
+    const shouldTrackEdges: boolean = isset(edgeX) || isset(edgeY);
 
     /* Ensure offsets */
     const offsets: Object = {
       x: offsetX || 0,
       y: offsetY || 0
     };
+
+    if (shouldTrackEdges) {
+      /**
+       * Calculate bleeding edges.
+       * Bleeding edge represents an imaginary line with an absolute coordinate, which is
+       * expected to appear in the bounds/viewport.
+       */
+      const edges: Object = {
+        x: edgeX && targetArea.left + (targetArea.width * edgeX / 100) + offsets.x,
+        y: edgeY && targetArea.top + (targetArea.height * edgeY / 100) + offsets.y
+      };
+
+      /**
+       * First, check if the edge lies within the viewport, then check if it lies within the
+       * bounds. The edge should lie within the both mentioned boundaries in order to
+       * satisfy the tracking criteria.
+       */
+      const edgeMatches = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
+
+      return { matches: edgeMatches };
+    }
 
     /* Ensure thresholds */
     const thresholds: Object = {
@@ -211,13 +233,6 @@ export default class Tracker {
     /* Determine if achieved delta lies within the current viewport */
     const deltaInViewport: boolean = viewportArea.contains(deltaArea);
 
-    /* Compose a summary object */
-    const snapshotSummary: TSnapshotSummary = {
-      deltaMatches,
-      deltaInViewport,
-      matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport
-    };
-
     /* Debugging */
     this.debug(() => {
       console.groupCollapsed(`03 Taking a snapshot${name ? ` "${name}"` : ''}...`);
@@ -245,14 +260,13 @@ export default class Tracker {
           console.log('Expects', deltaArea.height, '(VD) >=', expectedHeight, '(expectedHeight)');
           console.log('deltaMatches vertically:', deltaMatches.byY);
         console.groupEnd();
-
-        console.group('Snapshot summary');
-          console.log(snapshotSummary);
-        console.groupEnd();
       console.groupEnd();
     });
 
-    return snapshotSummary;
+    /* Compose a summary object */
+    return {
+      matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport
+    };
   }
 
   /**

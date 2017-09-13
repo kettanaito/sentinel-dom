@@ -3,7 +3,6 @@ import { validateProps } from './utils';
 export function hasValidProps(props) {
   validateProps(props, {
     targets: {
-      required: true,
       expect: (value) => {
         return (
           value instanceof HTMLCollection ||
