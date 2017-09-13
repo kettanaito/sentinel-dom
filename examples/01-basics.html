@@ -12,7 +12,7 @@
 
   <h1>Basics</h1>
   <section>
-    <h2 id="absolute-tracking">Absolute tracking</h2>
+    <h2>Absolute tracking</h2>
     <p>By default, targets are tracked against the window. While this is suitable for most cases, it is highly recommended to provide custom boundaries to increase the tracking performance.</p>
     <center>
       <div id="target-absolute" class="target"></div>
@@ -21,7 +21,7 @@
   </section>
 
   <section>
-    <h2 id="relative-tracking">Relative tracking</h2>
+    <h2>Relative tracking</h2>
     <p>You can track the target relatively to the custom boundaries (i.e. parent DOMElement). Simply pass the container's DOMElement reference in the <code>bounds</code> option.</p>
     <h3>Behind the scenes</h3>
     <p>The benefit of using custom boundaries is that no tracking is performed if the boundaries lie beyond the current viewport. This can significantly save resources when performing heavy tracking.</p>
@@ -39,7 +39,7 @@
   </section>
 
   <section>
-    <h2 id="unique-impressions">Manual tracking</h2>
+    <h2>Manual tracking</h2>
     <p>You can store an initialized instance of a tracker to access its public methods at any time. This is particularly useful when the tracking cannot fully rely on scroll event and should also be performed manually (i.e. on carousel slide change).</p>
     <p>
       <blockquote><strong>Note:</strong> A <code>manual</code> property is set to "true" only for illustrational purposes (so that scrolling would not trigger visibility check). Provide it <strong>only</strong> when you need to disable tracking on scroll explicitly. It is perfectly fine to have both scroll-based and manual tracking at the same time.</blockquote>
@@ -59,13 +59,13 @@
   </section>
 
   <section>
-    <h2 id="unique-impressions">Unique impressions</h2>
+    <h2>Unique impressions</h2>
     <p>One of the frequent requirements toward any visibility tracking is to be able to handle a view or impression only once. Achieve this delightfully setting <code>once: true</code>.</p>
     <h3>Behind the scenes</h3>
     <p>There is a custom logic dedicated to handling unique impressions. In simple words, once the target it tracked the first time, it sets a certain internal flag, which prevents further tracking related to the target to be performed. So once the traget is tracked, it gets omitted from the further tracking operations completely, saving up the resources.</p>
-    <div class="bounds bounds-flex" align="center">
-      <div class="target"></div>
-      <div class="target" data-label="with unique views"></div>
+    <div id="example-unique-bounds" class="bounds bounds-flex" align="center">
+      <div id="example-unique-target-default" class="target" data-label="0"></div>
+      <div id="example-unique-target" class="target" data-label="0"></div>
       </div>
     </div>
   </section>
@@ -127,9 +127,34 @@
     document.getElementById('manual-trigger').addEventListener('click', manualTracker.track);
   </script>
 
-<script id="example-huge-targets">
+  <script id="example-unique">
     new Sentinel.Tracker({
       debug: true,
+      bounds: document.getElementById('example-unique-bounds'),
+      snapshots: [
+        {
+          targets: document.getElementById('example-unique-target-default'),
+          callback({ DOMElement }) {
+            const trackedCount = DOMElement.dataset.label;
+            DOMElement.dataset.label = parseFloat(trackedCount) + 1;
+            DOMElement.classList.add('tracked');
+          }
+        },
+        {
+          targets: document.getElementById('example-unique-target'),
+          once: true,
+          callback({ DOMElement }) {
+            const trackedCount = DOMElement.dataset.label;
+            DOMElement.dataset.label = parseFloat(trackedCount) + 1;
+            DOMElement.classList.add('tracked');
+          }
+        }
+      ]
+    });
+  </script>
+
+  <script id="example-huge-targets">
+    new Sentinel.Tracker({
       bounds: document.getElementById('target-huge-bounds'),
       once: true,
       snapshots: [

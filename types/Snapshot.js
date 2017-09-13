@@ -14,8 +14,8 @@ export type TSnapshot = {
   offsetY?: number, // vertical offset (px) applied to the vertical bleeding edge
   thresholdX?: number, // width threshold (%) to consider element tracked
   thresholdY?: number, // height threshold (%) to consider element tracked
-  edgeX?: number,
-  edgeY?: number,
+  edgeX?: number, // horizontal bleeding edge (% of the width)
+  edgeY?: number, // vertical bleeding edge (% of the height)
   once?: boolean, // whether the snapshot should be tracked only once
   callback: (args: TSnapshotCallbackArgs) => any, // callback function after successful snapshot
 

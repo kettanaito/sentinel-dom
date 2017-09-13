@@ -10,7 +10,7 @@ export type TTarget = Array<HTMLElement> | HTMLElement;
 /**
  * Tracker options
  */
-export type TTrackingOptions = {
+export type TOptions = {
   targets: TTarget, // targets in the DOM to track
   bounds?: window | HTMLElement, // boundaries against which the targets are tracked
   snapshots: Array<TSnapshot>, // collection of snapshots to apply
@@ -25,6 +25,18 @@ export type TTrackingOptions = {
 
   /* Private */
   iterableTargets: Array<HTMLElement>,
+}
+
+/**
+ * A single pool entry.
+ */
+export type TPoolEntry = Array<HTMLElement>;
+
+/**
+ * Pool of the tracked targets.
+ */
+export type TPool = {
+  [snapshotIndex: number]: TTrackerPoolEntry
 }
 
 /**

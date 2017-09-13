@@ -1,5 +1,10 @@
 /* @flow weak */
-import type { TTrackingOptions, TPublicMethods } from '../types/Tracker';
+import type {
+  TOptions,
+  TPool,
+  TPoolEntry,
+  TPublicMethods
+} from '../types/Tracker';
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
@@ -14,10 +19,10 @@ const defaultOptions: Object = {
  * Tracker.
  */
 export default class Tracker {
-  options: TTrackingOptions;
-  pool: Array<HTMLElement>;
+  options: TOptions;
+  pool: TPool;
 
-  constructor(options: TTrackingOptions): TPublicMethods {
+  constructor(options: TOptions): TPublicMethods {
     /* Verify that passed options/props are valid */
     hasValidProps(options);
 
@@ -33,7 +38,7 @@ export default class Tracker {
     };
 
     /* Pool of already tracked elements */
-    this.pool = [];
+    this.pool = {};
 
     if (!options.manual) {
       /* Attach scroll event listener */
@@ -64,7 +69,7 @@ export default class Tracker {
       console.log('Viewport area:', viewportArea);
     });
 
-    options.snapshots.forEach((snapshot: TSnapshot) => {
+    options.snapshots.forEach((snapshot: TSnapshot, snapshotIndex: number) => {
       /* Get bounds and their client rectangle */
       const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
       const isBoundsWindow: boolean = (bounds === window);
@@ -93,7 +98,7 @@ export default class Tracker {
        * overwrite the target(s) provided in the root options.
        */
       const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
-      const once: boolean = Boolean(snapshot.once || options.once);
+      const once: boolean = isset(snapshot.once) ? snapshot.once : options.once;
 
       /* Debugging */
       this.debug(() => {
@@ -109,16 +114,19 @@ export default class Tracker {
 
       /* Iterate through each target and make respective snapshots */
       iterableTargets.forEach((target: HTMLElement) => {
+        const poolEntry: TPoolEntry = this.pool[snapshotIndex];
+        const isTargetInPool = poolEntry && poolEntry.includes(target);
+
         /* Debugging */
         this.debug(() => {
           console.groupCollapsed('02 Iterating through targets...');
         });
 
         /* Skip tracking when "once" is set and target was already tracked */
-        if (once && this.pool.includes(target)) {
+        if (once && isTargetInPool) {
           this.debug(() => {
-              console.log('Target has been already tracked while only unique impressions are allowed. Skipping.');
-              console.log('Tracking pool:', this.pool);
+            console.log('Target has been already tracked while only unique impressions are allowed. Skipping.');
+            console.log('Tracking pool:', this.pool);
             console.groupEnd();
           });
 
@@ -152,8 +160,12 @@ export default class Tracker {
           /* Dispatch the callback once the snapshot matches */
           snapshot.callback({ DOMElement: target });
 
-          /* Store matched HTMLElement in the pool */
-          this.pool.push(target);
+          /* Store matched target (HTMLElement) in the pool */
+          if (poolEntry) {
+            if (!isTargetInPool) this.pool[snapshotIndex].push(target);
+          } else {
+            this.pool[snapshotIndex] = [target];
+          }
         }
       });
     });
@@ -194,7 +206,7 @@ export default class Tracker {
        * bounds. The edge should lie within the both mentioned boundaries in order to
        * satisfy the tracking criteria.
        */
-      const edgeMatches = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
+      const edgeMatches: boolean = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
 
       return { matches: edgeMatches };
     }
