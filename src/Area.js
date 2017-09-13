@@ -21,6 +21,7 @@ export default class Area {
   /* Prototype methods */
   toAbsolute: Function;
   contains: Function;
+  containsEdge: Function;
   intersect: Function;
 
   constructor(pointer: window | HTMLElement | Object): Area {
@@ -66,7 +67,6 @@ export default class Area {
     });
   }
 
-
   /**
    * Check if current area contains the given area or coordinates object.
    */
@@ -92,6 +92,12 @@ export default class Area {
     );
   }
 
+  containsEdge({ x, y }): boolean {
+    const containsX = x ? (x >= this.left) && (x <= this.right) : true;
+    const containsY = y ? (y >= this.top) && (y <= this.bottom) : true;
+
+    return containsX && containsY;
+  }
 
   /**
    * Get the intersection area between the current area and the provided one.
