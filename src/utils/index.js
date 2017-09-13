@@ -4,5 +4,5 @@
 export isset from './isset';
 export throttle from './throttle';
 export ensureArray from './ensureArray';
-export ensureSnapshotTargets from './ensureSnapshotTargets';
+export ensureSnapshots from './ensureSnapshots';
 export validateProps from './validateProps';

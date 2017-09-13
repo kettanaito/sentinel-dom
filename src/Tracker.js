@@ -8,7 +8,7 @@ import type {
 import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
-import { isset, throttle, ensureArray, ensureSnapshotTargets } from './utils';
+import { isset, throttle, ensureArray, ensureSnapshots } from './utils';
 
 const defaultOptions: Object = {
   bounds: window,
@@ -34,7 +34,7 @@ export default class Tracker {
       iterableTargets: ensureArray(options.targets),
 
       /* Ensure snapshots have iterable targets */
-      snapshots: ensureSnapshotTargets(options.snapshots)
+      snapshots: ensureSnapshots(options.snapshots, options)
     };
 
     /* Pool of already tracked elements */
