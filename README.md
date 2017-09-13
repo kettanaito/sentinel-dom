@@ -1,4 +1,10 @@
-# Sentinel
+<p align="center">
+  <a href="https://github.com/kettanaito/sentinel-dom">
+    <img src="https://img.shields.io/npm/v/sentinel-dom.svg" alt="NPM version" />
+  </a>
+</p>
+
+<h1 align="center">Sentinel</h1>
 
 ## Install
 ```
