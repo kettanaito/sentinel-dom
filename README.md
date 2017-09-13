@@ -21,6 +21,11 @@ new Tracker({
       callback({ DOMElement }) {
         DOMElement.classList.add('visible');
       }
+    },
+    {
+      name: 'At least 50% of the box height is visible',
+      thresholdY: 50,
+      callback() { ... }
     }
   ]
 });
@@ -34,14 +39,14 @@ new Tracker({
   snapshots: [
     {
       name: 'Article has appeared',
-      thresholdY: 10,
+      edgeY: 10,
       callback() {
         console.log('Article content has appeared!');
       }
     },
     {
       name: 'Article is read',
-      thresholdY: 90,
+      edgeY: 90,
       callback() {
         console.log('Article content is read!');
       }
