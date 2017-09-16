@@ -1,10 +1,3 @@
-<style>
-  .image-caption {
-    color: gray;
-    font-size: .85rem;
-  }
-</style>
-
 # Options
 Sentinel DOM library has a list of declarative options which grant precise control over the tracking logic.
 
@@ -180,7 +173,7 @@ new Tracker({
 
 <div align="center">
   <img src="./media/offset-y.png" style="margin-right:1rem">
-  <p class="image-caption">Setting vertical offset to 10px.</p>
+  <p>Setting vertical offset to 10px.</p>
 </div>
 
 One the blue line appear in the viewport, a snapshot will be considered successful. Similarly, offsets affect [Bleeding edges](#bleeding-edges) or [Thresholds](#thresholds) if the latter are specified. The same logic applies to the horizontal offset (`offsetX`).
@@ -209,7 +202,7 @@ new Tracker({
 
 <div align="center">
   <img src="./media/edge-x.png" style="margin-right:1rem">
-  <p class="image-caption">Setting horizontal bleeding edge to 25%.</p>
+  <p>Setting horizontal bleeding edge to 25%.</p>
 </div>
 
 Setting `edgeX: 25` will draw a line at 25 percent of the target's width. The blue line (bleeding edge) on a picture should appear in the viewport <b>and</b> bounds (in case of custom bounds) in order to fire a callback function.
@@ -230,7 +223,7 @@ new Tracker({
 
 <div align="center">
   <img src="./media/edge-y.png" style="margin-right:1rem">
-  <p class="image-caption">Setting vertical bleeding edge to 25%.</p>
+  <p>Setting vertical bleeding edge to 25%.</p>
 </div>
 
 <p>In this example we set <code>edgeY: 25</code>. The blue line represents a vertical bleeding edge which should be in viewport <b>and</b> bounds (in case of custom bounds) in order to trigger a callback.</p>
@@ -264,7 +257,7 @@ This would render a *delta area* demonstrated as striped rectangles below:
 
 <div align="center">
   <img src="./media/threshold-y.png" alt="Threshold Y">
-  <p class="image-caption">Setting vertical threshold to 75%.</p>
+  <p>Setting vertical threshold to 75%.</p>
 </div>
 
 As you can see, delta areas are *omnidirectional*, meaning that they are expect to appear regardless of a scroll direction. This is the main difference between the thresholds and [bleeding edges](#bleeding-edges). The same rules apply to the horizontal threshold.
@@ -285,7 +278,7 @@ new Tracker({
 
 <div align="center">
   <img src="./media/threshold-xy.png" alt="Setting both thresholds">
-  <p class="image-caption">Setting vertical and horizontal thresholds to 75%.</p>
+  <p>Setting vertical and horizontal thresholds to 75%.</p>
 </div>
 
 Once any of these delta areas fully appear in the viewport/bounds, the snapshot would be considered successsful, and a callback function would be called.
