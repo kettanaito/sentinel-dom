@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h1 align="center">Sentinel</h1>
+<h1 align="center">Sentinel DOM</h1>
 
 ## Install
 ```
@@ -12,13 +12,16 @@ npm install --save-dev sentinel-dom
 ```
 
 ## Introduction
-**Sentinel** is a visibility tracking library aimed to make the latter easy and flexible. Althought it is designed primarily for analytics purposes, you may use it anywhere you need to determine element's visibility.
+**Sentinel DOM** is a library aimed to make visibility tracking of DOM elements easy and flexible. Althought it is designed primarily for analytics purposes, you may use it anywhere you need to determine element's visibility.
 
 ## Getting started
-### Basic usage
+Import the library in your project:
 ```js
 import { Tracker } from 'sentinel-dom';
+```
 
+And declare a new tracker:
+```js
 new Tracker({
   targets: document.getElementById('box'),
   snapshots: [
@@ -36,30 +39,7 @@ new Tracker({
   ]
 });
 ```
-
-### Custom snapshot options
-You may declare multiple snapshots to be performed on the same targets/bounds. Each snapshot may have different visibility conditions (see [Snapshot options](./docs/02-options.md#snapshot-options).)
-```js
-new Tracker({
-  targets: document.getElementsByClassName('article-content'),
-  snapshots: [
-    {
-      name: 'Article has appeared',
-      edgeY: 10,
-      callback() {
-        console.log('Article content has appeared!');
-      }
-    },
-    {
-      name: 'Article is read',
-      edgeY: 90,
-      callback() {
-        console.log('Article content is read!');
-      }
-    }
-  ]
-});
-```
+Please see the [Options documentation](./docs/02-options.md) for all the features and how to use them.
 
 ## Contribution
-Feel free to submit an issue or a pull request to make Sentinel even better.
+Feel free to submit an issue or a pull request to make this library even better. Thank you!
