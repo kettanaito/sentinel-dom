@@ -42,4 +42,4 @@ new Tracker({
 Please see the [Options documentation](./docs/02-options.md) for all the features and how to use them.
 
 ## Contribution
-Feel free to submit an issue or a pull request to make this library even better. Thank you!
+Feel free to submit an issue or a pull request to make this library even better. Make sure to read the [Contribution guide](./CONTRIBUTING.md) to ensure unified workflow and quality of the repository. Thank you!
