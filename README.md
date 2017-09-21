@@ -1,6 +1,13 @@
 <p align="center">
-  <a href="https://github.com/kettanaito/sentinel-dom">
+  <a href="https://www.npmjs.com/package/sentinel-dom">
     <img src="https://img.shields.io/npm/v/sentinel-dom.svg" alt="NPM version" />
+  </a>
+</p>
+
+<br>
+<p align="center">
+  <a href="https://github.com/kettanaito/sentinel-dom">
+    <img src="./sentinel-logo.png" alt="Sentinel DOM" />
   </a>
 </p>
 
@@ -26,7 +33,7 @@ new Tracker({
   targets: document.getElementById('box'),
   snapshots: [
     {
-      name: 'Box is visible',
+      name: 'Box is completely visible',
       callback({ DOMElement }) {
         DOMElement.classList.add('visible');
       }
