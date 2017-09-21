@@ -4,15 +4,15 @@
   </a>
 </p>
 
-<h1 align="center">Sentinel DOM</h1>
+<h1 align="center"><strong>Sentinel DOM</strong></h1>
+
+## Introduction
+**Sentinel DOM** is a library aimed to make visibility tracking of DOM elements easy and flexible. Althought it is designed primarily for analytics purposes, you may use it anywhere you need to determine element's visibility.
 
 ## Install
 ```
 npm install --save-dev sentinel-dom
 ```
-
-## Introduction
-**Sentinel DOM** is a library aimed to make visibility tracking of DOM elements easy and flexible. Althought it is designed primarily for analytics purposes, you may use it anywhere you need to determine element's visibility.
 
 ## Getting started
 Import the library in your project:
@@ -39,7 +39,7 @@ new Tracker({
   ]
 });
 ```
-Please see the [Options documentation](./docs/02-options.md) for all the features and how to use them.
+You can change the tracking logic to suit your needs. Please see the [Options documentation](./docs/02-options.md) for all the features and the examples of how to use them.
 
 ## Contribution
 Feel free to submit an issue or a pull request to make this library even better. Make sure to read the [Contribution guide](./CONTRIBUTING.md) to ensure unified workflow and quality of the repository. Thank you!
