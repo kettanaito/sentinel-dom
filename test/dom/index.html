@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Browser tests</title>
+  <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+  <link rel="stylesheet" href="../../examples/styles/base.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="container"></div>
+  <div id="mocha"></div>
+
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script>
+    mocha.setup('bdd');
+    var expect = chai.expect;
+  </script>
+
+  <!-- Library -->
+  <script src="../../lib/index.js"></script>
+
+  <!-- Tests -->
+  <script src="./index.spec.js"></script>
+
+  <script>mocha.run();</script>
+</body>
+</html>

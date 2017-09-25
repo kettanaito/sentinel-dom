@@ -161,9 +161,6 @@ export default class Tracker {
             console.groupEnd();
           });
 
-          /* Dispatch the callback once the snapshot matches */
-          snapshot.callback({ DOMElement: target });
-
           /* Store matched target (HTMLElement) in the pool */
           if (!isTargetInPool) {
             if (poolEntry) {
@@ -172,6 +169,12 @@ export default class Tracker {
               this.pool[snapshotIndex] = [target];
             }
           }
+
+          /* Dispatch the callback once the snapshot matches */
+          snapshot.callback({
+            DOMElement: target,
+            pool: this.pool
+          });
         }
       });
     });

@@ -13,7 +13,9 @@
     "start": "webpack --watch",
     "build": "NODE_ENV=production webpack",
     "flow": "flow",
-    "test": "mocha --compilers js:babel-core/register",
+    "test:static": "mocha --compilers js:babel-core/register",
+    "test:dom": "mocha-headless-chrome -f ./test/dom/index.html",
+    "test": "npm run test:static && npm run test:dom",
     "test:coverage": "instanbul cover _mocha -- --compilers js:babel-core/register",
     "prepublishOnly": "npm run test && npm run build"
   },
@@ -57,9 +59,8 @@
     "eslint-plugin-import": "^2.7.0",
     "flow": "^0.2.3",
     "istanbul": "^0.4.5",
-    "jsdom": "^11.2.0",
-    "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
+    "mocha-headless-chrome": "^1.4.0",
     "webpack": "^3.5.5"
   }
 }
