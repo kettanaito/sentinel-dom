@@ -1,6 +1,6 @@
 /* @flow */
 import type { TClientRect } from './ClientRect';
-import type { TTarget } from './Tracker';
+import type { TTarget, TPool } from './Tracker';
 import Area from '../src/Area';
 
 /**
@@ -31,7 +31,8 @@ export type TSnapshotOptions = {
 }
 
 type TSnapshotCallbackArgs = {
-  DOMElement: HTMLElement // reference to the DOMElement which became visible
+  DOMElement: HTMLElement, // reference to the DOMElement which became visible
+  pool: TPool // pool of all tracked elements
 }
 
 /**
