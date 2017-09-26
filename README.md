@@ -46,7 +46,7 @@ new Tracker({
   ]
 });
 ```
-You can change the tracking logic to suit your needs. Please see the [Options documentation](./docs/02-options.md) for all the features and the examples of how to use them.
+You can change the tracking logic to suit your needs. See the [Options documentation](./docs/options.md) for all the features and the examples of how to use them.
 
 ## Contribution
 Feel free to submit an issue or a pull request to make this library even better. Make sure to read the [Contribution guide](./CONTRIBUTING.md) to ensure unified workflow and quality of the repository. Thank you!
