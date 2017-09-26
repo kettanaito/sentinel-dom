@@ -1,4 +1,3 @@
-import 'jsdom-global/register';
 import { expect } from 'chai';
 import { Tracker } from '../src';
 
