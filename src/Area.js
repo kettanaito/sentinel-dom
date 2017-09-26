@@ -3,7 +3,7 @@
  * Area.
  * Area is a helper class built on top of the native ClientRect with a few useful methods.
  */
-import type { TOptions, TContainOptions } from '../types/Area';
+import type { TOptions, TContainOptions, TContainsEdgeAxis } from '../types/Area';
 
 const defaultOptions = {
   absolute: false
@@ -87,8 +87,8 @@ export default class Area {
       (area.left <= parentArea.right) && (area.top <= parentArea.bottom)
     ) : (
       /**
-       * Strong (default) mode, on the other hand, means that the area should completely lie
-       * within the parent rectangle. Only then it should resolve.
+       * Strong (default) mode means that the method will resolve only once
+       * the provided area completely lies within the parent rectangle.
        */
       (parentArea.top <= area.top) &&
       (parentArea.right >= area.right) &&
@@ -97,9 +97,10 @@ export default class Area {
     );
   }
 
-  containsEdge({ x, y }): boolean {
-    const containsX = x ? (x >= this.left) && (x <= this.right) : true;
-    const containsY = y ? (y >= this.top) && (y <= this.bottom) : true;
+  containsEdge(axis: TContainsEdgeAxis): boolean {
+    const { x, y } = axis;
+    const containsX = x ? ((x >= this.left) && (x <= this.right)) : true;
+    const containsY = y ? ((y >= this.top) && (y <= this.bottom)) : true;
 
     return containsX && containsY;
   }
@@ -116,10 +117,10 @@ export default class Area {
      * To properly calculate intersection, it is needed to handle 4 different scenarios of
      * the area position:
      * - area lies completely within the parent rectangle
-     * - area's bottom - within, while top part - beyond
-     * - area's top - within, while bottom part - beyond
-     * - area's right - within, while left part - beyond
-     * - area's left - within, while the right part - beyond
+     * - area's bottom within, while top part beyond
+     * - area's top within, while bottom part beyond
+     * - area's right within, while left part beyond
+     * - area's left within, while the right part beyond
      * In each of these scenarios coordinates of the intersected area will be inherited from
      * a different source (area or parent rectangle).
      */
