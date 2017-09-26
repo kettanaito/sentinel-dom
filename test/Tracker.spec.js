@@ -1,26 +1,5 @@
-<<<<<<< 0747803d2a834e3bcbdc8ece3dc92df05fb74c86
 import { expect } from 'chai';
 import { Tracker } from '../src';
-=======
-const { Tracker } = Sentinel;
-
-/* Shorthand callback declaration */
-function callback(done, isTracked) {
-  return function ({ DOMElement }) {
-    DOMElement.classList.add('tracked');
-
-    if (!isTracked) {
-      isTracked = true;
-      return done();
-    }
-  }
-}
-
-/* Disable throttling to align with continuous scrolling */
-const throttle = 0;
-let timer;
-let isTracked = false;
->>>>>>> Tests: Provide basic test setup and a few Absolute tracking tests
 
 describe('Tracker', () => {
   before() => {
