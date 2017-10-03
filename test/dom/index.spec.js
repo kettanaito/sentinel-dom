@@ -40,7 +40,7 @@ describe('Absolute tracking', () => {
   after(() => window.scrollTo(0, 0));
 
   it('Basics', async () => {
-    let poolCopy = {};
+    let times = 0;
     const targetOne = createTarget();
     const targetTwo = createTarget();
     const targetThree = createTarget();
@@ -52,17 +52,16 @@ describe('Absolute tracking', () => {
       targets: document.getElementsByClassName('target'),
       snapshots: [
         {
-          callback({ DOMElement, pool }) {
+          callback({ DOMElement }) {
             animate(DOMElement);
-            poolCopy = pool;
+            times++;
           }
         }
       ]
     });
 
     await scroll(0, 10);
-    expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-    expect(poolCopy[0]).to.include(targetTwo);
+    expect(times).to.equal(1);
   });
 
   describe('Edges', () => {
@@ -70,39 +69,37 @@ describe('Absolute tracking', () => {
     afterEach(afterEachHook);
 
     it('edgeX', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginLeft = `${window.innerWidth}px`;
+      target.style.marginLeft = `${innerWidth}px`;
 
       new Tracker({
         targets: document.getElementsByClassName('target'),
         snapshots: [
           {
             edgeX: 50,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(50, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(window.innerWidth + targetSize * 0.75, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(innerWidth + targetSize * 0.75, 0);
+      expect(times).to.equal(0);
 
       await scroll(150, 0);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      expect(times).to.equal(1);
     });
 
     it('edgeX + offsetX (positive)', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginLeft = `${window.innerWidth}px`;
+      target.style.marginLeft = `${innerWidth}px`;
 
       new Tracker({
         targets: target,
@@ -110,30 +107,28 @@ describe('Absolute tracking', () => {
           {
             edgeX: 35,
             offsetX: 10,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(15, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(window.innerWidth + targetSize * 0.35 + 15, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(innerWidth + targetSize * 0.35 + 15, 0);
+      expect(times).to.equal(0);
 
-      await scroll(window.innerWidth + targetSize * 0.35 + 10, 0);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      await scroll(innerWidth + targetSize * 0.35 + 10, 0);
+      expect(times).to.equal(1);
     });
 
     it('edgeX + offsetX (negative)', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginLeft = `${window.innerWidth}px`;
+      target.style.marginLeft = `${innerWidth}px`;
 
       new Tracker({
         targets: target,
@@ -141,60 +136,56 @@ describe('Absolute tracking', () => {
           {
             edgeX: 35,
             offsetX: -10,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(15, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(window.innerWidth + targetSize * 0.35 + 15, 0);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(innerWidth + targetSize * 0.35 + 15, 0);
+      expect(times).to.equal(0);
 
-      await scroll(window.innerWidth + targetSize * 0.35 - 15, 0);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      await scroll(innerWidth + targetSize * 0.35 - 15, 0);
+      expect(times).to.equal(1);
     });
 
     it('edgeY', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginTop = `${window.innerHeight}px`;
+      target.style.marginTop = `${innerHeight}px`;
 
       new Tracker({
         targets: target,
         snapshots: [
           {
             edgeY: 50,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(0, 50);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight + targetSize * 0.75);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(0, innerHeight + targetSize * 0.75);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      await scroll(0, innerHeight);
+      expect(times).to.equal(1);
     });
 
     it('edgeY + offsetY (positive)', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginTop = `${window.innerHeight}px`;
+      target.style.marginTop = `${innerHeight}px`;
 
       new Tracker({
         targets: target,
@@ -202,30 +193,28 @@ describe('Absolute tracking', () => {
           {
             edgeY: 75,
             offsetY: 10,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(0, 50);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight + targetSize * 0.75 + 15);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(0, innerHeight + targetSize * 0.75 + 15);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight + targetSize * 0.75 + 5);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      await scroll(0, innerHeight + targetSize * 0.75 + 5);
+      expect(times).to.equal(1);
     });
 
     it('edgeY + offsetY (negative)', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginTop = `${window.innerHeight}px`;
+      target.style.marginTop = `${innerHeight}px`;
 
       new Tracker({
         targets: target,
@@ -233,31 +222,29 @@ describe('Absolute tracking', () => {
           {
             edgeY: 75,
             offsetY: -10,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
       });
 
       await scroll(0, 50);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight + targetSize * 0.75 + 15);
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      await scroll(0, innerHeight + targetSize * 0.75 + 15);
+      expect(times).to.equal(0);
 
-      await scroll(0, window.innerHeight + targetSize * 0.75 - 15);
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      await scroll(0, innerHeight + targetSize * 0.75 - 15);
+      expect(times).to.equal(1);
     });
 
     it('edgeX + edgeY', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginLeft = `${window.innerWidth}px`;
-      target.style.marginTop = `${window.innerHeight}px`;
+      target.style.marginLeft = `${innerWidth}px`;
+      target.style.marginTop = `${innerHeight}px`;
 
       new Tracker({
         targets: target,
@@ -265,9 +252,9 @@ describe('Absolute tracking', () => {
           {
             edgeX: 25,
             edgeY: 50,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
@@ -275,30 +262,27 @@ describe('Absolute tracking', () => {
 
       /* Scroll less than the desired edges */
       await scroll(50, 50);
-      expect(Object.keys(poolCopy)).to.have.length(0);
 
       /* Scroll more than the desired edges */
       await scroll(
-        window.innerWidth + targetSize * 0.5,
-        window.innerHeight + targetSize * 0.75
+        innerWidth + targetSize * 0.5,
+        innerHeight + targetSize * 0.75
       );
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
       /* Scroll so that edges are visible */
       await scroll(
-        window.innerWidth + targetSize * 0.15,
-        window.innerHeight + targetSize * 0.35
+        innerWidth + targetSize * 0.15,
+        innerHeight + targetSize * 0.35
       );
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      expect(times).to.equal(1);
     });
 
     it('edgeX/Y + offsetX/Y (positive)', async () => {
-      let poolCopy = {};
+      let times = 0;
       const target = createTarget();
-      target.style.marginLeft = `${window.innerWidth}px`;
-      target.style.marginTop = `${window.innerHeight}px`;
+      target.style.marginLeft = `${innerWidth}px`;
+      target.style.marginTop = `${innerHeight}px`;
 
       new Tracker({
         targets: target,
@@ -308,9 +292,9 @@ describe('Absolute tracking', () => {
             edgeY: 50,
             offsetX: 15,
             offsetY: 10,
-            callback({ DOMElement, pool }) {
+            callback({ DOMElement }) {
               animate(DOMElement);
-              poolCopy = pool;
+              times++;
             }
           }
         ]
@@ -318,23 +302,124 @@ describe('Absolute tracking', () => {
 
       /* Scroll less than the desired edges */
       await scroll(50, 50);
-      expect(Object.keys(poolCopy)).to.have.length(0);
 
       /* Scroll more than the desired edges */
       await scroll(
-        window.innerWidth + targetSize * 0.25 + 20,
-        window.innerHeight + targetSize * 0.50 + 15
+        innerWidth + targetSize * 0.25 + 20,
+        innerHeight + targetSize * 0.50 + 15
       );
-      expect(Object.keys(poolCopy)).to.have.length(0);
+      expect(times).to.equal(0);
 
       /* Scroll so that edges are visible */
       await scroll(
-        window.innerWidth + targetSize * 0.25 - 20,
-        window.innerHeight + targetSize * 0.50 - 15
+        innerWidth + targetSize * 0.25 - 20,
+        innerHeight + targetSize * 0.50 - 15
       );
-      expect(poolCopy[0]).to.not.be.undefined;
-      expect(poolCopy[0]).to.be.an('array').that.has.length(1);
-      expect(poolCopy[0]).to.include(target);
+      expect(times).to.equal(1);
+    });
+  });
+
+  /**
+   * Thresholds
+   */
+  describe('Thresholds', () => {
+    it('thresholdX', async () => {
+      let times = 0;
+      const target = createTarget();
+      target.style.marginLeft = `${innerWidth}px`;
+
+      new Tracker({
+        targets: target,
+        snapshots: [
+          {
+            thresholdX: 25,
+            callback({ DOMElement }) {
+              animate(DOMElement);
+              times++;
+            }
+          }
+        ]
+      });
+
+      /* Scroll to the less portion than the specified threshold */
+      await scroll(targetSize * 0.15, 0);
+      await scroll(innerWidth + 175, 0);
+      expect(times).to.equal(0);
+
+      /* Scroll so the threshold is visible LTR */
+      await scroll(targetSize * 0.35, 0);
+      expect(times).to.equal(1);
+
+      /* Scroll so the threshold is visible RTL */
+      await scroll(innerWidth + targetSize * 0.25, 0);
+      expect(times).to.equal(2);
+    });
+
+    it('thresholdY', async () => {
+      let times = 0;
+      const target = createTarget();
+      target.style.marginTop = `${innerHeight}px`;
+
+      new Tracker({
+        targets: target,
+        snapshots: [
+          {
+            thresholdY: 25,
+            callback({ DOMElement }) {
+              animate(DOMElement);
+              times++;
+            }
+          }
+        ]
+      });
+
+      await scroll(0, targetSize * 0.15);
+      await scroll(0, innerHeight + targetSize * 0.8);
+      expect(times).to.equal(0);
+
+      await scroll(0, targetSize * 0.35);
+      expect(times).to.equal(1);
+
+      await scroll(0, innerHeight + targetSize * 0.5);
+      expect(times).to.equal(2);
+    });
+
+    it('thresholdX + thresholdY', async () => {
+      let times = 0;
+      const target = createTarget();
+      target.style.marginTop = `${innerHeight}px`;
+      target.style.marginLeft = `${innerWidth}px`;
+
+      new Tracker({
+        targets: target,
+        snapshots: [
+          {
+            thresholdX: 25,
+            thresholdY: 25,
+            callback({ DOMElement }) {
+              animate(DOMElement);
+              times++;
+            }
+          }
+        ]
+      });
+
+      /* Scroll outside of the expected thresholds */
+      await scroll(targetSize * 0.15, targetSize * 0.15);
+      await scroll(innerWidth + targetSize * 0.9, innerHeight + targetSize * 0.9);
+      expect(times).to.equal(0);
+
+      /* Scroll within the one of the thresholds */
+      await scroll(targetSize * 0.5, 0);
+      await scroll(0, targetSize * 0.5);
+      expect(times).to.equal(0);
+
+      /* Scroll within the expected thresholds */
+      await scroll(targetSize * 0.5, targetSize * 0.5);
+      expect(times).to.equal(1);
+
+      await scroll(innerWidth + targetSize * 0.5, innerHeight + targetSize * 0.5);
+      expect(times).to.equal(2);
     });
   });
 
