@@ -1,7 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
+const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 const packageJson = require('./package.json');
 
+/* Environment */
 const environment = process.env.NODE_ENV;
 const PRODUCTION = (environment === 'production');
 
@@ -18,7 +20,12 @@ module.exports = {
     new webpack.ProvidePlugin({
       'process.env.NODE_ENV': JSON.stringify(environment)
     }),
-    PRODUCTION && new webpack.optimize.UglifyJsPlugin()
+    PRODUCTION && new BabelMinifyPlugin({
+      removeConsole: true,
+      mangle: {
+        topLevel: true
+      }
+    })
   ].filter(Boolean),
   module: {
     rules: [
