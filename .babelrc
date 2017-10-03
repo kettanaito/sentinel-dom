@@ -11,5 +11,14 @@
     "transform-object-rest-spread",
     "transform-class-properties",
     "transform-flow-strip-types"
-  ]
+  ],
+  "env": {
+    "production": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }]
+      ]
+    }
+  }
 }
