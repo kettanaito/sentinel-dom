@@ -61,6 +61,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
     "mocha-headless-chrome": "^1.4.0",
+    "requirejs": "^2.3.5",
     "webpack": "^3.5.5"
   }
 }

@@ -17,14 +17,11 @@
   <script>
     mocha.setup('bdd');
     var expect = chai.expect;
-  </script>
+    </script>
 
   <!-- Library -->
   <script src="../../lib/index.js"></script>
 
-  <!-- Tests -->
-  <script src="./index.spec.js"></script>
-
-  <script>mocha.run();</script>
+  <script data-main="index.spec.js" src="../../node_modules/requirejs/require.js"></script>
 </body>
 </html>
