@@ -164,10 +164,12 @@ export default class Tracker {
           snapshot.callback({ DOMElement: target });
 
           /* Store matched target (HTMLElement) in the pool */
-          if (poolEntry) {
-            if (!isTargetInPool) this.pool[snapshotIndex].push(target);
-          } else {
-            this.pool[snapshotIndex] = [target];
+          if (!isTargetInPool) {
+            if (poolEntry) {
+              this.pool[snapshotIndex].push(target);
+            } else {
+              this.pool[snapshotIndex] = [target];
+            }
           }
         }
       });
