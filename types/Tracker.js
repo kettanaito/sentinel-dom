@@ -2,14 +2,15 @@
 import type { TClientRect } from './ClientRect';
 import type { TSnapshot } from './Snapshot';
 
-/**
- * Tracking target
- */
+export type TAxisObject = {
+  x?: number,
+  y?: number
+};
+
+/* Tracking target */
 export type TTarget = Array<HTMLElement> | HTMLElement;
 
-/**
- * Tracker options
- */
+/* Tracker options */
 export type TOptions = {
   targets: TTarget, // targets in the DOM to track
   bounds?: window | HTMLElement, // boundaries against which the targets are tracked
@@ -27,16 +28,12 @@ export type TOptions = {
   iterableTargets: Array<HTMLElement>,
 }
 
-/**
- * A single pool entry.
- */
+/* A single pool entry */
 export type TPoolEntry = Array<HTMLElement>;
 
-/**
- * Pool of the tracked targets.
- */
+/* Pool of the tracked targets */
 export type TPool = {
-  [snapshotIndex: number]: TTrackerPoolEntry
+  [snapshotIndex: number]: TPoolEntry
 }
 
 /**

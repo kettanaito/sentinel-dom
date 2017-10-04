@@ -1,5 +1,6 @@
 /* @flow weak */
 import type {
+  TAxisObject,
   TOptions,
   TPool,
   TPoolEntry,
@@ -190,7 +191,7 @@ export default class Tracker {
     const shouldTrackEdges: boolean = isset(edgeX) || isset(edgeY);
 
     /* Ensure offsets */
-    const offsets: Object = {
+    const offsets: TAxisObject = {
       x: offsetX || 0,
       y: offsetY || 0
     };
@@ -217,7 +218,7 @@ export default class Tracker {
     }
 
     /* Ensure thresholds */
-    const thresholds: Object = {
+    const thresholds: TAxisObject = {
       x: thresholdX || 100,
       y: thresholdY || 100
     };
