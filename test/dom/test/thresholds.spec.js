@@ -37,6 +37,66 @@ describe('Thresholds', () => {
     expect(times).to.equal(2);
   });
 
+  it('thresholdX + offsetX (positive)', async () => {
+    let times = 0;
+    const target = createTarget();
+    target.style.marginLeft = `${innerWidth}px`;
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          thresholdX: 25,
+          offsetX: 10,
+          callback({ DOMElement }) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll outside of the expected threshold */
+    await scroll(targetSize * 0.25, 0);
+    await scroll(innerWidth + targetSize * 0.75, 0);
+    expect(times).to.equal(0);
+
+    /* Scroll within the expected threshold */
+    await scroll(targetSize * 0.25 + 15, 0);
+    await scroll(innerWidth + targetSize * 0.75 - 15, 0);
+    expect(times).to.equal(2);
+  });
+
+  it('thresholdX + offsetX (negative)', async () => {
+    let times = 0;
+    const target = createTarget();
+    target.style.marginLeft = `${innerWidth}px`;
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          thresholdX: 25,
+          offsetX: -10,
+          callback({ DOMElement }) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll outside of the expected threshold */
+    await scroll(targetSize * 0.25 - 10 , 0);
+    await scroll(innerWidth + targetSize * 0.75 + 15, 0);
+    expect(times).to.equal(0);
+
+    /* Scroll within the expected threshold */
+    await scroll(targetSize * 0.25, 0);
+    await scroll(innerWidth + targetSize * 0.75, 0);
+    expect(times).to.equal(2);
+  });
+
   it('thresholdY', async () => {
     let times = 0;
     const target = createTarget();
@@ -63,6 +123,66 @@ describe('Thresholds', () => {
     expect(times).to.equal(1);
 
     await scroll(0, innerHeight + targetSize * 0.5);
+    expect(times).to.equal(2);
+  });
+
+  it('thresholdY + offsetY (positive)', async () => {
+    let times = 0;
+    const target = createTarget();
+    target.style.marginTop = `${innerHeight}px`;
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          thresholdY: 25,
+          offsetY: 10,
+          callback({ DOMElement}) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll outside of the expected threshold */
+    await scroll(0, targetSize * 0.25);
+    await scroll(0, innerHeight + target.size * 0.75);
+    expect(times).to.equal(0);
+
+    /* Scroll inside the expected threshold */
+    await scroll(0, targetSize * 0.25 + 15);
+    await scroll(0, innerHeight + targetSize * 0.75 - 15);
+    expect(times).to.equal(2);
+  });
+
+  it('thresholdY + offsetY (negative)', async () => {
+    let times = 0;
+    const target = createTarget();
+    target.style.marginTop = `${innerHeight}px`;
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          thresholdY: 25,
+          offsetY: -10,
+          callback({ DOMElement}) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll outside of the expected threshold */
+    await scroll(0, targetSize * 0.25 - 10);
+    await scroll(0, innerHeight + target.size * 0.75 + 10);
+    expect(times).to.equal(0);
+
+    /* Scroll inside the expected threshold */
+    await scroll(0, targetSize * 0.25);
+    await scroll(0, innerHeight + targetSize * 0.75);
     expect(times).to.equal(2);
   });
 
@@ -104,9 +224,10 @@ describe('Thresholds', () => {
     expect(times).to.equal(2);
   });
 
-  it('thresholdX + offsetX', async () => {
+  it('thresholdX/Y + offsetX/Y (positive)', async () => {
     let times = 0;
     const target = createTarget();
+    target.style.marginTop = `${innerHeight}px`;
     target.style.marginLeft = `${innerWidth}px`;
 
     new Tracker({
@@ -114,7 +235,9 @@ describe('Thresholds', () => {
       snapshots: [
         {
           thresholdX: 25,
+          thresholdY: 25,
           offsetX: 10,
+          offsetY: 10,
           callback({ DOMElement }) {
             animate(DOMElement);
             times++;
@@ -123,44 +246,14 @@ describe('Thresholds', () => {
       ]
     });
 
-    /* Scroll outside of the expected threshold */
-    await scroll(targetSize * 0.25, 0);
-    await scroll(innerWidth + targetSize * 0.75, 0);
+    /* Scroll outside of the expected thresholds */
+    await scroll(targetSize * 0.25, targetSize * 0.25);
+    await scroll(innerWidth + targetSize * 0.75, innerHeight + targetSize * 0.75);
     expect(times).to.equal(0);
 
-    /* Scroll within the expected threshold */
-    await scroll(targetSize * 0.25 + 15, 0);
-    await scroll(innerWidth + targetSize * 0.75 - 15, 0);
-    expect(times).to.equal(2);
-  });
-
-  it('thresholdY + offsetY', async () => {
-    let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
-
-    new Tracker({
-      targets: target,
-      snapshots: [
-        {
-          thresholdY: 25,
-          offsetY: 10,
-          callback({ DOMElement}) {
-            animate(DOMElement);
-            times++;
-          }
-        }
-      ]
-    });
-
-    /* Scroll outside of the expected threshold */
-    await scroll(0, targetSize * 0.25);
-    await scroll(0, innerHeight + target.size * 0.75);
-    expect(times).to.equal(0);
-
-    /* Scroll inside the expected threshold */
-    await scroll(0, targetSize * 0.25 + 15);
-    await scroll(0, innerHeight + targetSize * 0.75 - 15);
+    /* Scroll within the expected thresholds */
+    await scroll(targetSize * 0.25 + 15, targetSize * 0.25 + 15);
+    await scroll(innerWidth + targetSize * 0.25 + 15, innerHeight + targetSize * 0.25 + 15);
     expect(times).to.equal(2);
   });
 });
