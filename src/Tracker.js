@@ -247,8 +247,8 @@ export default class Tracker {
      * affected by offsets and thresholds.
      */
     const deltaMatches: Object = {
-      byX: (deltaArea.width + offsets.x) >= expectedWidth,
-      byY: (deltaArea.height + offsets.y) >= expectedHeight
+      byX: deltaArea.width >= (expectedWidth + offsets.x),
+      byY: deltaArea.height >= (expectedHeight + offsets.y)
     };
 
     /* Determine if achieved delta lies within the current viewport */
