@@ -37,5 +37,6 @@ function animate(DOMElement) {
 require([
   'test/basic.spec',
   'test/edges.spec',
-  'test/thresholds.spec'
+  'test/thresholds.spec',
+  'test/once.spec'
 ], () => mocha.run());
