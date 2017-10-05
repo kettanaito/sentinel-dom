@@ -1,11 +1,21 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 const packageJson = require('./package.json');
+const babelConfig = JSON.parse(fs.readFileSync('./.babelrc'));
 
 /* Environment */
 const environment = process.env.NODE_ENV;
 const PRODUCTION = (environment === 'production');
+
+function getBabelConfig() {
+  if (PRODUCTION) {
+    babelConfig.presets[0][1].modules = false;
+  }
+
+  return babelConfig;
+}
 
 module.exports = {
   entry: path.resolve(__dirname, packageJson.source),
@@ -35,9 +45,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: {
+            options: Object.assign({}, {
               cacheDirectory: true
-            }
+            }, getBabelConfig())
           },
           {
             loader: 'eslint-loader',
