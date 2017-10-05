@@ -16,6 +16,17 @@
 ## Introduction
 **Sentinel DOM** is a library aimed to make visibility tracking of DOM elements easy and flexible. Althought it is designed primarily for analytics purposes, you may use it anywhere you need to determine element's visibility.
 
+## Motivation
+### Essential
+* This library contains essential features which will cover frequently requested visibility tracking logic (unique impressions, visibility after certain point/action, percentage visibility, and much more).
+
+### Reliable
+* Small visibility logic snippets have [a few major drawbacks](./docs).
+* The logic used in this library is *thoroughly tested* with both automated tests and continuous usage on production. Do more programming, less bug fixing.
+
+### Fast
+* This library uses built-in optimizations (i.e. throttling, conditional tracking) which ensure utmost performance in your project.
+
 ## Install
 ```
 npm install --save-dev sentinel-dom
