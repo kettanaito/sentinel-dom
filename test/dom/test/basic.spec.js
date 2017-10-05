@@ -11,8 +11,8 @@ describe('Absolute tracking', () => {
     const targetTwo = createTarget();
     const targetThree = createTarget();
 
-    targetOne.style.left = '-10px';
-    targetThree.style.top = '-10px';
+    targetOne.style.marginLeft = '-10px';
+    targetThree.style.marginTop = '-10px';
 
     new Tracker({
       targets: document.getElementsByClassName('target'),
