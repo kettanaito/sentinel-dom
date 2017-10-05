@@ -25,7 +25,7 @@
 * The logic used in this library is *thoroughly tested* with both automated tests and continuous usage on production. Do more programming, less bug fixing.
 
 ### Fast
-* This library uses built-in optimizations (i.e. throttling, conditional tracking) which ensure utmost performance in your project.
+* This library uses built-in optimizations (i.e. throttling, [conditional tracking](./docs/conditional-tracking.md)) which ensure utmost performance in your project.
 
 ## Install
 ```
