@@ -18,7 +18,7 @@
 
 ## Motivation
 ### Essential
-* This library contains essential features which will cover frequently requested visibility tracking logic (unique impressions, visibility after certain point/action, percentage visibility, and much more).
+* This library contains essential features which will cover frequently requested visibility tracking logic ([unique impressions](./docs/options.md#unique-snapshots), [visibility after certain point](./docs/options.md#bleeding-edges), [percentage visibility](./docs/options.md#thresholds), and [much more](./docs/options.md)).
 
 ### Reliable
 * Small visibility logic snippets have [a few major drawbacks](./docs).
