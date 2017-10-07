@@ -44,15 +44,15 @@ new Tracker({
   targets: document.getElementById('box'),
   snapshots: [
     {
-      name: 'Box is completely visible',
       callback({ DOMElement }) {
-        DOMElement.classList.add('visible');
+        console.log(`${DOMElement} is completely visible`);
       }
     },
     {
-      name: 'At least 50% of the box height is visible',
-      thresholdY: 50,
-      callback() { ... }
+      thresholdY: 25,
+      callback({ DOMElement }) {
+        console.log(`At least 25% of ${DOMElement} height is visible`);
+      }
     }
   ]
 });
