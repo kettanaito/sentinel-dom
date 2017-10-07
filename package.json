@@ -17,14 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/kettanaito/sentinel-dom.git"
   },
-  "keywords": [
-    "sentinel",
-    "sentinel-dom",
-    "visible",
-    "visibility",
-    "tracker",
-    "tracking",
-    "DOMElement"
+  "keywords": ["sentinel", "sentinel-dom", "visible", "visibility", "tracker", "tracking", "dom", "visibility analysis", "snapshot", "snapshots", "dom element", "impressions", "impression", "visible", "analytics tracking", "tracker"
   ],
   "license": "MIT",
   "devDependencies": {
