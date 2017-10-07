@@ -1,7 +1,7 @@
 {
   "name": "sentinel-dom",
   "libraryName": "Sentinel",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Lightweight and powerful visibility tracker for DOM elements.",
   "source": "src/index.js",
   "main": "lib/index.js",
@@ -17,7 +17,23 @@
     "type": "git",
     "url": "git+https://github.com/kettanaito/sentinel-dom.git"
   },
-  "keywords": ["sentinel", "sentinel-dom", "visible", "visibility", "tracker", "tracking", "dom", "visibility analysis", "snapshot", "snapshots", "dom element", "impressions", "impression", "visible", "analytics tracking", "tracker"
+  "keywords": [
+    "sentinel",
+    "sentinel-dom",
+    "visible",
+    "visibility",
+    "tracker",
+    "tracking",
+    "dom",
+    "visibility analysis",
+    "snapshot",
+    "snapshots",
+    "dom element",
+    "impressions",
+    "impression",
+    "visible",
+    "analytics tracking",
+    "tracker"
   ],
   "license": "MIT",
   "devDependencies": {
