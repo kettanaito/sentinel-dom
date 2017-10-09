@@ -7,8 +7,7 @@ describe('Edges', () => {
 
   it('edgeX', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: document.getElementsByClassName('target'),
@@ -35,8 +34,7 @@ describe('Edges', () => {
 
   it('edgeX + offsetX (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: target,
@@ -64,8 +62,7 @@ describe('Edges', () => {
 
   it('edgeX + offsetX (negative)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: target,
@@ -93,8 +90,7 @@ describe('Edges', () => {
 
   it('edgeY', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -121,8 +117,7 @@ describe('Edges', () => {
 
   it('edgeY + offsetY (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -150,8 +145,7 @@ describe('Edges', () => {
 
   it('edgeY + offsetY (negative)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -179,9 +173,10 @@ describe('Edges', () => {
 
   it('edgeX + edgeY', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
 
     new Tracker({
       targets: target,
@@ -217,9 +212,10 @@ describe('Edges', () => {
 
   it('edgeX/Y + offsetX/Y (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
 
     new Tracker({
       targets: target,

@@ -7,8 +7,7 @@ describe('Thresholds', () => {
 
   it('thresholdX', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: target,
@@ -24,8 +23,8 @@ describe('Thresholds', () => {
     });
 
     /* Scroll to the less portion than the specified threshold */
-    await scroll(targetSize * 0.15, 0);
-    await scroll(innerWidth + 175, 0);
+    await scroll(targetSize * 0.20, 0);
+    await scroll(innerWidth + targetSize * 0.85, 0);
     expect(times).to.equal(0);
 
     /* Scroll so the threshold is visible LTR */
@@ -39,8 +38,7 @@ describe('Thresholds', () => {
 
   it('thresholdX + offsetX (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: target,
@@ -69,8 +67,7 @@ describe('Thresholds', () => {
 
   it('thresholdX + offsetX (negative)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({ marginLeft: `${innerWidth}px` });
 
     new Tracker({
       targets: target,
@@ -99,8 +96,7 @@ describe('Thresholds', () => {
 
   it('thresholdY', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -128,8 +124,7 @@ describe('Thresholds', () => {
 
   it('thresholdY + offsetY (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -158,8 +153,7 @@ describe('Thresholds', () => {
 
   it('thresholdY + offsetY (negative)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
+    const target = createTarget({ marginTop: `${innerHeight}px` });
 
     new Tracker({
       targets: target,
@@ -188,9 +182,10 @@ describe('Thresholds', () => {
 
   it('thresholdX + thresholdY', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
 
     new Tracker({
       targets: target,
@@ -226,9 +221,10 @@ describe('Thresholds', () => {
 
   it('thresholdX/Y + offsetX/Y (positive)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = `${innerHeight}px`;
-    target.style.marginLeft = `${innerWidth}px`;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
 
     new Tracker({
       targets: target,

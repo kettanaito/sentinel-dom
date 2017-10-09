@@ -52,10 +52,6 @@ body {
   z-index: 5;
 }
 
-.target + .target {
-  margin-top: 1rem;
-}
-
 .target:after {
   background-color: rgba(119, 136, 153, .75);
   content: "Target" "\A" attr(data-label);
