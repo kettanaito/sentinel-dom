@@ -7,8 +7,7 @@ describe('Once', () => {
 
   it('single snapshot (root.once)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = '30px';
+    const target = createTarget({ marginTop: '30px' });
 
     new Tracker({
       targets: target,
@@ -29,8 +28,7 @@ describe('Once', () => {
 
   it('single snapshot (snapshot[i].once)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = '30px';
+    const target = createTarget({ marginTop: '30px' });
 
     new Tracker({
       targets: target,
@@ -51,8 +49,7 @@ describe('Once', () => {
 
   it('multiple snapshots (root.once)', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = '30px';
+    const target = createTarget({ marginTop: '30px' });
 
     new Tracker({
       targets: target,
@@ -77,8 +74,7 @@ describe('Once', () => {
 
   it('multiple snapshots with different "once"', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = '30px';
+    const target = createTarget({ marginTop: '30px' });
 
     new Tracker({
       targets: target,
@@ -103,8 +99,7 @@ describe('Once', () => {
 
   it('multiple snapshots (root.once) with "false" for a single snapshot', async () => {
     let times = 0;
-    const target = createTarget();
-    target.style.marginTop = '30px';
+    const target = createTarget({ marginTop: '30px' });
 
     new Tracker({
       targets: target,

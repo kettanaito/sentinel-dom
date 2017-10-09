@@ -7,12 +7,9 @@ describe('Absolute tracking', () => {
 
   it('Basics', async () => {
     let times = 0;
-    const targetOne = createTarget();
-    const targetTwo = createTarget();
-    const targetThree = createTarget();
-
-    targetOne.style.marginLeft = '-10px';
-    targetThree.style.marginTop = '-10px';
+    const targetOne = createTarget({ marginLeft: '-30px' });
+    const targetTwo = createTarget({ marginTop: '30px' });
+    const targetThree = createTarget({ marginTop: '-30px' });
 
     new Tracker({
       targets: document.getElementsByClassName('target'),

@@ -3,15 +3,15 @@ const { Tracker } = Sentinel;
 const targetSize = 200;
 const container = document.getElementById('container');
 
-function createTarget(id) {
+function createTarget(styles = {}, parent = container) {
   const element = document.createElement('div');
   element.classList.add('target');
-  if (id) element.id = id;
 
   element.style.height = `${targetSize}px`;
   element.style.width = `${targetSize}px`;
+  Object.keys(styles).forEach(rule => element.style[rule] = styles[rule]);
 
-  container.appendChild(element);
+  parent.appendChild(element);
   return element;
 }
 
