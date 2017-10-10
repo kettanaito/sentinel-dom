@@ -5,7 +5,7 @@ describe('Once', () => {
   beforeEach(beforeEachHook);
   afterEach(afterEachHook);
 
-  it('single snapshot (root.once)', async () => {
+  it('root.once', async () => {
     let times = 0;
     const target = createTarget({ marginTop: '30px' });
 
