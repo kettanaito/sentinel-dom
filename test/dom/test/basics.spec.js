@@ -10,6 +10,7 @@ describe('Basics', () => {
    */
   it('absolute tracking', async () => {
     let times = 0;
+    let poolCopy;
     const targetOne = createTarget({ marginLeft: '-30px' });
     const targetTwo = createTarget({ marginTop: '30px' });
     const targetThree = createTarget({ marginTop: '-30px' });
@@ -18,9 +19,10 @@ describe('Basics', () => {
       targets: document.getElementsByClassName('target'),
       snapshots: [
         {
-          callback({ DOMElement }) {
+          callback({ DOMElement, pool }) {
             animate(DOMElement);
             times++;
+            poolCopy = pool;
           }
         }
       ]
@@ -28,6 +30,7 @@ describe('Basics', () => {
 
     await scroll(0, 10);
     expect(times).to.equal(1);
+    expect(poolCopy).to.include(targetTwo);
   });
 
   /**
