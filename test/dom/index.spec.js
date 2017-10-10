@@ -47,4 +47,4 @@ require([
   'test/edges.spec',
   'test/thresholds.spec',
   'test/once.spec',
-], mocha.run);
+], () => mocha.run());
