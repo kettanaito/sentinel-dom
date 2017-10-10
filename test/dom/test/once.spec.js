@@ -72,31 +72,6 @@ describe('Once', () => {
     expect(times).to.equal(2);
   });
 
-  it('multiple snapshots with different "once"', async () => {
-    let times = 0;
-    const target = createTarget({ marginTop: '30px' });
-
-    new Tracker({
-      targets: target,
-      snapshots: [
-        {
-          once: true,
-          callback() { times++; }
-        },
-        {
-          edgeY: 10,
-          callback() { times++; }
-        }
-      ]
-    });
-
-    await scroll(0, 10);
-    expect(times).to.equal(2);
-
-    await scroll(0, 15);
-    expect(times).to.equal(3);
-  });
-
   it('multiple snapshots (root.once) with "false" for a single snapshot', async () => {
     let times = 0;
     const target = createTarget({ marginTop: '30px' });
@@ -110,6 +85,31 @@ describe('Once', () => {
         },
         {
           once: false,
+          edgeY: 10,
+          callback() { times++; }
+        }
+      ]
+    });
+
+    await scroll(0, 10);
+    expect(times).to.equal(2);
+
+    await scroll(0, 15);
+    expect(times).to.equal(3);
+  });
+
+  it('multiple snapshots with different "once"', async () => {
+    let times = 0;
+    const target = createTarget({ marginTop: '30px' });
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          once: true,
+          callback() { times++; }
+        },
+        {
           edgeY: 10,
           callback() { times++; }
         }
