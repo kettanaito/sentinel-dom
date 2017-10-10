@@ -23,7 +23,7 @@ function createTarget(styles = {}, parent = container) {
 function scroll(nextX, nextY) {
   return new Promise((resolve) => {
     window.scrollTo(nextX, nextY);
-    setTimeout(resolve, 20);
+    setTimeout(resolve, 25);
   });
 }
 
