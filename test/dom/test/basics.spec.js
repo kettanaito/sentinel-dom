@@ -11,9 +11,9 @@ describe('Basics', () => {
   it('absolute tracking', async () => {
     let times = 0;
     let poolCopy;
-    const targetOne = createTarget({ marginLeft: '-30px' });
-    const targetTwo = createTarget({ marginTop: '30px' });
-    const targetThree = createTarget({ marginTop: '-30px' });
+    const targetOne = createTarget({ left: '-30px' });
+    const targetTwo = createTarget({ top: '30px' });
+    const targetThree = createTarget({ top: '-30px' });
 
     new Tracker({
       targets: document.getElementsByClassName('target'),
