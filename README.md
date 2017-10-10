@@ -2,6 +2,9 @@
   <a href="https://www.npmjs.com/package/sentinel-dom">
     <img src="https://img.shields.io/npm/v/sentinel-dom.svg" alt="NPM version" />
   </a>
+  <a href="#">
+    <img src="https://circleci.com/gh/kettanaito/sentinel-dom/tree/master.svg?style=shield" alt="Build status" />
+  </a>
 </p>
 
 <br>
