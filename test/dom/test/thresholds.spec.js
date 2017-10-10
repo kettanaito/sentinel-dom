@@ -252,4 +252,38 @@ describe('Thresholds', () => {
     await scroll(innerWidth + targetSize * 0.25 + 15, innerHeight + targetSize * 0.25 + 15);
     expect(times).to.equal(2);
   });
+
+  it('thresholdX/Y + offsetX/Y (negative)', async () => {
+    let times = 0;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          thresholdX: 25,
+          thresholdY: 25,
+          offsetX: -10,
+          offsetY: -10,
+          callback({ DOMElement }) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll outside of the expected thresholds */
+    await scroll(targetSize * 0.25 - 15, targetSize * 0.25 - 15);
+    await scroll(innerWidth + targetSize * 0.75 + 15, innerHeight + targetSize * 0.75 + 15);
+    expect(times).to.equal(0);
+
+    /* Scroll within the expected thresholds */
+    await scroll(targetSize * 0.25 + 15, targetSize * 0.25 + 15);
+    await scroll(innerWidth + targetSize * 0.25 + 15, innerHeight + targetSize * 0.25 + 15);
+    expect(times).to.equal(2);
+  });
 });

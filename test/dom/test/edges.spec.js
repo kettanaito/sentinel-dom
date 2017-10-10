@@ -223,7 +223,7 @@ describe('Edges', () => {
         {
           edgeX: 25,
           edgeY: 50,
-          offsetX: 15,
+          offsetX: 10,
           offsetY: 10,
           callback({ DOMElement }) {
             animate(DOMElement);
@@ -238,16 +238,51 @@ describe('Edges', () => {
 
     /* Scroll more than the desired edges */
     await scroll(
-      innerWidth + targetSize * 0.25 + 20,
+      innerWidth + targetSize * 0.25 + 15,
       innerHeight + targetSize * 0.50 + 15
     );
     expect(times).to.equal(0);
 
     /* Scroll so that edges are visible */
     await scroll(
-      innerWidth + targetSize * 0.25 - 20,
+      innerWidth + targetSize * 0.25 - 15,
       innerHeight + targetSize * 0.50 - 15
     );
+    expect(times).to.equal(1);
+  });
+
+  it('edgeX/Y + offsetX/Y (negative)', async () => {
+    let times = 0;
+    const target = createTarget({
+      marginTop: `${innerHeight}px`,
+      marginLeft: `${innerWidth}px`
+    });
+
+    new Tracker({
+      targets: target,
+      snapshots: [
+        {
+          edgeX: 25,
+          edgeY: 50,
+          offsetX: -10,
+          offsetY: -10,
+          callback({ DOMElement }) {
+            animate(DOMElement);
+            times++;
+          }
+        }
+      ]
+    });
+
+    /* Scroll less than the desired edges */
+    await scroll(50, 50);
+
+    /* Scroll more than the desired edges */
+    await scroll(innerWidth + targetSize * 0.25, innerHeight + targetSize * 0.50);
+    expect(times).to.equal(0);
+
+    /* Scroll so that edges are visible */
+    await scroll(innerWidth + targetSize * 0.25 - 20, innerHeight + targetSize * 0.50 - 15);
     expect(times).to.equal(1);
   });
 });
