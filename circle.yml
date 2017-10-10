@@ -6,3 +6,5 @@ dependencies:
   pre:
     - node --version
     - npm --version
+  post:
+    - npm run build
