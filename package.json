@@ -1,7 +1,7 @@
 {
   "name": "sentinel-dom",
   "libraryName": "Sentinel",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "Lightweight and powerful visibility tracker for DOM elements.",
   "source": "src/index.js",
   "main": "lib/index.js",
