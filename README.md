@@ -5,6 +5,9 @@
   <a href="#">
     <img src="https://circleci.com/gh/kettanaito/sentinel-dom/tree/master.svg?style=shield" alt="Build status" />
   </a>
+  <a href="https://david-dm.org/kettanaito/sentinel-dom">
+    <img src="https://david-dm.org/kettanaito/sentinel-dom/status.svg" alt="Dependencies status" />
+  </a>
 </p>
 
 <br>
