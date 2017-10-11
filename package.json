@@ -14,10 +14,9 @@
     "build": "NODE_ENV=production webpack",
     "flow": "flow",
     "test:static": "mocha --compilers js:babel-core/register",
-    "test:dom": "mocha-headless-chrome --file ./test/dom/index.html --width 1000 --height 1000",
-    "test": "npm run test:static && npm run test:dom",
-    "test:coverage": "instanbul cover _mocha -- --compilers js:babel-core/register",
-    "prepublishOnly": "npm run test && npm run build"
+    "test:browser": "mocha-headless-chrome --file ./test/dom/index.html --width 1000 --height 1000",
+    "test": "npm run test:static && npm run test:browser",
+    "prepublishOnly": "npm test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -53,7 +52,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "chai": "^4.1.2",
-    "eslint": "^4.6.1",
+    "eslint": "^4.8.0",
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
@@ -61,9 +60,9 @@
     "istanbul": "^0.4.5",
     "jsdom": "^11.3.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^4.0.1",
+    "mocha": "^3.5.0",
     "mocha-headless-chrome": "^1.4.0",
     "requirejs": "^2.3.5",
-    "webpack": "^3.5.5"
+    "webpack": "^3.6.0"
   }
 }
