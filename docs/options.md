@@ -132,7 +132,7 @@ Provided snapshot options have higher priority and overwrite the root options (i
 ### Named snapshots
 * `name?: string`
 
-The name of a snapshot. Useful primarily for debugging purposes. When performing multiple snapshots they will appear named in debug mode if they have `name` option set.
+The name of a snapshot. Useful primarily for debugging purposes. When performing multiple snapshots they will appear named in the debug mode, if they have `name` option specified.
 ```js
 new Tracker({
   // ...
@@ -146,19 +146,17 @@ new Tracker({
 ```
 
 ### Unique snapshots
-* `once?: boolean`
+* `once?: boolean` (default: `false`)
 
 Similar to the [root option](#once), `once` allows/forbids to perform the callback function multiple times, after the target has appear the first time. Setting this option on a certain snapshot will overwrite the `once` option provided in the root options.
 ```js
 new Tracker({
-  // ...
-  once: false, // allow for callbacks to fire multiple times
   snapshots: [
     {
-      callback() { ... }
+      callback() { ... } // this callback fires multiple times
     },
     {
-      once: true, // this snapshot's callback will fire only once
+      once: true, // this callback fires only once
       callback() { ... }
     }
   ]
@@ -169,7 +167,7 @@ new Tracker({
 * `offsetX?: number` (default: `0`)
 * `offsetY?: number` (default: `0`)
 
-*Offset* - is an absolute amount of pixels (**px**) to add to the current bleeding edge/threshold.
+*Offset* - is an absolute amount of pixels (**px**) to add to the current bleeding edge/threshold. Supports negative values as well.
 
 For example, a callback function should be called once there is still 10 pixels left to the actual top edge of the target:
 ```js
@@ -187,12 +185,12 @@ new Tracker({
 
 <div align="center">
   <img src="./media/offset-y.png" style="margin-right:1rem">
-  <p>Setting vertical offset to 10px.</p>
+  <p>Setting vertical offset to -10px.</p>
 </div>
 
 One the blue line appear in the viewport, a snapshot will be considered successful. Similarly, offsets affect [Bleeding edges](#bleeding-edges) or [Thresholds](#thresholds) if the latter are specified. The same logic applies to the horizontal offset (`offsetX`).
 
-> **Note:** If your tracking logic relies on the percentage of the target's width/height see [Threshold options](#thresholds) respectively. Do **not** use offset option for this purpose.
+> **Note:** If your tracking logic relies on the percentage of the target's width/height see [Threshold options](#thresholds) instead. Do **not** use offset option for this purpose.
 
 ### Bleeding edges
 * `edgeX?: number`
@@ -250,8 +248,7 @@ Generally, using `edgeX` and `edgeY` is recommended when your visibility logic r
 * `thresholdX?: number` (default: `100`)
 * `thresholdY?: number` (default: `100`)
 
-*Threshold* - is a percentage of the target's width/height which should appear in the viewport and bounds in order for a snapshot to be successful.
-
+*Threshold* - is a percentage of the target's width/height which should appear in the viewport and bounds in order for a snapshot to be successful. By default, thresholds for both axis are set to `100` percent, which means that the target is considered visible *only* when all its height and width is present in the viewport/bounds. You can change this behavior by specifying custom percentages to the respective options.
 
 Lets say you would like to execute a certain callback only when at least **75%** of the element's height is in the viewport. You can achieve this by setting `thresholdY: 75` as a snapshot option.
 
@@ -274,9 +271,9 @@ This would render a *delta area* demonstrated as striped rectangles below:
   <p>Setting vertical threshold to 75%.</p>
 </div>
 
-As you can see, delta areas are *omnidirectional*, meaning that they are expect to appear regardless of a scroll direction. This is the main difference between the thresholds and [bleeding edges](#bleeding-edges). The same rules apply to the horizontal threshold.
+As you can see, delta areas are *omnidirectional*, meaning that they are expected to appear regardless of the scroll direction. This is the main difference between thresholds and [Bleeding edges](#bleeding-edges). The same rules apply to the horizontal threshold.
 
-One of the powerful features of thresholds is the ability to combine them:
+One of the powerful features of the thresholds is the ability to combine them:
 ```js
 new Tracker({
   // ...
@@ -295,14 +292,14 @@ new Tracker({
   <p>Setting vertical and horizontal thresholds to 75%.</p>
 </div>
 
-Once any of these delta areas fully appear in the viewport/bounds, the snapshot would be considered successsful, and a callback function would be called.
+When any of these delta areas appear in the viewport/bounds, the snapshot becomes successsful, and a callback function is called.
 
-> **Note:** Treshold options **do not** accept negative values.
+> **Note:** Treshold options **do not** accept negative values. If you would like to trigger the callback function at the negative space before the actual target's dimensions please see [Bleeding edges](#bleeding-edges).
 
 ### Callback
 * `callback: Function(args: TCallbackArgs): any`
 
-Callback function which is called immediately once snapshot is considered successful (the target is visible within the bounds).
+Callback function which is called immediately when snapshot becomes successful (the target is visible within the bounds).
 
 Callback function has the following arguments:
 ```js
@@ -319,7 +316,6 @@ new Tracker({
   snapshots: [
     {
       callback({ DOMElement }) {
-        /* Append class name "tracked" once the snapshot it resolved */
         DOMElement.classList.add('tracked');
       }
     }
