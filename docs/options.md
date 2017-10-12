@@ -57,19 +57,33 @@ new Tracker({
 ```
 
 ### Once
-* `once?: boolean` (default: `true`)
+* `once?: boolean` (default: `false`)
 
 Should each snapshot invoke its callback only once, after the first successful tracking. Setting this to `false` will trigger snapshot's callback function each time the target becomes visible within the bounds.
 
 ```js
 new Tracker({
   // ...
-  once: false, // allow callback functions to be called mutliple times
+  once: true, // forbid snapshot callbacks to be called more than once
   // ...
 });
 ```
+Setting `once` on a root options level applies it to all the snapshots, unless the latter has its own `once` options specified:
 
-Setting `once` on a root level will apply to each snapshot, unless it has its own `once` specified.
+```js
+new Tracker({
+  once: true, // root level option
+  snapshots: [
+    {
+      once: false, // snapshot level option
+      callback() { ... } // this callback is called multiple times
+    },
+    {
+      callback() { ... } // this callback is called once
+    }
+  ]
+})
+```
 
 ### Debug
 * `debug?: boolean` (default: `false`)
@@ -97,11 +111,11 @@ new Tracker({
   // ...
   snapshots: [
     {
-      edgeY: 10, // once scroll position is at 10% of target's height or more
+      edgeY: 10, // when scroll position is at 10% of target's height or more
       callback() { ... }
     },
     {
-      thresholdY: 50, // once exactly 50% of the target's height becomes visible
+      thresholdY: 50, // when exactly 50% of the target's height becomes visible
       callback() { ... }
     }
   ]
