@@ -61,7 +61,7 @@
     "jsdom": "^11.3.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
-    "mocha-headless-chrome": "^1.4.0",
+    "mocha-headless-chrome": "^1.5.2",
     "requirejs": "^2.3.5",
     "webpack": "^3.6.0"
   }
