@@ -1,12 +1,15 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/sentinel-dom">
-    <img src="https://img.shields.io/npm/v/sentinel-dom.svg" alt="NPM version" />
+    <img src="https://img.shields.io/npm/v/sentinel-dom.svg" title="NPM version" />
   </a>
   <a href="#">
-    <img src="https://circleci.com/gh/kettanaito/sentinel-dom/tree/master.svg?style=shield" alt="Build status" />
+    <img src="https://circleci.com/gh/kettanaito/sentinel-dom/tree/master.svg?style=shield" title="Build status" />
   </a>
   <a href="https://david-dm.org/kettanaito/sentinel-dom">
-    <img src="https://david-dm.org/kettanaito/sentinel-dom/status.svg" alt="Dependencies status" />
+    <img src="https://david-dm.org/kettanaito/sentinel-dom/status.svg" title="Dependencies status" />
+  </a>
+  <a href="https://david-dm.org/kettanaito/sentinel-dom?type=dev" title="devDependencies status">
+    <img src="https://david-dm.org/kettanaito/sentinel-dom/dev-status.svg" />
   </a>
 </p>
 
