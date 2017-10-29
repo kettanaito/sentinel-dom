@@ -30,7 +30,7 @@ function clearChildren(node) {
 function scroll(nextX, nextY) {
   return new Promise((resolve) => {
     window.scrollTo(nextX, nextY);
-    setTimeout(resolve, 25);
+    setTimeout(resolve, 30);
   });
 }
 

@@ -3,8 +3,8 @@ import type { TClientRect } from './ClientRect';
 import type { TSnapshot } from './Snapshot';
 
 export type TAxisObject = {
-  x?: number,
-  y?: number
+  x: number,
+  y: number
 };
 
 /* Tracking target */
