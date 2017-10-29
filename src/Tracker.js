@@ -101,7 +101,8 @@ export default class Tracker {
        * Target(s) provided in the snapshot options have higher priority and
        * overwrite the target(s) provided in the root options.
        */
-      const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
+      // const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
+      const iterableTargets: Array<HTMLElement> = ensureArray(snapshot.targets || options.targets);
       const once: boolean = isset(snapshot.once) ? snapshot.once : options.once;
 
       /* Debugging */
@@ -203,7 +204,7 @@ export default class Tracker {
       /**
        * Calculate bleeding edges.
        * Bleeding edge represents an imaginary line with an absolute coordinate, which is
-       * expected to appear in the bounds/viewport.
+       * expected to appear in the bounds/viewport in order to resolve a snapshot.
        */
       const edges: Object = {
         x: edgeX && targetArea.left + (targetArea.width * edgeX / 100) + offsets.x,
@@ -215,9 +216,9 @@ export default class Tracker {
        * bounds. The edge should lie within the both mentioned boundaries in order to
        * satisfy the tracking criteria.
        */
-      const edgeMatches: boolean = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
+      const edgesMatch: boolean = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
 
-      return { matches: edgeMatches };
+      return { matches: edgesMatch };
     }
 
     /* Ensure thresholds */
@@ -231,8 +232,8 @@ export default class Tracker {
      * Threshold options affect the target's width and height to be visible in order to
      * consider the snapshot successful.
      */
-    const expectedWidth: number = targetArea.width * ((thresholds.x || 100) / 100);
-    const expectedHeight: number = targetArea.height * ((thresholds.y || 100) / 100);
+    const expectedWidth: number = targetArea.width * (thresholds.x / 100);
+    const expectedHeight: number = targetArea.height * (thresholds.y / 100);
 
     /**
      * Get intersection delta area.
