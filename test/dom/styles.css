@@ -82,10 +82,8 @@ body {
 }
 
 .bounds {
-  margin: 2rem;
   background-color: rgba(240, 128, 128, .035);
   border: 2px dashed lightcoral;
-  padding: 10px;
   position: relative;
   z-index: 0;
 }

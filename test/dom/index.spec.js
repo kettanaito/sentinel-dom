@@ -1,9 +1,10 @@
 const { Tracker } = Sentinel;
 
 /* Constants */
-const targetSize = 200;
 const container = document.getElementById('container');
 const bounds = document.getElementById('bounds');
+const targetSize = 200;
+const targetSelector = document.getElementsByClassName('target');
 
 function createTarget(styles = {}, parent = container) {
   const element = document.createElement('div');
@@ -20,6 +21,12 @@ function createTarget(styles = {}, parent = container) {
   return element;
 }
 
+function clearChildren(node) {
+  while (node.lastChild) {
+    node.removeChild(node.lastChild);
+  }
+}
+
 function scroll(nextX, nextY) {
   return new Promise((resolve) => {
     window.scrollTo(nextX, nextY);
@@ -28,23 +35,47 @@ function scroll(nextX, nextY) {
 }
 
 function beforeEachHook() {
+}
+
+function cleanUp() {
+  /* Flush the containers' content */
+  clearChildren(container);
+  clearChildren(bounds);
+
   /* Restore scroll position before each test */
   window.scrollTo(0, 0);
 }
 
-function afterEachHook() {
-  /* Clean up the containers after each test */
-  container.innerHTML = '';
-  bounds.innerHTML = '';
+function addObserver(observer) {
+  window.observer = observer;
 }
 
+/**
+ * Flush tracking observer.
+ * Each test scenario group declares its own Observer. Therefore, the latter
+ * should be flashed after each test group to prevent settings overlapping.
+ */
+function flushObserver() {
+  window.observer = null;
+}
+
+/**
+ * Animate the tracked DOM element.
+ * Used mainly for snapshot resolve callback to portray the
+ * tracking status of the element in the browser.
+ */
 function animate(DOMElement) {
   DOMElement.classList.add('tracked');
 }
 
 require([
-  './test/basics.spec',
-  './test/edges.spec',
-  './test/thresholds.spec',
-  './test/once.spec',
+  // './test/basics.spec',
+  // './test/once.spec',
+
+  /* Absolute tracking */
+  './test/absolute/edges.spec',
+  './test/absolute/thresholds.spec',
+
+  /* Relative tracking */
+  // './test/relative/thresholds.spec'
 ], mocha.run);

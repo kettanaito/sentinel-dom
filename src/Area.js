@@ -45,7 +45,11 @@ export default class Area {
       rect = pointer;
     }
 
-    /* Assign client rectangle properties */
+    /**
+     * Propagete the properties into the class context.
+     * Ensure potentially missing properties are composed from the
+     * existing onces.
+     */
     this.top = rect.top;
     this.right = rect.right || rect.left + rect.width;
     this.bottom = rect.bottom || rect.top + rect.height;
