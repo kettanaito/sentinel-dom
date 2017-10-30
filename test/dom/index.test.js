@@ -69,13 +69,14 @@ function animate(DOMElement) {
 }
 
 require([
-  // './test/basics.spec',
-  // './test/once.spec',
+  // './test/basics.test',
+  // './test/once.test',
 
   /* Absolute tracking */
-  './test/absolute/edges.spec',
-  './test/absolute/thresholds.spec',
+  './test/absolute/basics.test',
+  './test/absolute/edges.test',
+  './test/absolute/thresholds.test',
 
   /* Relative tracking */
-  // './test/relative/thresholds.spec'
+  // './test/relative/thresholds.test'
 ], mocha.run);

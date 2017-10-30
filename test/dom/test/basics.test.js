@@ -36,29 +36,29 @@ describe('Basics', () => {
   /**
    * Relative tracking
    */
-  it('relative tracking', async () => {
-    let times = 0;
-    let poolCopy;
-    const targetOne = createTarget({ left: '-20px' }, bounds);
-    const targetTwo = createTarget({ top: '-20px' }, bounds);
-    const targetThree = createTarget({}, bounds);
+  // it('relative tracking', async () => {
+  //   let times = 0;
+  //   let poolCopy;
+  //   const targetOne = createTarget({ left: '-20px' }, bounds);
+  //   const targetTwo = createTarget({ top: '-20px' }, bounds);
+  //   const targetThree = createTarget({}, bounds);
 
-    new Tracker({
-      targets: document.getElementsByClassName('target'),
-      bounds,
-      snapshots: [
-        {
-          callback({ DOMElement, pool }) {
-            animate(DOMElement);
-            times++;
-            poolCopy = pool;
-          }
-        }
-      ]
-    });
+  //   new Tracker({
+  //     targets: document.getElementsByClassName('target'),
+  //     bounds,
+  //     snapshots: [
+  //       {
+  //         callback({ DOMElement, pool }) {
+  //           animate(DOMElement);
+  //           times++;
+  //           poolCopy = pool;
+  //         }
+  //       }
+  //     ]
+  //   });
 
-    await scroll(0, 10);
-    expect(times).to.equal(1);
-    expect(poolCopy).to.include(targetThree);
-  });
+  //   await scroll(0, 10);
+  //   expect(times).to.equal(1);
+  //   expect(poolCopy).to.include(targetThree);
+  // });
 });
