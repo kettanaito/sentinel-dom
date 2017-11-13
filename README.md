@@ -23,10 +23,16 @@
 <h1 align="center"><strong>Sentinel DOM</strong></h1>
 <p align="center">Predictable, flexible and easy visibility tracking of DOM elements.</p>
 
-## Motivation
-| Features | Reliability | Performance |
-| --- | --- | --- |
-| This library ships with the essential features frequently requested in visibility tracking logic ([unique impressions](./docs/options.md#unique-snapshots), [visibility after certain point](./docs/options.md#bleeding-edges), [percentage visibility](./docs/options.md#thresholds), and [much more](./docs/options.md)). | Random visibility logic snippets have [a few major drawbacks](./docs). The logic used in this library is *thoroughly tested* with both automated tests and continuous usage on production. Do more programming, less bug fixing. | Built-in optimizations (i.e. throttling, [conditional tracking](./docs/conditional-tracking.md)) which ensure utmost performance in your project. |
+## Why?
+### Why should I use this library if there are small snippets to track DOM elements' visibility?
+When those snippets are enough for your project's needs - by all means, *use* them and don't overcomplicate your implementation.
+
+From my practice those 10-15 lines of code are not sufficient to provide [unique impressions](./docs/options.md#unique-snapshots), [visibility after certain point](./docs/options.md#bleeding-edges) or [percentage visibility](./docs/options.md#thresholds). Those are vital things commonly shared between different visibility tracking requirements (such as Google Analytics implementation).  Sounds good to be put into a single library and work out of the box.
+
+### Why should I add another dependency to my project?
+In case you are looking for a reliable, stable and thoroughly tested solution, having Sentinel as a dependency is a small trade off.
+
+This library also comes with a built-in performance optimizations (i.e. [conditional tracking](./docs/developer/conditional-tracking.md)) which have proven themselves worthy in the production run.
 
 ## Install
 ```
@@ -35,6 +41,11 @@ npm install --save-dev sentinel-dom
 
 ## Getting started
 Import the library in your project:
+```js
+const Tracker = require('sentinel-dom').Tracker;
+```
+
+Alternatively, with **ES6+:**
 ```js
 import { Tracker } from 'sentinel-dom';
 ```
@@ -58,7 +69,17 @@ new Tracker({
   ]
 });
 ```
-You can change the tracking logic to suit your needs. See the [Options documentation](./docs/options.md) for all the features and the examples of how to use them.
+That's it! Sentinel will now track the provided `targets` matching those `snapshots` in a performant, omni-directional scroll event handler.
+
+### Options and featues
+That is not nearly everything. Thresholds, offsets, bleeding edges, manual tracking and much more can be configured at your will, whenever you need it.
+
+Learn more about all available options and features in the [Official documentation](./docs/options.md).
+
+## Concept
+The main concept behind Sentinel is an ability to take multiple tracking attempts of the provided target(s) at the same time. Those attempts are refered to as `snapshots` and allow you to define various tracking logic based on the same optimized algorithm.
+
+Learn more how Sentinel works under the hood from the [Developer documentation](./docs/developer).
 
 ## Contribution
 Feel free to submit an issue or a pull request to make this library even better. Make sure to read the [Contribution guide](./.github/CONTRIBUTING.md) to ensure unified workflow and quality of the repository. Thank you!

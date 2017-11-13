@@ -13,6 +13,7 @@ When put simply, a target cannot be visible when its bounds are not visible. The
 
 ## How to use it?
 Make sure to provide a custom `bounds` property when instantiating your tracker:
+
 ```js
 new Tracker({
   targets: document.getElementById('box'),
@@ -20,4 +21,5 @@ new Tracker({
   ...
 })
 ```
+
 This will automatically enable conditional tracking, ensuring that unless `#box-container` element is visible, no unnecessary logic is being performed relatively to `#box` element.
