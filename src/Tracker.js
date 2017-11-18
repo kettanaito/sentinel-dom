@@ -73,15 +73,15 @@ export default class Tracker {
     options.snapshots.forEach((snapshot: TSnapshot, snapshotIndex: number) => {
       /* Get bounds and their client rectangle */
       const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
-      const isBoundsWindow: boolean = (bounds === window);
-      const boundsArea: Area = isBoundsWindow ? viewportArea : new Area(bounds, { absolute: true });
+      const isBoundsViewport: boolean = (bounds === window);
+      const boundsArea: Area = isBoundsViewport ? viewportArea : new Area(bounds, { absolute: true });
 
       /**
        * Determine if current bounds lie within the visible viewport.
        * When bounds are {window}, there is no need to check, since it is a viewport itself.
        */
       const isBoundsVisible: boolean = (
-        isBoundsWindow ||
+        isBoundsViewport ||
         viewportArea.contains(boundsArea, { weak: true })
       );
 
@@ -91,7 +91,7 @@ export default class Tracker {
        */
       if (!isBoundsVisible) {
         this.debug(() => {
-          console.warn('Boundaries lie outside of the viewport. Tracking is skipped.');
+          console.warn('Boundaries lie outside of the viewport. Tracking attempt is skipped.');
         });
         return;
       }
@@ -103,17 +103,17 @@ export default class Tracker {
        */
       // const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
       const iterableTargets: Array<HTMLElement> = ensureArray(snapshot.targets || options.targets);
-      const once: boolean = isset(snapshot.once) ? snapshot.once : options.once;
+      const once: boolean = (isset(snapshot.once) ? snapshot.once : options.once) || false;
 
       /* Debugging */
       this.debug(() => {
         console.groupCollapsed('01 Snapshot attempt');
-        console.log('Bounds:', bounds);
-        console.log('Bounds area:', boundsArea);
-        console.log('Absolute tracking:', isBoundsWindow);
-        console.log('Bounds in viewport:', isBoundsVisible);
-        console.log('Iterable targets:', iterableTargets);
-        console.log('Unique impressions:', once);
+        console.log('bounds:', bounds);
+        console.log('bounds area:', boundsArea);
+        console.log('absolute tracking:', isBoundsViewport);
+        console.log('bounds in viewport:', isBoundsVisible);
+        console.log('iterable targets:', iterableTargets);
+        console.log('unique impressions:', once);
         console.groupEnd();
       });
 
@@ -131,7 +131,7 @@ export default class Tracker {
         if (once && isTargetInPool) {
           this.debug(() => {
             console.log('Target has been already tracked while only unique impressions are allowed. Skipping.');
-            console.log('Tracking pool:', this.pool);
+            console.log('tracking pool:', this.pool);
             console.groupEnd();
           });
 
@@ -142,8 +142,8 @@ export default class Tracker {
         const targetArea: Area = new Area(target);
 
         this.debug(() => {
-            console.log('Current target:', target);
-            console.log('Target area:', targetArea);
+            console.log('current target:', target);
+            console.log('target area:', targetArea);
           console.groupEnd();
         });
 
@@ -152,7 +152,8 @@ export default class Tracker {
           snapshot,
           targetArea: targetArea.toAbsolute(),
           boundsArea,
-          viewportArea
+          viewportArea,
+          isBoundsViewport
         });
 
         if (snapshotSummary.matches) {
@@ -190,7 +191,7 @@ export default class Tracker {
    * Take a snapshot
    */
   takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
-    const { snapshot, targetArea, boundsArea, viewportArea } = snapshotOptions;
+    const { snapshot, targetArea, boundsArea, viewportArea, isBoundsViewport } = snapshotOptions;
     const { name, offsetX, offsetY, thresholdX, thresholdY, edgeX, edgeY } = snapshot;
     const shouldTrackEdges: boolean = isset(edgeX) || isset(edgeY);
 
@@ -229,23 +230,23 @@ export default class Tracker {
 
     /**
      * Calculate expected dimensions.
-     * Threshold options affect the target's width and height to be visible in order to
-     * consider the snapshot successful.
+     * Depending on the threshold options, expected width and height are changed.
+     * Offsets are not taken into account to prevent the dimensions distortion.
      */
     const expectedWidth: number = targetArea.width * (thresholds.x / 100);
     const expectedHeight: number = targetArea.height * (thresholds.y / 100);
 
     /**
-     * Get intersection delta area.
+     * Get delta area.
      * Delta (intersection) area is an area of the target which currently lies within the
      * boundaries of bounds rectangle. When tracking relatively to the custom boundaries,
      * only the intersected areas should be tracked.
      */
-    const deltaArea: Area = boundsArea.intersect(targetArea);
+    const deltaArea: Area = viewportArea.intersect(targetArea);
 
     /**
-     * Determine if delta area's dimensions match expected dimensions
-     * affected by offsets and thresholds.
+     * Determine if delta area's dimensions match expected dimensions,
+     * including offsets influence.
      */
     const deltaMatches: Object = {
       byX: deltaArea.width >= (expectedWidth + offsets.x),
@@ -255,39 +256,54 @@ export default class Tracker {
     /* Determine if achieved delta lies within the current viewport */
     const deltaInViewport: boolean = viewportArea.contains(deltaArea);
 
+    /**
+     * Determine if delta area in inside the bounds area.
+     * In case of absolute tracking bounds = viewport, so no extra calculations required.
+     */
+    const deltaInBounds: boolean = isBoundsViewport ? deltaInViewport : boundsArea.contains(deltaArea);
+
     /* Debugging */
     this.debug(() => {
       console.groupCollapsed(`03 Taking a snapshot${name ? ` "${name}"` : ''}...`);
-        console.group('Snapshot options');
-          console.log('Snapshot:', snapshot);
-          console.log('Target rectangle:', targetArea);
-          console.log('Offsets (px):', offsets);
-          console.log('Thresholds (%):', thresholds);
+        console.group('Snapshot');
+          console.log('snapshot options:', snapshot);
+          console.log('offsets (px):', offsets);
+          console.log('thresholds (%):', thresholds);
+        console.groupEnd();
+
+        console.group('Coordinates');
+          console.table({
+            viewport: viewportArea,
+            bounds: boundsArea,
+            target: targetArea,
+            delta: deltaArea
+          });
         console.groupEnd();
 
         console.group('Deltas');
-          console.log('Expected width:', expectedWidth);
-          console.log('Expected height:', expectedHeight);
-          console.log('Bounds absolute area:', boundsArea);
-          console.log('Delta area:', deltaArea);
-          console.log('Delta in viewport:', deltaInViewport);
+          console.log('delta area width:', expectedWidth);
+          console.log('delta area height:', expectedHeight);
+          console.log('bounds absolute area:', boundsArea);
+          console.log('delta area:', deltaArea);
+          console.log('delta in viewport:', deltaInViewport);
+          console.log(`delta in bounds${isBoundsViewport ? ' (same)' : ''}:`, deltaInBounds);
         console.groupEnd();
 
         console.group('Horizontal visibility');
-          console.log('Expects', deltaArea.width, '(HD) >=', expectedWidth, '(expectedWidth)');
-          console.log('deltaMatches horizontally:', deltaMatches.byX);
+          console.log('current', deltaArea.width, '(HD) >=', expectedWidth, 'expected width');
+          console.log('delta matches horizontally (X):', deltaMatches.byX);
         console.groupEnd();
 
         console.group('Vertical visibility');
-          console.log('Expects', deltaArea.height, '(VD) >=', expectedHeight, '(expectedHeight)');
-          console.log('deltaMatches vertically:', deltaMatches.byY);
+          console.log('current', deltaArea.height, '(VD) >=', expectedHeight, 'expected height');
+          console.log('delta matches vertically (Y):', deltaMatches.byY);
         console.groupEnd();
       console.groupEnd();
     });
 
     /* Compose a summary object */
     return {
-      matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport
+      matches: deltaMatches.byX && deltaMatches.byY && deltaInViewport && deltaInBounds
     };
   }
 

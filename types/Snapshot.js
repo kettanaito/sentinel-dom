@@ -27,7 +27,8 @@ export type TSnapshotOptions = {
   snapshot: TSnapshot,
   targetArea: Area,
   boundsArea: Area,
-  viewportArea: Area
+  viewportArea: Area,
+  isBoundsViewport: boolean
 }
 
 type TSnapshotCallbackArgs = {
