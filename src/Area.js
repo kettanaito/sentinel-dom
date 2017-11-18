@@ -51,13 +51,13 @@ export default class Area {
      * existing onces.
      */
     this.top = rect.top;
-    this.right = rect.right || rect.left + rect.width;
-    this.bottom = rect.bottom || rect.top + rect.height;
+    this.right = rect.right || Math.floor(rect.left + rect.width);
+    this.bottom = rect.bottom || Math.floor(rect.top + rect.height);
     this.left = rect.left;
 
     /* Ensure dimensions */
-    this.height = rect.height || this.bottom - this.top;
-    this.width = rect.width || this.right - this.left;
+    this.height = rect.height || Math.floor(this.bottom - this.top);
+    this.width = rect.width || Math.floor(this.right - this.left);
 
     return absolute ? this.toAbsolute() : this;
   }
@@ -69,10 +69,10 @@ export default class Area {
    */
   toAbsolute(): Area {
     return new Area({
-      top: this.top + window.scrollY,
-      right: this.right + window.scrollX,
-      bottom: this.bottom + window.scrollY,
-      left: this.left + window.scrollX
+      top: Math.floor(this.top + window.scrollY),
+      right: Math.floor(this.right + window.scrollX),
+      bottom: Math.floor(this.bottom + window.scrollY),
+      left: Math.floor(this.left + window.scrollX)
     });
   }
 
