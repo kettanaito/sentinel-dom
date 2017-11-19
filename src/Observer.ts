@@ -46,7 +46,7 @@ export default class Observer {
   }
 
   /**
-   * Track visibility.
+   * Tracks visibility.
    * This method provides sequential tracking of targets by described snapshots.
    * In order to increase its performance, first it determines if relative bounds are
    * in the visible viewport. If not, no snapshots are taken.
@@ -182,7 +182,7 @@ export default class Observer {
   }
 
   /**
-   * Take a snapshot
+   * Takes a snapshot with the provided snapshot options.
    */
   takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
     const { snapshot, targetArea, boundsArea, viewportArea, isBoundsViewport } = snapshotOptions;
@@ -302,7 +302,7 @@ export default class Observer {
   }
 
   /**
-   * Execute given function only when debug mode is on.
+   * Executes the given function only if debug mode is on.
    */
   debug(func: Function): void {
     if (this.options.debug) func();

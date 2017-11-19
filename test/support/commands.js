@@ -59,7 +59,7 @@ function snapshotCallback({ DOMElement }) {
   DOMElement.classList.add('tracked');
 }
 
-Cypress.Commands.add('createTracker', function (optionsGetter) {
+Cypress.Commands.add('createObserver', function (optionsGetter) {
   cy.window().then((window) => {
     const { document } = window;
 
@@ -67,24 +67,24 @@ Cypress.Commands.add('createTracker', function (optionsGetter) {
     const targets = Array.from(document.getElementsByClassName('target'));
 
     /* Compose options Object */
-    const trackerOptions = optionsGetter({
+    const observerOptions = optionsGetter({
       document,
       targets,
       callback: snapshotCallback
     });
 
-    /* Create a new instance of Tracker */
-    const tracker = new Observer(Object.assign({}, {
+    /* Create a new instance of Observer */
+    const observer = new Observer(Object.assign({}, {
       window: {
         top: window.scrollY,
         left: window.scrollX,
         height: window.innerHeight,
         width: window.innerWidth
       }
-    }, trackerOptions));
+    }, observerOptions));
 
-    window.__sentinel_tracker__ = tracker;
+    window.__sentinel_observer__ = observer;
 
-    return tracker;
+    return observer;
   });
 });

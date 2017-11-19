@@ -12,7 +12,7 @@ When put simply, a target cannot be visible when its bounds are not visible. The
 * When the target element is not visible within the current viewport, no further analyzis is performed (i.e. offsets/edges/thresholds and delta areas intersections).
 
 ## How to use it?
-Make sure to provide a custom `bounds` property when instantiating your tracker:
+Make sure to provide a custom `bounds` property when instantiating your Observer:
 
 ```js
 new Observer({

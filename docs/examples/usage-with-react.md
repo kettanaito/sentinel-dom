@@ -1,7 +1,7 @@
 # Usage with React
 
 ## Example
-You can use `Observer` just as you would in any other scenario. However, you need to declare the tracker **after** the mounting of the target component.
+You can use `Observer` just as you would in any other scenario. However, you need to declare the `Observer` **after** the mounting of the target component.
 
 ```js
 import { Observer } from 'sentinel-dom';
@@ -47,18 +47,18 @@ export default class ViewObserver extends React.Component {
   componentDidMount() {
     const { ...trackingOptions } = this.props;
 
-    this.tracker = new Observer({
+    this.observer = new Observer({
       ...trackingOptions,
       targets: this.containerElement
     });
   }
 
   track = () => {
-    if (!this.tracker) {
-      throw new Error('Trying to manually track visibility before the ViewTracker is initialized.');
+    if (!this.observer) {
+      throw new Error('Trying to manually track visibility before the ViewObserver is initialized.');
     }
 
-    this.tracker.track();
+    this.observer.track();
   }
 
   render() {

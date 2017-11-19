@@ -1,5 +1,5 @@
 import { TClientRect } from './ClientRect';
-import { TTarget, TObserverPool } from './Observer';
+import { TObservableTargets, TObserverPool } from './Observer';
 import Area from '../src/Area';
 
 /**
@@ -7,7 +7,7 @@ import Area from '../src/Area';
  */
 export type TSnapshot = {
   name?: string, // name of the snapshot for better debugging
-  targets: TTarget, // (optional) targets to track within the current snapshot
+  targets: TObservableTargets, // (optional) targets to track within the current snapshot
   bounds: HTMLElement, // (optional) custom boundaries to overwrite root boundaries
   offsetX?: number, // horizontal offset (px) applied to the horizontal bleeding edge
   offsetY?: number, // vertical offset (px) applied to the vertical bleeding edge
