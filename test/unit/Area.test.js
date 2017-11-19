@@ -1,6 +1,6 @@
 import 'jsdom-global/register';
 import { expect } from 'chai';
-import Area from '../../src/Area';
+import { Area } from '../../lib';
 
 describe('Area', () => {
   it('Should not be undefined', () => expect(Area).to.not.be.undefined);
