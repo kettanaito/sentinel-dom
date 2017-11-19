@@ -6,6 +6,8 @@ jspm_packages
 
 # Build
 lib
+
+# Tests
 test/screenshots
 test/videos
 
