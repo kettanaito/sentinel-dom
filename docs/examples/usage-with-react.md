@@ -1,14 +1,14 @@
 # Usage with React
 
 ## Example
-You can use `Tracker` just as you would in any other scenario. However, you need to declare the tracker **after** the mounting of the target component.
+You can use `Observer` just as you would in any other scenario. However, you need to declare the tracker **after** the mounting of the target component.
 
 ```js
-import { Tracker } from 'sentinel-dom';
+import { Observer } from 'sentinel-dom';
 
 export default class SearchTile extends React.Component {
   componentDidMount() {
-    new Tracker({
+    new Observer({
       targets: this.DOMElement,
       snapshots: [
         {
@@ -41,13 +41,13 @@ export default class SearchTile extends React.Component {
 ## Abstraction
 In some cases it would make sense to isolate the logic above into the context-free abstraction component, which would serve as a wrapper for tracking.
 
-**ViewTracker.jsx**
+**ViewObserver.jsx**
 ```jsx
-export default class ViewTracker extends React.Component {
+export default class ViewObserver extends React.Component {
   componentDidMount() {
     const { ...trackingOptions } = this.props;
 
-    this.tracker = new Tracker({
+    this.tracker = new Observer({
       ...trackingOptions,
       targets: this.containerElement
     });
@@ -73,7 +73,7 @@ export default class ViewTracker extends React.Component {
 
 **Usage example:**
 ```jsx
-import ViewTracker from './ViewTracker';
+import ViewObserver from './ViewObserver';
 
 export default class SearchTile extends React.Component {
   handleVisibility = () => {
@@ -87,7 +87,7 @@ export default class SearchTile extends React.Component {
 
   render() {
     return (
-      <ViewTracker
+      <ViewObserver
         snapshots={[{
           thresholdY: 50,
           callback: this.handleVisibility
@@ -96,7 +96,7 @@ export default class SearchTile extends React.Component {
         <div className="tile-container">
           {/* ... */}
         </div>
-      </ViewTracker>
+      </ViewObserver>
     );
   }
 }

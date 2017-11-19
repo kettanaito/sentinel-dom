@@ -1,5 +1,4 @@
-/* @flow */
-export type TOptions = {
+export type TAreaOptions = {
   absolute?: boolean // create an Area with absolute coordinates immediately
 }
 

@@ -42,17 +42,17 @@ npm install --save-dev sentinel-dom
 ## Getting started
 Import the library in your project:
 ```js
-const Tracker = require('sentinel-dom').Tracker;
+const Observer = require('sentinel-dom').Observer;
 ```
 
 Alternatively, with **ES6+:**
 ```js
-import { Tracker } from 'sentinel-dom';
+import { Observer } from 'sentinel-dom';
 ```
 
-And declare a new tracker:
+And declare an Observer:
 ```js
-new Tracker({
+new Observer({
   targets: document.getElementById('box'),
   snapshots: [
     {

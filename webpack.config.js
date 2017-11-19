@@ -40,7 +40,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/i,
+        test: /\.(j|t)sx?$/i,
         exclude: /node_modules/,
         use: [
           {
@@ -48,6 +48,9 @@ module.exports = {
             options: Object.assign({}, {
               cacheDirectory: true
             }, getBabelConfig())
+          },
+          {
+            loader: 'awesome-typescript-loader'
           },
           {
             loader: 'eslint-loader',
@@ -58,5 +61,8 @@ module.exports = {
         ]
       }
     ]
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
   }
 };

@@ -24,7 +24,7 @@ Sentinel DOM library has a list of declarative options which grant precise contr
 One or mutliple DOM elements to be tracked.
 
 ```js
-new Tracker({
+new Observer({
   targets: document.getElementsByClassName('box'),
   // ...
 });
@@ -36,7 +36,7 @@ new Tracker({
 Boundaries against which the tracking is performed. You may want to provide custom boundaries to make the tracking more performant.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   bounds: document.getElementById('custom-bounds'),
   // ...
@@ -49,7 +49,7 @@ new Tracker({
 Throttle amount (**ms**) between each tracking attempt.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   throttle: 1000, // attempt tracking no more than once per second
   // ...
@@ -62,7 +62,7 @@ new Tracker({
 Should each snapshot invoke its callback only once, after the first successful tracking. Setting this to `false` will trigger snapshot's callback function each time the target becomes visible within the bounds.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   once: true, // forbid snapshot callbacks to be called more than once
   // ...
@@ -71,7 +71,7 @@ new Tracker({
 Setting `once` on a root options level applies it to all the snapshots, unless the latter has its own `once` options specified:
 
 ```js
-new Tracker({
+new Observer({
   once: true, // root level option
   snapshots: [
     {
@@ -91,7 +91,7 @@ new Tracker({
 Enable/disable debug mode.
 
 ```js
-new Tracker({
+new Observer({
   debug: true,
   // ...
 });
@@ -107,7 +107,7 @@ Debug mode is meant for monitoring the steps of tracking attempts in the console
 A list of the snapshots to take per each tracking attempt.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -134,7 +134,7 @@ Provided snapshot options have higher priority and overwrite the root options (i
 
 The name of a snapshot. Useful primarily for debugging purposes. When performing multiple snapshots they will appear named in the debug mode, if they have `name` option specified.
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -150,7 +150,7 @@ new Tracker({
 
 Similar to the [root option](#once), `once` allows/forbids to perform the callback function multiple times, after the target has appear the first time. Setting this option on a certain snapshot will overwrite the `once` option provided in the root options.
 ```js
-new Tracker({
+new Observer({
   snapshots: [
     {
       callback() { ... } // this callback fires multiple times
@@ -171,7 +171,7 @@ new Tracker({
 
 For example, a callback function should be called once there is still 10 pixels left to the actual top edge of the target:
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -201,7 +201,7 @@ One the blue line appear in the viewport, a snapshot will be considered successf
 It is possible to set expected horizontal (`edgeX`) and vertical (`edgeY`) bleeding edges. Bleeding edges are set in percentages (**%**) relatively to the target's width or height respectively.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -222,7 +222,7 @@ Setting `edgeX: 25` will draw a line at 25 percent of the target's width. The bl
 > Note: Bleeding edges are unaware of scroll direction. That means that the **exact** coordinate should be met. Using the current example (`edgeX: 25`), if you were scrolling from right to left, you would need to scroll to **75%** of the target's width to meet the bleeding edge.
 
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -253,7 +253,7 @@ Generally, using `edgeX` and `edgeY` is recommended when your visibility logic r
 Lets say you would like to execute a certain callback only when at least **75%** of the element's height is in the viewport. You can achieve this by setting `thresholdY: 75` as a snapshot option.
 
 ```js
-const Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -275,7 +275,7 @@ As you can see, delta areas are *omnidirectional*, meaning that they are expecte
 
 One of the powerful features of the thresholds is the ability to combine them:
 ```js
-new Tracker({
+new Observer({
   // ...
   snapshots: [
     {
@@ -310,7 +310,7 @@ type TCallbackArgs = {
 
 Let's say we would like to add a certian class name to the element once it becomes visible:
 ```js
-new Tracker({
+new Observer({
   target: document.getElementsByClassName('box'),
   once: true,
   snapshots: [

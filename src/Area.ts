@@ -1,9 +1,8 @@
 /**
- * @flow
  * Area.
  * Area is a helper class built on top of the native ClientRect with a few useful methods.
  */
-import type { TOptions, TContainOptions, TContainsEdgeAxis } from '../types/Area';
+import { TAreaOptions, TContainOptions, TContainsEdgeAxis } from '../types/Area';
 
 const defaultOptions = {
   absolute: false
@@ -12,6 +11,13 @@ const defaultOptions = {
 const defaultContainOptions = {
   weak: false
 };
+
+type TAreaLikeObject = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number
+}
 
 export default class Area {
   /* Public properties */
@@ -22,22 +28,16 @@ export default class Area {
   height: number;
   width: number;
 
-  /* Prototype methods */
-  toAbsolute: Function;
-  contains: Function;
-  containsEdge: Function;
-  intersect: Function;
-
-  constructor(pointer: window | HTMLElement | Object, options?: TOptions): Area {
-    const { absolute } = { ...defaultOptions, ...options };
+  constructor(pointer: Window | HTMLElement | Object, options?: TAreaOptions) {
+    const { absolute }: TAreaOptions = { ...defaultOptions, ...options };
     let rect;
 
     if (pointer === window) {
       rect = {
         top: window.scrollY,
         left: window.scrollX,
-        height: window.innerHeight || window.documentElement.clientHeight,
-        width: window.innerWidth || window.documentElement.clientWidth
+        height: window.innerHeight,
+        width: window.innerWidth
       };
     } else if (pointer instanceof HTMLElement) {
       rect = pointer.getBoundingClientRect();
@@ -79,8 +79,8 @@ export default class Area {
   /**
    * Check if current area contains the given area or coordinates object.
    */
-  contains(area: Area | Object, options?: TContainOptions): boolean {
-    const { weak } = { ...defaultContainOptions, ...options };
+  contains(area: Area | TAreaLikeObject, options?: TContainOptions): boolean {
+    const { weak }: TContainOptions = { ...defaultContainOptions, ...options };
     const parentArea: Area = this;
 
     return weak ? (
