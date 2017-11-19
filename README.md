@@ -36,7 +36,7 @@ This library also comes with a built-in performance optimizations (i.e. [conditi
 
 ## Install
 ```
-npm install --save-dev sentinel-dom
+npm install --save sentinel-dom
 ```
 
 ## Getting started
