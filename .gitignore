@@ -6,7 +6,8 @@ jspm_packages
 
 # Build
 lib
-cypress/screenshots
+test/screenshots
+test/videos
 
 # Logs
 *.log

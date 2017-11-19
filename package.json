@@ -13,9 +13,10 @@
     "start": "webpack --watch",
     "build": "NODE_ENV=production webpack",
     "flow": "flow",
-    "test:static": "mocha --compilers js:babel-core/register",
-    "test:browser": "mocha-headless-chrome --file ./test/dom/index.html --width 1000 --height 1000",
-    "test": "npm run test:static && npm run test:browser",
+    "test:unit": "mocha --compilers js:babel-core/register test/unit",
+    "test:integration": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
+    "cypress:ui": "node_modules/.bin/cypress open",
+    "test": "npm run test:unit && npm run test:integration",
     "prepublishOnly": "npm test && npm run build"
   },
   "repository": {

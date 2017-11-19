@@ -1,4 +1,9 @@
 {
+  "fixturesFolder": "test/fixtures",
+  "integrationFolder": "test/integration",
+  "screenshotsFolder": "test/screenshots",
+  "supportFile": "test/support",
+  "videosFolder": "test/videos",
   "env": {
     "targetSize": 200,
     "trackedClass": "tracked"
