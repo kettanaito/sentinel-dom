@@ -18,6 +18,7 @@
       snapshots: [
         {
           edgeX: 25,
+          offsetX: 10,
           callback({ DOMElement }) {
             DOMElement.classList.add(Cypress.env('trackedClass'));
           }
