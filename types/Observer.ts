@@ -1,6 +1,5 @@
-/* @flow */
-import type { TClientRect } from './ClientRect';
-import type { TSnapshot } from './Snapshot';
+import { TClientRect } from './ClientRect';
+import { TSnapshot } from './Snapshot';
 
 export type TAxisObject = {
   x: number,
@@ -8,13 +7,13 @@ export type TAxisObject = {
 };
 
 /* Tracking target */
-export type TTarget = Array<HTMLElement> | HTMLElement;
+export type TTarget = HTMLElement[] | HTMLElement;
 
 /* Tracker options */
-export type TOptions = {
+export type TObserverOptions = {
   targets: TTarget, // targets in the DOM to track
-  bounds?: window | HTMLElement, // boundaries against which the targets are tracked
-  snapshots: Array<TSnapshot>, // collection of snapshots to apply
+  bounds?: Window | HTMLElement, // boundaries against which the targets are tracked
+  snapshots: TSnapshot[], // collection of snapshots to apply
   throttle?: number, // throttle delay between the tracking attempts
   offsetX?: number, // horizontal offset (px) applied to the horizontal bleeding edge
   offsetY?: number, // vertical offset (px) applied to the vertical bleeding edge
@@ -25,15 +24,15 @@ export type TOptions = {
   debug?: boolean, // perform tracking in a debug mode
 
   /* Private */
-  iterableTargets: Array<HTMLElement>,
+  iterableTargets: HTMLElement[],
 }
 
 /* A single pool entry */
-export type TPoolEntry = Array<HTMLElement>;
+export type TObserverPoolEntry = Array<HTMLElement>;
 
 /* Pool of the tracked targets */
-export type TPool = {
-  [snapshotIndex: number]: TPoolEntry
+export type TObserverPool = {
+  [snapshotIndex: number]: TObserverPoolEntry
 }
 
 /**
@@ -41,5 +40,5 @@ export type TPool = {
  * Object returned after tracking kit construction.
  */
 export type TPublicMethods = {
-  track: Function => void // manually perform visibility tracking
+  track: () => void // manually perform visibility tracking
 }

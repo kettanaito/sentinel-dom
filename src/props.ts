@@ -1,6 +1,7 @@
+import { TObserverOptions } from '../types/Observer';
 import { validateProps } from './utils';
 
-export function hasValidProps(props) {
+export function hasValidProps(props: TObserverOptions) {
   validateProps(props, {
     targets: {
       expect: (value) => {

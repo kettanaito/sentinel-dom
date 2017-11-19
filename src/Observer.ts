@@ -1,38 +1,33 @@
-/* @flow weak */
-import type {
+import {
   TAxisObject,
-  TOptions,
-  TPool,
-  TPoolEntry,
-  TPublicMethods
-} from '../types/Tracker';
-import type { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
+  TObserverOptions,
+  TObserverPool,
+  TObserverPoolEntry
+} from '../types/Observer';
+import { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
 import { isset, throttle, ensureArray, ensureSnapshots } from './utils';
 
-const defaultOptions: Object = {
+const defaultOptions = {
   bounds: window,
   throttle: 250
 };
 
 /**
- * Tracker.
+ * Observer.
  */
-export default class Tracker {
-  options: TOptions;
-  pool: TPool;
+export default class Observer {
+  options: TObserverOptions;
+  pool: TObserverPool;
 
-  constructor(options: TOptions): TPublicMethods {
+  constructor(options: TObserverOptions) {
     /* Verify that passed options/props are valid */
     hasValidProps(options);
 
     this.options = {
       ...defaultOptions,
       ...options,
-
-      /* Ensure targets are iterable */
-      iterableTargets: ensureArray(options.targets),
 
       /* Ensure snapshots have iterable targets */
       snapshots: ensureSnapshots(options.snapshots, options)
@@ -72,7 +67,7 @@ export default class Tracker {
 
     options.snapshots.forEach((snapshot: TSnapshot, snapshotIndex: number) => {
       /* Get bounds and their client rectangle */
-      const bounds: window | HTMLElement = snapshot.bounds || options.bounds;
+      const bounds: Window | HTMLElement = snapshot.bounds || options.bounds;
       const isBoundsViewport: boolean = (bounds === window);
       const boundsArea: Area = isBoundsViewport ? viewportArea : new Area(bounds, { absolute: true });
 
@@ -101,7 +96,6 @@ export default class Tracker {
        * Target(s) provided in the snapshot options have higher priority and
        * overwrite the target(s) provided in the root options.
        */
-      // const iterableTargets: Array<HTMLElement> = snapshot.iterableTargets || options.iterableTargets;
       const iterableTargets: Array<HTMLElement> = ensureArray(snapshot.targets || options.targets);
       const once: boolean = (isset(snapshot.once) ? snapshot.once : options.once) || false;
 
@@ -119,7 +113,7 @@ export default class Tracker {
 
       /* Iterate through each target and make respective snapshots */
       iterableTargets.forEach((target: HTMLElement) => {
-        const poolEntry: TPoolEntry = this.pool[snapshotIndex];
+        const poolEntry: TObserverPoolEntry = this.pool[snapshotIndex];
         const isTargetInPool = poolEntry && poolEntry.includes(target);
 
         /* Debugging */
@@ -207,7 +201,7 @@ export default class Tracker {
        * Bleeding edge represents an imaginary line with an absolute coordinate, which is
        * expected to appear in the bounds/viewport in order to resolve a snapshot.
        */
-      const edges: Object = {
+      const edges = {
         x: edgeX && targetArea.left + (targetArea.width * edgeX / 100) + offsets.x,
         y: edgeY && targetArea.top + (targetArea.height * edgeY / 100) + offsets.y
       };
@@ -217,7 +211,7 @@ export default class Tracker {
        * bounds. The edge should lie within the both mentioned boundaries in order to
        * satisfy the tracking criteria.
        */
-      const edgesMatch: boolean = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
+      const edgesMatch = viewportArea.containsEdge(edges) && boundsArea.containsEdge(edges);
 
       return { matches: edgesMatch };
     }
@@ -233,8 +227,8 @@ export default class Tracker {
      * Depending on the threshold options, expected width and height are changed.
      * Offsets are not taken into account to prevent the dimensions distortion.
      */
-    const expectedWidth: number = targetArea.width * (thresholds.x / 100);
-    const expectedHeight: number = targetArea.height * (thresholds.y / 100);
+    const expectedWidth = targetArea.width * (thresholds.x / 100);
+    const expectedHeight = targetArea.height * (thresholds.y / 100);
 
     /**
      * Get delta area.
@@ -248,19 +242,19 @@ export default class Tracker {
      * Determine if delta area's dimensions match expected dimensions,
      * including offsets influence.
      */
-    const deltaMatches: Object = {
+    const deltaMatches = {
       byX: deltaArea.width >= (expectedWidth + offsets.x),
       byY: deltaArea.height >= (expectedHeight + offsets.y)
     };
 
     /* Determine if achieved delta lies within the current viewport */
-    const deltaInViewport: boolean = viewportArea.contains(deltaArea);
+    const deltaInViewport = viewportArea.contains(deltaArea);
 
     /**
      * Determine if delta area in inside the bounds area.
      * In case of absolute tracking bounds = viewport, so no extra calculations required.
      */
-    const deltaInBounds: boolean = isBoundsViewport ? deltaInViewport : boundsArea.contains(deltaArea);
+    const deltaInBounds = isBoundsViewport ? deltaInViewport : boundsArea.contains(deltaArea);
 
     /* Debugging */
     this.debug(() => {
@@ -308,7 +302,7 @@ export default class Tracker {
   }
 
   /**
-   * Execute given function in debug mode only
+   * Execute given function only when debug mode is on.
    */
   debug(func: Function): void {
     if (this.options.debug) func();

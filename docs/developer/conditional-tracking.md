@@ -15,7 +15,7 @@ When put simply, a target cannot be visible when its bounds are not visible. The
 Make sure to provide a custom `bounds` property when instantiating your tracker:
 
 ```js
-new Tracker({
+new Observer({
   targets: document.getElementById('box'),
   bounds: document.getElementById('box-container'),
   ...

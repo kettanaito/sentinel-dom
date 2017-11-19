@@ -1,4 +1,3 @@
-/* @flow */
 export type TClientRect = {
   top: number,
   right: number,

@@ -1,8 +1,8 @@
 /**
  * Ensure snapshots' targets are iterable.
  */
-import type { TOptions } from '../../types/Tracker';
-import type { TSnapshot } from '../../types/Snapshot';
+import { TObserverOptions } from '../../types/Observer';
+import { TSnapshot } from '../../types/Snapshot';
 import isset from './isset';
 import ensureArray from './ensureArray';
 
@@ -16,9 +16,9 @@ export const requiredOptions = [
   'edgeY'
 ];
 
-export default function ensureSnapshots(snapshots: Array<TSnapshot>, fallbacks: TOptions): Array<TSnapshot> {
+export default function ensureSnapshots(snapshots: TSnapshot[], fallbacks: TObserverOptions): TSnapshot[] {
   return snapshots.map((snapshot: TSnapshot): TSnapshot => {
-    const nextSnapshot: Object = Object.assign({}, snapshot);
+    const nextSnapshot: TSnapshot = Object.assign({}, snapshot);
 
     /* Ensure snapshot targets are iterable (when present) */
     if (nextSnapshot.targets) {

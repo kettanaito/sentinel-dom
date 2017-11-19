@@ -24,7 +24,7 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { Tracker } from '../../lib';
+import { Observer } from '../../lib';
 
 Cypress.Commands.add('hook', function (command, force = false) {
   if (force || Cypress.env('debug')) command();
@@ -74,7 +74,7 @@ Cypress.Commands.add('createTracker', function (optionsGetter) {
     });
 
     /* Create a new instance of Tracker */
-    const tracker = new Tracker(Object.assign({}, {
+    const tracker = new Observer(Object.assign({}, {
       window: {
         top: window.scrollY,
         left: window.scrollX,

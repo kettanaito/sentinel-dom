@@ -2,14 +2,13 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": "last 3 versions"
+        "browsers": "last 2 versions"
       }
     }]
   ],
   "plugins": [
     "transform-export-extensions",
     "transform-object-rest-spread",
-    "transform-class-properties",
-    "transform-flow-strip-types"
+    "transform-class-properties"
   ]
 }

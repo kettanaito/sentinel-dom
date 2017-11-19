@@ -1,12 +1,11 @@
 /**
- * @flow
- * Throttle.
+ * Throttles the given function for the threshold.
  */
-export default function throttle(func: Function, threshold: number, scope?: mixed): Function {
+export default function throttle(func: Function, threshold: number, scope?: any): EventListenerOrEventListenerObject {
   let last;
   let deferTimer;
 
-  return function (...args: Array<mixed>) {
+  return function (...args: any[]) {
     const context = scope || this;
     const now = +new Date();
 

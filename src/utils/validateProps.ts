@@ -1,5 +1,4 @@
 /**
- * @flow weak
  * Validate props.
  */
 export default function validateProps(props: Object, rules: Object): void {

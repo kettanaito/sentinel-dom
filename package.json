@@ -3,7 +3,7 @@
   "libraryName": "Sentinel",
   "version": "0.7.8",
   "description": "Lightweight, powerful and reliable library to determine the visibility of DOM elements.",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "main": "lib/index.js",
   "engines": {
     "node": ">= 5.10",
@@ -12,7 +12,6 @@
   "scripts": {
     "start": "webpack --watch",
     "build": "NODE_ENV=production webpack",
-    "flow": "flow",
     "test:unit": "mocha --compilers js:babel-core/register test/unit",
     "test:integration": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
     "cypress:ui": "node_modules/.bin/cypress open",
@@ -43,6 +42,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "awesome-typescript-loader": "^3.4.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
@@ -59,13 +59,13 @@
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
-    "flow": "^0.2.3",
     "istanbul": "^0.4.5",
     "jsdom": "^11.3.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
     "mocha-headless-chrome": "^1.5.2",
     "requirejs": "^2.3.5",
+    "typescript": "^2.6.1",
     "webpack": "^3.6.0"
   }
 }

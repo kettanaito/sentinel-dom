@@ -1,6 +1,5 @@
-/* @flow */
-import type { TClientRect } from './ClientRect';
-import type { TTarget, TPool } from './Tracker';
+import { TClientRect } from './ClientRect';
+import { TTarget, TObserverPool } from './Observer';
 import Area from '../src/Area';
 
 /**
@@ -20,7 +19,7 @@ export type TSnapshot = {
   callback: (args: TSnapshotCallbackArgs) => any, // callback function after successful snapshot
 
   /* Private */
-  iterableTargets: Array<HTMLElement>
+  iterableTargets: HTMLElement[]
 }
 
 export type TSnapshotOptions = {
@@ -33,7 +32,7 @@ export type TSnapshotOptions = {
 
 type TSnapshotCallbackArgs = {
   DOMElement: HTMLElement, // reference to the DOMElement which became visible
-  pool: TPool // pool of all tracked elements
+  pool: TObserverPool // pool of all tracked elements
 }
 
 /**
