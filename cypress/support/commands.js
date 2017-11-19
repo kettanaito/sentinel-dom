@@ -26,19 +26,17 @@
 
 import { Tracker } from '../../lib';
 
-/**
- * Shorthand: Open test page.
- */
-Cypress.Commands.add('openPage', function () {
-  cy.visit('./cypress/integration/index.html');
-});
-
 Cypress.Commands.add('openExample', function (filePath) {
   cy.visit(`./examples/${filePath}`);
 });
 
-Cypress.Commands.add('flushTracker', function () {
-  window.__sentinel_tracker__ = null;
+/**
+ * Conditional screenshot.
+ * Shorthand function to take a screenshot once the respective
+ * environmental flag is passed to Cypress.
+ */
+Cypress.Commands.add('snap', function (force = false) {
+  if (force || Cypress.env('screenshots')) cy.screenshot();
 });
 
 /**
@@ -63,8 +61,6 @@ Cypress.Commands.add('createTarget', function (styles = {}, parentNode) {
 });
 
 function snapshotCallback({ DOMElement }) {
-  console.log('THIS IS A SNAPSHOT CALLBACK!');
-
   DOMElement.classList.add('tracked');
 }
 
@@ -82,11 +78,6 @@ Cypress.Commands.add('createTracker', function (optionsGetter) {
       callback: snapshotCallback
     });
 
-    console.log(window.scrollX);
-    console.log(window.scrollY);
-    console.log(window.innerWidth);
-    console.log(window.innerHeight);
-
     /* Create a new instance of Tracker */
     const tracker = new Tracker(Object.assign({}, {
       window: {
@@ -99,7 +90,6 @@ Cypress.Commands.add('createTracker', function (optionsGetter) {
 
     window.__sentinel_tracker__ = tracker;
 
-    console.warn('Created a new Tracker:', tracker);
     return tracker;
   });
 });

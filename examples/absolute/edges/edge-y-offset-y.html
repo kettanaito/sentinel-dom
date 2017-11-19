@@ -9,7 +9,7 @@
 </head>
 <body>
   <div id="target-01" class="target"></div>
-  <div id="target-02" class="target" style="margin-left: 100vw"></div>
+  <div id="target-02" class="target" style="margin-top: 100vh"></div>
 
   <script src="../../../lib/index.js"></script>
   <script>
@@ -17,7 +17,8 @@
       targets: document.getElementsByClassName('target'),
       snapshots: [
         {
-          edgeX: 25,
+          edgeY: 25,
+          offsetY: 10,
           callback({ DOMElement }) {
             DOMElement.classList.add(Cypress.env('trackedClass'));
           }
