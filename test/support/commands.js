@@ -26,17 +26,12 @@
 
 import { Tracker } from '../../lib';
 
-Cypress.Commands.add('openExample', function (filePath) {
-  cy.visit(`./examples/${filePath}`);
+Cypress.Commands.add('hook', function (command, force = false) {
+  if (force || Cypress.env('debug')) command();
 });
 
-/**
- * Conditional screenshot.
- * Shorthand function to take a screenshot once the respective
- * environmental flag is passed to Cypress.
- */
-Cypress.Commands.add('snap', function (force = false) {
-  if (force || Cypress.env('screenshots')) cy.screenshot();
+Cypress.Commands.add('openExample', function (filePath) {
+  cy.visit(`./examples/${filePath}`);
 });
 
 /**
