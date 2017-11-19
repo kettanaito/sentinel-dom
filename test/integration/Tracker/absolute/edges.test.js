@@ -94,32 +94,67 @@ describe('Edges', function () {
     });
   });
 
+  /**
+   * edgeY + offsetY
+   */
   describe('edgeY + offsetY', function () {
+    afterEach(() => cy.hook(cy.screenshot));
+
     it('Open test page', () => cy.openExample('absolute/edges/edge-y-offset-y.html'));
 
     it('Should resolve: edgeY + offsetY is visible', function () {
       cy.scrollTo(0, 1);
       cy.get('#target-01').should('have.class', Cypress.env('trackedClass'));
-      cy.hook(cy.screenshot);
     });
 
     it('Should reject: scrollY < edgeY + offsetY', function () {
       cy.scrollTo(0, Cypress.env('targetSize') * 0.25);
       cy.get('#target-02').should('not.have.class', Cypress.env('trackedClass'));
-      cy.hook(cy.screenshot);
     });
 
     it('Should reject: scrollY > edgeY + offsetY', function () {
       cy.scrollTo(0, Cypress.config('viewportHeight') + Cypress.env('targetSize') * 0.75);
       cy.get('#target-02').should('not.have.class', Cypress.env('trackedClass'));
-      cy.hook(cy.screenshot);
     });
 
     it('Should resolve: edgeY + offsetY is visible', function () {
       cy.scrollTo(0, Cypress.config('viewportHeight') + Cypress.env('targetSize') * 0.25 + 10);
       cy.get('#target-02').should('have.class', Cypress.env('trackedClass'));
-      cy.hook(cy.screenshot);
     });
   });
 
+  /**
+   * edgeX + edgeY
+   */
+  describe('edgeX + edgeY', function () {
+    afterEach(() => cy.hook(cy.screenshot));
+
+    it('Open test page', () => cy.openExample('absolute/edges/edge-xy.html'));
+
+    it('Should resolve: edgeX/Y are visible', function () {
+      cy.scrollTo(1, 1);
+      cy.get('#target-01').should('have.class', Cypress.env('trackedClass'));
+    });
+
+    it('Should reject: scrollX/Y < edgeX/Y', function () {
+      cy.scrollTo(Cypress.env('targetSize') * 0.2, Cypress.env('targetSize') * 0.2);
+      cy.get('#target-02').should('not.have.class', Cypress.env('trackedClass'));
+    });
+
+    it('Should reject scrollX/Y > edgeX/Y', function () {
+      cy.scrollTo(
+        Cypress.config('viewportWidth') + Cypress.env('targetSize') * 0.75,
+        Cypress.config('viewportWidth') + Cypress.env('targetSize') * 0.75
+      );
+      cy.get('#target-02').should('not.have.class', Cypress.env('trackedClass'));
+    });
+
+    it('Should resolve: edgeX/Y are visible', function () {
+      cy.scrollTo(
+        Cypress.config('viewportWidth') + Cypress.env('targetSize') * 0.25,
+        Cypress.config('viewportHeight') + Cypress.env('targetSize') * 0.25
+      );
+      cy.get('#target-02').should('have.class', Cypress.env('trackedClass'));
+    });
+  });
 });
