@@ -5,8 +5,8 @@ bower_components
 jspm_packages
 
 # Build
-.happypack
 lib
+cypress/screenshots
 
 # Logs
 *.log
