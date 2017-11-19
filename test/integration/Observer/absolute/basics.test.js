@@ -1,5 +1,3 @@
-import { Tracker } from '../../../../lib';
-
 export default describe('Basics', function () {
   it('Open test page', () => {
     cy.visit('examples/absolute/basics.html');
