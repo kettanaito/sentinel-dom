@@ -2,7 +2,7 @@
  * Area.
  * Area is a helper class built on top of the native ClientRect with a few useful methods.
  */
-import { TAreaOptions, TContainOptions, TContainsEdgeAxis } from '../types/Area';
+import { TAreaOptions, TContainOptions, TContainsEdgeAxis, TAreaLikeObject } from '../types/Area';
 
 const defaultOptions = {
   absolute: false
@@ -11,13 +11,6 @@ const defaultOptions = {
 const defaultContainOptions = {
   weak: false
 };
-
-type TAreaLikeObject = {
-  top: number,
-  right: number,
-  bottom: number,
-  left: number
-}
 
 export default class Area {
   /* Public properties */

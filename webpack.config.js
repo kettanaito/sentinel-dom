@@ -40,7 +40,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(j|t)sx?$/i,
+        test: /\.tsx?$/i,
         exclude: /node_modules/,
         use: [
           {
@@ -53,9 +53,9 @@ module.exports = {
             loader: 'awesome-typescript-loader'
           },
           {
-            loader: 'eslint-loader',
+            loader: 'tslint-loader',
             options: {
-              failOnError: PRODUCTION
+              emitErrors: PRODUCTION
             }
           }
         ]

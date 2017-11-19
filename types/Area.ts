@@ -10,3 +10,10 @@ export type TContainsEdgeAxis = {
   x: number,
   y: number
 }
+
+export type TAreaLikeObject = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number
+}

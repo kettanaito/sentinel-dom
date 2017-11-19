@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "eofline": true,
+    "indent": [2, "spaces"],
+    "trailing-comma": false,
+    "max-line-length": false,
+    "no-shadowed-variable": true,
+    "no-empty-interface": true,
+    "no-eval": true,
+    "space-within-parens": false,
+    "prefer-const": true,
+    "no-trailing-whitespace": true,
+    "one-variable-per-declaration": true
+  }
+}
