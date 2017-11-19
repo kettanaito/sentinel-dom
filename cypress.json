@@ -4,6 +4,7 @@
   "screenshotsFolder": "test/screenshots",
   "supportFile": "test/support",
   "videosFolder": "test/videos",
+  "viewportHeight": 1000,
   "env": {
     "targetSize": 200,
     "trackedClass": "tracked"
