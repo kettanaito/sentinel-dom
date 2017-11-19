@@ -1,0 +1,6 @@
+{
+  "env": {
+    "targetSize": 200,
+    "trackedClass": "tracked"
+  }
+}
