@@ -2,6 +2,7 @@
 src
 
 # Configurations
+cypress*
 .babelrc
 .eslint*
 .travis.yml
