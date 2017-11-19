@@ -16,7 +16,7 @@
     "test:integration": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
     "cypress:ui": "node_modules/.bin/cypress open",
     "test": "npm run test:unit && npm run test:integration",
-    "prepublishOnly": "npm test && npm run build"
+    "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
