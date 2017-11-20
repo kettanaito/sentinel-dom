@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="../../../../examples/styles.css" />
+
+<div id="target-01" class="target" style="
+  margin-top: 198px;
+  margin-left: 25.9951171875px;
+  height: 410px;
+  width: 927.390625px;
+"></div>
+
+<script src="../../../../lib/index.js"></script>
+<script>
+  new Sentinel.Observer({
+    targets: document.getElementsByClassName('target'),
+    snapshots: [
+      {
+        thresholdY: 80,
+        callback({ DOMElement }) {
+          DOMElement.classList.add(Cypress.env('trackedClass'));
+        }
+      }
+    ]
+  });
+</script>

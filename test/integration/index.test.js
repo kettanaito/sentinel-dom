@@ -7,5 +7,8 @@ describe('Basics', () => {
   });
 });
 
-/* Require test groups */
+/* Test groups */
 require('./Observer/index.test');
+
+/* Bugfixes */
+require('./bugfixes/index.test');

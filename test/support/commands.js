@@ -26,65 +26,29 @@
 
 import { Observer } from '../../lib';
 
+/**
+ * Shorthand command which executes the given function
+ * only once the proper flag is set within Cypress process.
+ */
 Cypress.Commands.add('hook', function (command, force = false) {
   if (force || Cypress.env('debug')) command();
 });
 
+/**
+ * Shorthand command to open an example HTML file.
+ */
 Cypress.Commands.add('openExample', function (filePath) {
   cy.visit(`./examples/${filePath}`);
 });
 
 /**
- * Create target element on the page.
+ * Shorthand command to open a bug scenario.
+ * Useful for bugfix tests.
  */
-Cypress.Commands.add('createTarget', function (styles = {}, parentNode) {
-  cy.window().then(({ document }) => {
-    const target = document.createElement('div');
-    target.classList.add('target');
-
-    /* Append provided styles */
-    Object.keys(styles).forEach((styleRule) => {
-      target.style[styleRule] = styles[styleRule];
-    });
-
-    /* Append target element to its parent */
-    const parent = parentNode || document.body;
-    parent.appendChild(target);
-
-    return target;
-  });
+Cypress.Commands.add('openBugScenario', function (filePath) {
+  cy.visit(`./test/integration/bugfixes/${filePath}`);
 });
 
 function snapshotCallback({ DOMElement }) {
   DOMElement.classList.add('tracked');
 }
-
-Cypress.Commands.add('createObserver', function (optionsGetter) {
-  cy.window().then((window) => {
-    const { document } = window;
-
-    /* Pre-get targets, convert to array */
-    const targets = Array.from(document.getElementsByClassName('target'));
-
-    /* Compose options Object */
-    const observerOptions = optionsGetter({
-      document,
-      targets,
-      callback: snapshotCallback
-    });
-
-    /* Create a new instance of Observer */
-    const observer = new Observer(Object.assign({}, {
-      window: {
-        top: window.scrollY,
-        left: window.scrollX,
-        height: window.innerHeight,
-        width: window.innerWidth
-      }
-    }, observerOptions));
-
-    window.__sentinel_observer__ = observer;
-
-    return observer;
-  });
-});
