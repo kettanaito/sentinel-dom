@@ -1,7 +1,7 @@
 /**
  * GitHub issue: https://github.com/kettanaito/sentinel-dom/issues/5.
  */
-it('Should compare dimensions after rounding', function () {
+it('Wrong dimensions comparison due to missing rounding', function () {
   cy.openBugScenario('./dimensions-rounding');
   cy.viewport(990, 500);
 
