@@ -45,7 +45,7 @@ Import the library in your project:
 const Observer = require('sentinel-dom').Observer;
 ```
 
-Alternatively, with **ES6+:**
+Alternatively, with ES6+:
 ```js
 import { Observer } from 'sentinel-dom';
 ```
@@ -69,15 +69,15 @@ new Observer({
   ]
 });
 ```
-That's it! Sentinel will now track the provided `targets` matching those `snapshots` in a performant, omni-directional scroll event handler.
+That's it! Sentinel will now track the provided `targets` matching those `snapshots` using a performant, omni-directional tracking algorithm.
 
 ### Options and featues
-That is not nearly everything. Thresholds, offsets, bleeding edges, manual tracking and much more can be configured at your will, whenever you need it.
+There is much more to that. Thresholds, offsets, bleeding edges, manual tracking and much more can be configured at your will, whenever you need it.
 
 Learn more about all available options and features in the [Official documentation](./docs/options.md).
 
 ## Concept
-The main concept behind Sentinel is an ability to take multiple tracking attempts of the provided target(s) at the same time. Those attempts are refered to as `snapshots` and allow you to define various tracking logic based on the same optimized algorithm.
+The main concept behind Sentinel is an ability to take multiple tracking attempts of the provided target(s) at the same time. Those attempts are refered to as `snapshots` and allow you to define different tracking logic against the same targets/bounds.
 
 Learn more how Sentinel works under the hood from the [Developer documentation](./docs/developer).
 
