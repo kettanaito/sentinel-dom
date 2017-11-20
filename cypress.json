@@ -1,9 +1,10 @@
 {
   "fixturesFolder": "test/fixtures",
   "integrationFolder": "test/integration",
+  "pageLoadTimeout": 2000,
+  "pluginsFile": "test/plugins",
   "screenshotsFolder": "test/screenshots",
   "supportFile": "test/support",
-  "pluginsFile": "test/plugins",
   "videosFolder": "test/videos",
   "viewportHeight": 1000,
   "env": {
