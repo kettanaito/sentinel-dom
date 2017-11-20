@@ -1,5 +1,5 @@
 # Options
-Sentinel DOM library has a list of declarative options which grant precise control over the tracking logic.
+Sentinel DOM has a list of declarative options, granting you a  precise control over the tracking logic.
 
 * [Root options](#root-options)
   * [Targets](#targets)
@@ -19,9 +19,9 @@ Sentinel DOM library has a list of declarative options which grant precise contr
 
 ## Root options
 ### Targets
-* `targets: Array<HTMLElement> | HTMLElement`
+* `targets: HTMLCollection | Array<HTMLElement> | HTMLElement`
 
-One or mutliple DOM elements to be tracked.
+One, or mutliple DOM elements to be tracked within the declared instance of `Observer`:
 
 ```js
 new Observer({
@@ -31,9 +31,11 @@ new Observer({
 ```
 
 ### Bounds
-* `bounds?: HTMLElement` (default: `window`)
+* `bounds?: HTMLElement | Window` (default: `window`)
 
-Boundaries against which the tracking is performed. You may want to provide custom boundaries to make the tracking more performant.
+Boundaries element which acts like a container for the provided targets. When specified, the tracking is performed relatively to the bounds, applying the [Conditional tracking] logic.
+
+> **Note:** It is recommended to provide custom `bounds` whenever possible to ensure outmost tracking perfromance.
 
 ```js
 new Observer({
@@ -46,12 +48,12 @@ new Observer({
 ### Throttle
 * `throttle?: number` (default: `250`)
 
-Throttle amount (**ms**) between each tracking attempt.
+Throttles the tracking attemps by the provided value (in **ms**). Adjust this correspondingly to the tracking frequency your scenario requires.
 
 ```js
 new Observer({
   // ...
-  throttle: 1000, // attempt tracking no more than once per second
+  throttle: 1000, // no more than 1 attempt in a second
   // ...
 });
 ```
@@ -59,16 +61,18 @@ new Observer({
 ### Once
 * `once?: boolean` (default: `false`)
 
-Should each snapshot invoke its callback only once, after the first successful tracking. Setting this to `false` will trigger snapshot's callback function each time the target becomes visible within the bounds.
+Controls whether snapshot's callback function should be called only once, when the snapshot is resolved.
+
+Setting this to `false` will trigger the callback each time the target becomes visible within the bounds.
 
 ```js
 new Observer({
   // ...
-  once: true, // forbid snapshot callbacks to be called more than once
+  once: true, // each snapshot callback is called only once
   // ...
 });
 ```
-Setting `once` on a root options level applies it to all the snapshots, unless the latter has its own `once` options specified:
+Setting `once` on a root level applies to each snapshot, unless the latter has its own `once` options specified:
 
 ```js
 new Observer({
@@ -99,7 +103,7 @@ new Observer({
 
 Debug mode is meant for monitoring the steps of tracking attempts in the console. It is useful during the investigation of the tracking behavior.
 
-> **Note:** Debug mode may decrease the tracking performance due to adding extra operations (logging) after each tracking step. Consider **not to turn it on** unless needed.
+> **Note:** Debug mode may significantly decrease the tracking performance due to adding extra operations (logging) after each tracking step. Consider **having it disabled** unless needed.
 
 ### Snapshots
 * `snapshots: Array<Snapshot>`
