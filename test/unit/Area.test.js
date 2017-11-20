@@ -7,7 +7,7 @@ describe('Area', () => {
 
   const AParent = new Area({ top: 100, right: 200, bottom: 200, left: 100 });
 
-  it('Should calculate "contains"', () => {
+  it('Properly calculate "contains"', () => {
     const parentArea = new Area({ top: 0, right: 500, bottom: 500, left: 0 });
     const areaWithin = new Area({ top: 50, right: 100, bottom: 50, left: 50 });
     const partArea = new Area({ top: 0, right: 400, bottom: 750, left: 10 });
@@ -20,7 +20,7 @@ describe('Area', () => {
     expect(parentArea.contains(partArea, { weak: true })).to.be.true;
   });
 
-  it('Should calculate "containsEdge"', () => {
+  it('Properly calculate "containsEdge"', () => {
     const parentArea = new Area({ top: 0, right: 500, bottom: 500, left: 0 });
     const edgeOne = { x: 20 };
     const edgeTwo = { y: 20 };
@@ -33,14 +33,14 @@ describe('Area', () => {
     expect(parentArea.containsEdge(edgeFour)).to.be.false;
   });
 
-  it('Should calculate "intersect" with area within the parent', () => {
+  it('Properly calculate "intersect" with area within the parent', () => {
     const AWithin = new Area({ top: 125, right: 175, bottom: 175, left: 125 });
     const intersection = AParent.intersect(AWithin);
 
     expect(intersection).to.deep.equal(AWithin);
   });
 
-  it('Should calculate "intersect" with area bottom left', () => {
+  it('Properly calculate "intersect" with area bottom left', () => {
     const ABottomLeft = new Area({ top: 150, right: 150, bottom: 250, left: 50 });
     const intersection = AParent.intersect(ABottomLeft);
 
@@ -54,7 +54,7 @@ describe('Area', () => {
     }));
   });
 
-  it('Should calculate "intersect" with area top right', () => {
+  it('Properly calculate "intersect" with area top right', () => {
     const ATopRight = new Area({ top: 50, right: 250, bottom: 150, left: 150 });
     const intersection = AParent.intersect(ATopRight);
 
