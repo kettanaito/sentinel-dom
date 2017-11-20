@@ -14,7 +14,7 @@
     "build": "NODE_ENV=production webpack",
     "test:unit": "mocha --compilers js:babel-core/register test/unit",
     "test:integration": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
-    "cypress:ui": "node_modules/.bin/cypress open",
+    "cypress": "node_modules/.bin/cypress open",
     "test": "npm run test:unit && npm run test:integration",
     "prepublishOnly": "npm run build && npm test"
   },
@@ -51,16 +51,16 @@
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "cypress": "^1.0.3",
+    "cypress": "^1.1.0",
     "istanbul": "^0.4.5",
-    "jsdom": "^11.3.0",
+    "jsdom": "^11.4.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^3.5.0",
     "tslint": "^5.8.0",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.6.1",
-    "webpack": "^3.6.0"
+    "webpack": "^3.8.1"
   }
 }

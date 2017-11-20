@@ -3,6 +3,7 @@
   "integrationFolder": "test/integration",
   "screenshotsFolder": "test/screenshots",
   "supportFile": "test/support",
+  "pluginsFile": "test/plugins",
   "videosFolder": "test/videos",
   "viewportHeight": 1000,
   "env": {
