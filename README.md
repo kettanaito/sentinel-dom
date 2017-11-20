@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/sentinel-dom">
-    <img src="https://img.shields.io/npm/v/sentinel-dom.svg" title="NPM version" />
+    <img src="https://img.shields.io/npm/v/sentinel-dom.svg" title="Published version" />
   </a>
   <a href="#">
     <img src="https://circleci.com/gh/kettanaito/sentinel-dom/tree/master.svg?style=shield" title="Build status" />
