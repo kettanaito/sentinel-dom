@@ -11,11 +11,6 @@ import { hasValidOptions } from './options';
 import Area from './Area';
 import { isset, throttle, ensureArray, ensureSnapshots } from './utils';
 
-const defaultOptions = {
-  bounds: window,
-  throttle: 250
-};
-
 /**
  * Observer.
  */
@@ -27,20 +22,20 @@ export default class Observer {
     /* Verify that passed options/props are valid */
     hasValidOptions(options);
 
+    const observerOptions = new TObserverOptions(options);
     this.options = {
-      ...defaultOptions,
-      ...options,
+      ...observerOptions,
 
       /* Ensure snapshots have iterable targets */
-      snapshots: ensureSnapshots(options.snapshots, options)
+      snapshots: ensureSnapshots(observerOptions.snapshots, observerOptions)
     };
 
     /* Pool of already tracked elements */
     this.pool = {};
 
-    if (!options.manual) {
+    if (!observerOptions.manual) {
       /* Attach scroll event listener */
-      window.addEventListener('scroll', throttle(this.track, options.throttle), false);
+      window.addEventListener('scroll', throttle(this.track, observerOptions.throttle), false);
     }
 
     /* Return public methods */
