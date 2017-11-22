@@ -30,14 +30,17 @@ export type TSnapshotOptions = {
   isBoundsViewport: boolean
 }
 
+/**
+ * Arguments types for the snapshot's callback function.
+ */
 type TSnapshotCallbackArgs = {
   DOMElement: HTMLElement, // reference to the DOMElement which became visible
   pool: TObserverPool // pool of all tracked elements
 }
 
 /**
- * Result object of a single taken snapshot
+ * Result Object of a single taken snapshot.
  */
-export type TSnapshotSummary = {
+export type TSnapshotResult = {
   matches: boolean // whether the target satisfies the provided tracking criterias
 }

@@ -8,11 +8,12 @@ export type TAxisObject = {
 
 /* Tracking target */
 export type TObservableTargets = HTMLElement[] | HTMLElement;
+export type TObservableBounds = Window | HTMLElement;
 
 /* Observer options */
 export type TObserverOptions = {
   targets: TObservableTargets, // targets in the DOM to track
-  bounds?: Window | HTMLElement, // boundaries against which the targets are tracked
+  bounds?: TObservableBounds, // boundaries against which the targets are tracked
   snapshots: TSnapshot[], // collection of snapshots to apply
   throttle?: number, // throttle delay between the tracking attempts
   offsetX?: number, // horizontal offset (px) applied to the horizontal bleeding edge

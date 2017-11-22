@@ -1,10 +1,12 @@
 import {
   TAxisObject,
   TObserverOptions,
+  TObservableTargets,
+  TObservableBounds,
   TObserverPool,
   TObserverPoolEntry
 } from '../types/Observer';
-import { TSnapshot, TSnapshotOptions, TSnapshotSummary } from '../types/Snapshot';
+import { TSnapshot, TSnapshotOptions, TSnapshotResult } from '../types/Snapshot';
 import { hasValidProps } from './props';
 import Area from './Area';
 import { isset, throttle, ensureArray, ensureSnapshots } from './utils';
@@ -67,15 +69,15 @@ export default class Observer {
 
     options.snapshots.forEach((snapshot: TSnapshot, snapshotIndex: number) => {
       /* Get bounds and their client rectangle */
-      const bounds: Window | HTMLElement = snapshot.bounds || options.bounds;
-      const isBoundsViewport: boolean = (bounds === window);
+      const bounds: TObservableBounds = snapshot.bounds || options.bounds;
+      const isBoundsViewport = (bounds === window);
       const boundsArea: Area = isBoundsViewport ? viewportArea : new Area(bounds, { absolute: true });
 
       /**
        * Determine if current bounds lie within the visible viewport.
        * When bounds are {window}, there is no need to check, since it is a viewport itself.
        */
-      const isBoundsVisible: boolean = (
+      const isBoundsVisible = (
         isBoundsViewport ||
         viewportArea.contains(boundsArea, { weak: true })
       );
@@ -96,8 +98,8 @@ export default class Observer {
        * Target(s) provided in the snapshot options have higher priority and
        * overwrite the target(s) provided in the root options.
        */
-      const iterableTargets: Array<HTMLElement> = ensureArray(snapshot.targets || options.targets);
-      const once: boolean = (isset(snapshot.once) ? snapshot.once : options.once) || false;
+      const iterableTargets: TObservableTargets = ensureArray(snapshot.targets || options.targets);
+      const once = (isset(snapshot.once) ? snapshot.once : options.once) || false;
 
       /* Debugging */
       this.debug(() => {
@@ -142,7 +144,7 @@ export default class Observer {
         });
 
         /* Take a snapshot */
-        const snapshotSummary: TSnapshotSummary = this.takeSnapshot({
+        const snapshotSummary: TSnapshotResult = this.takeSnapshot({
           snapshot,
           targetArea: targetArea.toAbsolute(),
           boundsArea,
@@ -184,7 +186,7 @@ export default class Observer {
   /**
    * Takes a snapshot with the provided snapshot options.
    */
-  takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotSummary {
+  takeSnapshot(snapshotOptions: TSnapshotOptions): TSnapshotResult {
     const { snapshot, targetArea, boundsArea, viewportArea, isBoundsViewport } = snapshotOptions;
     const { name, offsetX, offsetY, thresholdX, thresholdY, edgeX, edgeY } = snapshot;
     const shouldTrackEdges: boolean = isset(edgeX) || isset(edgeY);
@@ -201,7 +203,7 @@ export default class Observer {
        * Bleeding edge represents an imaginary line with an absolute coordinate, which is
        * expected to appear in the bounds/viewport in order to resolve a snapshot.
        */
-      const edges = {
+      const edges: TAxisObject = {
         x: edgeX && targetArea.left + (targetArea.width * edgeX / 100) + offsets.x,
         y: edgeY && targetArea.top + (targetArea.height * edgeY / 100) + offsets.y
       };
@@ -304,7 +306,7 @@ export default class Observer {
   /**
    * Executes the given function only if debug mode is on.
    */
-  debug(func: Function): void {
+  debug(func: Function) {
     if (this.options.debug) func();
   }
 }
