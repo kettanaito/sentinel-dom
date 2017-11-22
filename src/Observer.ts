@@ -7,7 +7,7 @@ import {
   TObserverPoolEntry
 } from '../types/Observer';
 import { TSnapshot, TSnapshotOptions, TSnapshotResult } from '../types/Snapshot';
-import { hasValidProps } from './props';
+import { hasValidOptions } from './options';
 import Area from './Area';
 import { isset, throttle, ensureArray, ensureSnapshots } from './utils';
 
@@ -25,7 +25,7 @@ export default class Observer {
 
   constructor(options: TObserverOptions) {
     /* Verify that passed options/props are valid */
-    hasValidProps(options);
+    hasValidOptions(options);
 
     this.options = {
       ...defaultOptions,

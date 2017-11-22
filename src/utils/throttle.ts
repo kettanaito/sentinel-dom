@@ -1,5 +1,5 @@
 /**
- * Throttles the given function for the threshold.
+ * Throttles the function for the provided threshold.
  */
 export default function throttle(func: Function, threshold: number, scope?: any): EventListenerOrEventListenerObject {
   let last;

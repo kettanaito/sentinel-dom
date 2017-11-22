@@ -1,12 +1,8 @@
-/**
- * Ensure snapshots' targets are iterable.
- */
 import { TObserverOptions } from '../../types/Observer';
 import { TSnapshot } from '../../types/Snapshot';
-import isset from './isset';
-import ensureArray from './ensureArray';
+import { isset, ensureArray } from '../utils';
 
-/* List of required snapshot options */
+/* List of the required snapshot options */
 export const requiredOptions = [
   'offsetX',
   'offsetY',
@@ -16,6 +12,10 @@ export const requiredOptions = [
   'edgeY'
 ];
 
+/**
+ * Ensures the targets of the given snapshots collection are iterable.
+ * Uses a fallback Object for missing snapshot options.
+ */
 export default function ensureSnapshots(snapshots: TSnapshot[], fallbacks: TObserverOptions): TSnapshot[] {
   return snapshots.map((snapshot: TSnapshot): TSnapshot => {
     const nextSnapshot: TSnapshot = Object.assign({}, snapshot);

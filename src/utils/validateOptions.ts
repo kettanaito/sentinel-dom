@@ -1,9 +1,9 @@
 /**
- * Validate props.
+ * Validates the given options Object.
  */
-export default function validateProps(props: Object, rules: Object): void {
+export default function validateOptions(options: Object, rules: Object): void {
   Object.keys(rules).forEach((propName) => {
-    const propValue = props[propName];
+    const propValue = options[propName];
     const propRule = rules[propName];
 
     if (propRule.required) {

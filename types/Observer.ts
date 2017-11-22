@@ -1,4 +1,3 @@
-import { TClientRect } from './ClientRect';
 import { TSnapshot } from './Snapshot';
 
 export type TAxisObject = {

@@ -1,4 +1,3 @@
-import { TClientRect } from './ClientRect';
 import { TObservableTargets, TObserverPool } from './Observer';
 import Area from '../src/Area';
 

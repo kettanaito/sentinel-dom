@@ -1,6 +1,5 @@
 /**
  * Area.
- * Area is a helper class built on top of the native ClientRect with a few useful methods.
  */
 import { TAreaOptions, TContainOptions, TContainsEdgeAxis, TAreaLikeObject } from '../types/Area';
 
@@ -12,6 +11,9 @@ const defaultContainOptions = {
   weak: false
 };
 
+/**
+ * Superset class based on the native ClientRect.
+ */
 export default class Area {
   /* Public properties */
   top: number;
@@ -56,7 +58,7 @@ export default class Area {
   }
 
   /**
-   * Compose a new Area based on the current one, which takes scroll position into account
+   * Composes a new Area based on the current one, which takes scroll position into account
    * when calculating its coordinates. Explicitly returns a new instance of Area to prevent
    * unexpected mutations of the values of the original (source) Area.
    */
@@ -70,17 +72,15 @@ export default class Area {
   }
 
   /**
-   * Check if current area contains the given area or coordinates object.
+   * Checks if current Area contains the given Area or coordinates object.
+   * Pass "weak" option to tell the method to resolve if the given Area
+   * is within the parent Area partially.
    */
   contains(area: Area | TAreaLikeObject, options?: TContainOptions): boolean {
     const { weak }: TContainOptions = { ...defaultContainOptions, ...options };
     const parentArea: Area = this;
 
     return weak ? (
-      /**
-       * Weak mode means that the provided area should not necessarily be in the parent
-       * rectangle completely. Even partial presence will resolve.
-       */
       (area.left <= parentArea.right) && (area.top <= parentArea.bottom)
     ) : (
       /**
@@ -94,6 +94,9 @@ export default class Area {
     );
   }
 
+  /**
+   * Determines whether the current Area contains the given edge (absolute).
+   */
   containsEdge(axis: TContainsEdgeAxis): boolean {
     const { x, y } = axis;
     const containsX = x ? ((x >= this.left) && (x <= this.right)) : true;
@@ -103,7 +106,7 @@ export default class Area {
   }
 
   /**
-   * Get the intersection area between the current area and the provided one.
+   * Returns an intersection Area between the current Area and the provided one.
    */
   intersect(area: Area): Area {
     /* When current area completely contains the provided area, return the area */

@@ -1,5 +1,5 @@
 /**
- * Ensures the given variable is encapsulated in the Array (and, therefore, iterable).
+ * Ensures the given variable is encapsulated in the Array and, this, is iterable.
  */
 export default function ensureArray(variable: any[] | any): any[] {
   /* Bypass arrays */
