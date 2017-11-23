@@ -1,7 +1,7 @@
 import { Observer, Area } from '../../lib';
 
-describe('Basics', () => {
-  it('Library exports are fine', () => {
+describe('Basics', function () {
+  it('Library exports are fine', function () {
     expect(Observer).to.not.be.undefined;
     expect(Area).to.not.be.undefined;
   });
