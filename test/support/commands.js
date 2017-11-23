@@ -49,6 +49,20 @@ Cypress.Commands.add('openBugScenario', function (filePath) {
   cy.visit(`./test/integration/bugfixes/${filePath}`);
 });
 
+Cypress.Commands.add('createTarget', function (id, styles = {}) {
+  return cy.window().then((win) => {
+    const target = win.document.createElement('div');
+    if (id) target.id = id;
+
+    Object.keys(styles).forEach((propName) => target.style[propName] = styles[propName]);
+
+    target.classList.add('target');
+    win.document.body.appendChild(target);
+
+    return target;
+  });
+});
+
 function snapshotCallback({ DOMElement }) {
   DOMElement.classList.add('tracked');
 }
