@@ -29,6 +29,9 @@ When those snippets are enough for your project's needs - by all means, *use* th
 
 From my practice those 10-15 lines of code are not sufficient to provide [unique impressions](./docs/options.md#unique-snapshots), [visibility after certain point](./docs/options.md#bleeding-edges) or [percentage visibility](./docs/options.md#thresholds). Those are vital things commonly shared between different visibility tracking requirements (such as Google Analytics implementation).  Sounds good to be put into a single library and work out of the box.
 
+### Why not just use IntersectionObserver?
+While this is a promising technology, [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) is still experimental and shouldn't be relied on without a polyfill. Sentinel DOM uses VanillaJS under its hood (simple numbers comparison), and doesn't rely on experimental features, which results into vast browser support and reliability. It also uses much more simple API than the IO.
+
 ### Why should I add another dependency to my project?
 In case you are looking for a reliable, stable and thoroughly tested solution, having Sentinel as a dependency is a small trade off.
 
