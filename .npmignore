@@ -8,6 +8,8 @@ cypress*
 .eslint*
 .travis.yml
 .flowconfig
+.prettierrc
+jest.*
 npm-*
 webpack.*
 

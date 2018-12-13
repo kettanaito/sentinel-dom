@@ -14,9 +14,9 @@
 // ***********************************************************
 
 /* Allow modern syntaxic features */
-import 'babel-polyfill';
+import 'babel-polyfill'
 
 /* Import commands.js using ES2015 syntax */
 import './commands'
 
-import { Observer } from '../../lib';
+import { Observer } from '../../lib'
