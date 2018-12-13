@@ -13,9 +13,9 @@
     "start": "webpack --watch",
     "build": "NODE_ENV=production webpack",
     "test:unit": "jest test/unit",
-    "test:integration": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
+    "test:e2e": "node_modules/.bin/cypress run --spec test/integration/index.test.js",
     "cypress": "node_modules/.bin/cypress open",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run test:unit && npm run test:e2e",
     "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
