@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Sentinel Edges</title>
-  <link rel="stylesheet" href="../../styles.css" />
-</head>
-<body>
-  <div id="target-01" class="target"></div>
-  <div id="target-02" class="target" style="margin-left: 100vw"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Sentinel Edges</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <div id="target-01" class="target"></div>
+    <div id="target-02" class="target" style="margin-left: 100vw"></div>
 
-  <script src="../../../lib/index.js"></script>
-  <script>
-    new Sentinel.Observer({
-      targets: document.getElementsByClassName('target'),
-      snapshots: [
-        {
-          edgeX: 25,
-          offsetX: 10,
-          callback({ DOMElement }) {
-            DOMElement.classList.add(Cypress.env('trackedClass'));
-          }
-        }
-      ]
-    });
-  </script>
-</body>
+    <script src="../../../lib/index.js"></script>
+    <script>
+      new Sentinel.Observer({
+        targets: document.getElementsByClassName('target'),
+        snapshots: [
+          {
+            edgeX: 25,
+            offsetX: 10,
+            callback({ DOMElement }) {
+              DOMElement.classList.add(Cypress.env('trackedClass'))
+            },
+          },
+        ],
+      })
+    </script>
+  </body>
 </html>

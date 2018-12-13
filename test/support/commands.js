@@ -24,45 +24,47 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { Observer } from '../../lib';
+import { Observer } from '../../lib'
 
 /**
  * Shorthand command which executes the given function
  * only once the proper flag is set within Cypress process.
  */
-Cypress.Commands.add('hook', function (command, force = false) {
-  if (force || Cypress.env('debug')) command();
-});
+Cypress.Commands.add('hook', function(command, force = false) {
+  if (force || Cypress.env('debug')) command()
+})
 
 /**
  * Shorthand command to open an example HTML file.
  */
-Cypress.Commands.add('openExample', function (filePath) {
-  cy.visit(`./examples/${filePath}`);
-});
+Cypress.Commands.add('openExample', function(filePath) {
+  cy.visit(`./examples/${filePath}`)
+})
 
 /**
  * Shorthand command to open a bug scenario.
  * Useful for bugfix tests.
  */
-Cypress.Commands.add('openBugScenario', function (filePath) {
-  cy.visit(`./test/integration/bugfixes/${filePath}`);
-});
+Cypress.Commands.add('openBugScenario', function(filePath) {
+  cy.visit(`./test/integration/bugfixes/${filePath}`)
+})
 
-Cypress.Commands.add('createTarget', function (id, styles = {}) {
+Cypress.Commands.add('createTarget', function(id, styles = {}) {
   return cy.window().then((win) => {
-    const target = win.document.createElement('div');
-    if (id) target.id = id;
+    const target = win.document.createElement('div')
+    if (id) target.id = id
 
-    Object.keys(styles).forEach((propName) => target.style[propName] = styles[propName]);
+    Object.keys(styles).forEach(
+      (propName) => (target.style[propName] = styles[propName]),
+    )
 
-    target.classList.add('target');
-    win.document.body.appendChild(target);
+    target.classList.add('target')
+    win.document.body.appendChild(target)
 
-    return target;
-  });
-});
+    return target
+  })
+})
 
 function snapshotCallback({ DOMElement }) {
-  DOMElement.classList.add('tracked');
+  DOMElement.classList.add('tracked')
 }

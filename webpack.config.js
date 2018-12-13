@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 const packageJson = require('./package.json');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const babelConfig = JSON.parse(fs.readFileSync('./.babelrc'));
 
 /* Environment */
@@ -18,6 +19,7 @@ function getBabelConfig() {
 }
 
 module.exports = {
+  mode: environment || 'development',
   entry: path.resolve(__dirname, packageJson.source),
   output: {
     path: __dirname,
@@ -35,7 +37,7 @@ module.exports = {
       mangle: {
         topLevel: true
       }
-    })
+    }),
   ].filter(Boolean),
   module: {
     rules: [
