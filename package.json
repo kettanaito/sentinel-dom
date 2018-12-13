@@ -1,7 +1,7 @@
 {
   "name": "sentinel-dom",
   "libraryName": "Sentinel",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Lightweight, powerful and reliable library to determine the visibility of DOM elements.",
   "source": "src/index.ts",
   "main": "lib/index.js",
