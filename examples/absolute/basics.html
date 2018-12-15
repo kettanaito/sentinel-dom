@@ -13,15 +13,17 @@
 
     <script src="../../lib/index.js"></script>
     <script>
-      new Sentinel.Observer({
-        targets: document.getElementsByClassName('target'),
-        snapshots: [
-          {
-            callback({ DOMElement }) {
-              DOMElement.classList.add('tracked')
-            },
-          },
-        ],
+      const observer = Sentinel.observe({
+        elements: document.getElementById('target-01'),
+      })
+
+      observer.once('visible', (element) => {
+        console.warn('visible once!', element)
+        element.classList.add('tracked')
+      })
+
+      observer.on('visible', (element) => {
+        console.warn('visible!', element)
       })
     </script>
   </body>

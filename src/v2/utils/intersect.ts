@@ -3,6 +3,8 @@ import containsArea from './containsArea'
 
 /**
  * Returns intersection area of two given areas.
+ * @param childArea Area to test.
+ * @param parentArea Area to test against.
  */
 export default function intersect(childArea: Area, parentArea: Area): Area {
   /**

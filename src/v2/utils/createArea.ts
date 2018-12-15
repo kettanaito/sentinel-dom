@@ -16,6 +16,11 @@ interface AreaLikeObject {
 
 type AreaSource = Window | HTMLElement | AreaLikeObject
 
+/**
+ * Returns absolute coordinates of the given area
+ * (coordinates relatively to the window).
+ * @param area Relative area
+ */
 const makeAbsolute = (area: Area) => {
   return Object.assign({}, area, {
     top: Math.floor(area.top + window.scrollY),
@@ -43,8 +48,6 @@ export default function createArea(
   } else {
     clientRect = source
   }
-
-  console.log({ source, clientRect })
 
   const area = {
     top: clientRect.top,

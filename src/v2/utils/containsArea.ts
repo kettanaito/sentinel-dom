@@ -1,7 +1,13 @@
 import { Area } from './createArea'
 
+/**
+ * Determines if the given area lies within the given parent area.
+ * @param childArea Area to test.
+ * @param parentArea Area to test against.
+ * @param strict Wheter `childArea` must lie entirely within `parentArea`.
+ */
 export default function containsArea(
-  area: Area,
+  childArea: Area,
   parentArea: Area,
   strict: boolean = true,
 ): boolean {
@@ -10,10 +16,10 @@ export default function containsArea(
        * Strict mode: resolve only when area is entirely present
        * within the parent.
        */
-      parentArea.top <= area.top &&
-        parentArea.right >= area.right &&
-        parentArea.bottom >= area.bottom &&
-        parentArea.left <= area.left
+      parentArea.top <= childArea.top &&
+        parentArea.right >= childArea.right &&
+        parentArea.bottom >= childArea.bottom &&
+        parentArea.left <= childArea.left
     : /* Weak mode: resolve when area is even partially visible within parent */
-      area.left <= parentArea.right && area.top <= parentArea.bottom
+      childArea.left <= parentArea.right && childArea.top <= parentArea.bottom
 }
