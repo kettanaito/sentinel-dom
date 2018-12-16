@@ -14,7 +14,7 @@
     <script src="../../lib/index.js"></script>
     <script>
       const observer = Sentinel.observe({
-        elements: document.getElementById('target-01'),
+        elements: document.getElementsByClassName('target'),
       })
 
       observer.once('visible', (element) => {

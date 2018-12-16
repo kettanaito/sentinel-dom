@@ -9,7 +9,11 @@ interface ObserveOptions {
   throttle?: number
 }
 
-type ObserverEventCallback = (element: HTMLElement) => void
+type ObserverEventCallback = (
+  element: HTMLElement,
+  snapshotName: string,
+  snapshotOptions: SnapshotOptions,
+) => void
 
 interface Observer {
   /**
@@ -35,19 +39,29 @@ export default function observe(options: ObserveOptions): Observer {
     throttle: throttleThreshold,
   } = options
 
+  const iterableElements =
+    elements instanceof HTMLCollection
+      ? Array.from(elements)
+      : [].concat(elements)
+
   this.callbackCounts = {}
 
   const applicableSnapshots = Object.entries(snapshots).reduce(
     (list, [snapshotName, snapshotOptions]) => {
       return list.concat(() => {
-        /**
-         * @todo Support HTMLCollection of `elements`.
-         */
-        if (takeSnapshot(elements, snapshotOptions)) {
-          window.dispatchEvent(
-            new CustomEvent('elementAppeared', { detail: { elements } }),
-          )
-        }
+        iterableElements.forEach((element) => {
+          if (takeSnapshot(element, snapshotOptions)) {
+            window.dispatchEvent(
+              new CustomEvent(snapshotName, {
+                detail: {
+                  element,
+                  snapshotName,
+                  snapshotOptions,
+                },
+              }),
+            )
+          }
+        })
       })
     },
     [],
@@ -67,19 +81,36 @@ export default function observe(options: ObserveOptions): Observer {
       /**
        * @todo Lift up the listener part, so it doesn't repeat between `once` and `on`.
        */
-      window.addEventListener('elementAppeared', (event: CustomEvent) => {
+      window.addEventListener(snapshotName, (event: CustomEvent) => {
+        const {
+          element,
+          snapshotName: resolvedSnapshotName,
+          snapshotOptions,
+        } = event.detail
         if (!this.callbackCounts[snapshotName]) {
-          callback(event.detail.elements)
-          this.callbackCounts[snapshotName] = true
+          callback(element, resolvedSnapshotName, snapshotOptions)
+
+          /**
+           * @todo
+           * Do per element assignment. A single snapshot may have multiple elements.
+           * "once" behavior must work per element, not per snapshot.
+           */
+          this.callbackCounts[resolvedSnapshotName] = true
         }
       })
 
       return this
     },
     on: (snapshotName, callback) => {
-      window.addEventListener('elementAppeared', (event: CustomEvent) => {
-        callback(event.detail.elements)
-        this.callbackCounts[snapshotName] = true
+      window.addEventListener(snapshotName, (event: CustomEvent) => {
+        const {
+          element,
+          snapshotName: resolvedSnapshotName,
+          snapshotOptions,
+        } = event.detail
+        callback(element, resolvedSnapshotName, snapshotOptions)
+
+        this.callbackCounts[resolvedSnapshotName] = true
       })
 
       return this
