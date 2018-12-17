@@ -1,5 +1,5 @@
 import throttle from './utils/throttle'
-import takeSnapshot, { SnapshotOptions, SnapshotBounds } from './takeSnapshot'
+import takeSnapshot, { SnapshotOptions } from './takeSnapshot'
 
 interface ObserveOptions {
   elements: HTMLElement
@@ -30,6 +30,13 @@ interface Observer {
 
 const defaultSnapshots = {
   visible: {},
+  appear: {
+    pruneOnReject: true,
+    resolve(element, matches, prevState) {
+      console.log('should resolve appear', matches, prevState)
+      return matches && !prevState.includes(element)
+    },
+  },
 }
 
 export default function observe(options: ObserveOptions): Observer {
@@ -39,28 +46,31 @@ export default function observe(options: ObserveOptions): Observer {
     throttle: throttleThreshold,
   } = options
 
+  this.state = {}
+
+  /* Ensure elements are iterable, either a single element, or a collection */
   const iterableElements =
     elements instanceof HTMLCollection
       ? Array.from(elements)
       : [].concat(elements)
 
-  this.callbackCounts = {}
-
-  const applicableSnapshots = Object.entries(snapshots).reduce(
+  const matchesQueue = Object.entries(snapshots).reduce(
     (list, [snapshotName, snapshotOptions]) => {
       return list.concat(() => {
         iterableElements.forEach((element) => {
-          if (takeSnapshot(element, snapshotOptions)) {
-            window.dispatchEvent(
-              new CustomEvent(snapshotName, {
-                detail: {
-                  element,
-                  snapshotName,
-                  snapshotOptions,
-                },
-              }),
-            )
+          const snapshotMatches = takeSnapshot(element, snapshotOptions)
+          const eventPayload = {
+            element,
+            snapshotName,
+            snapshotOptions,
+            matches: snapshotMatches,
           }
+
+          window.dispatchEvent(
+            new CustomEvent(snapshotName, {
+              detail: eventPayload,
+            }),
+          )
         })
       })
     },
@@ -70,50 +80,81 @@ export default function observe(options: ObserveOptions): Observer {
   window.addEventListener(
     'scroll',
     throttle(
-      () => applicableSnapshots.forEach((resolver) => resolver()),
+      () =>
+        matchesQueue.forEach((checkSnapshotMatches) => checkSnapshotMatches()),
       throttleThreshold || 200,
     ),
     false,
   )
 
+  const createEventHandler = createHandler.bind(this)
+
   return {
-    once: (snapshotName, callback) => {
-      /**
-       * @todo Lift up the listener part, so it doesn't repeat between `once` and `on`.
-       */
-      window.addEventListener(snapshotName, (event: CustomEvent) => {
+    once: createEventHandler(
+      this.state,
+      (snapshotState, element) => !snapshotState.includes(element),
+    ),
+    on: createEventHandler(this.state, () => true),
+  }
+}
+
+type ObserverHandlerPredicate = (
+  snapshotState: Object,
+  element: HTMLElement,
+  snapshotName: string,
+) => boolean
+
+function createHandler(state, predicate: ObserverHandlerPredicate) {
+  return (snapshotName: string, callback: ObserverEventCallback) => {
+    window.addEventListener(
+      snapshotName,
+      (event: CustomEvent) => {
         const {
+          matches,
           element,
           snapshotName: resolvedSnapshotName,
           snapshotOptions,
         } = event.detail
-        if (!this.callbackCounts[snapshotName]) {
+
+        /* Short curcuit on irrelevant snapshots */
+        if (resolvedSnapshotName !== snapshotName) {
+          return
+        }
+
+        if (!state[resolvedSnapshotName]) {
+          state[resolvedSnapshotName] = []
+        }
+
+        const prevSnapshotState = state[resolvedSnapshotName]
+        let nextSnapshotState = prevSnapshotState
+
+        const shouldSnapshotResolve = snapshotOptions.resolve
+          ? snapshotOptions.resolve(element, matches, prevSnapshotState)
+          : matches
+
+        if (
+          shouldSnapshotResolve &&
+          predicate(prevSnapshotState, element, snapshotName)
+        ) {
           callback(element, resolvedSnapshotName, snapshotOptions)
 
-          /**
-           * @todo
-           * Do per element assignment. A single snapshot may have multiple elements.
-           * "once" behavior must work per element, not per snapshot.
-           */
-          this.callbackCounts[resolvedSnapshotName] = true
+          /* Update the snapshot state */
+          nextSnapshotState = nextSnapshotState.includes(element)
+            ? nextSnapshotState
+            : nextSnapshotState.concat(element)
         }
-      })
 
-      return this
-    },
-    on: (snapshotName, callback) => {
-      window.addEventListener(snapshotName, (event: CustomEvent) => {
-        const {
-          element,
-          snapshotName: resolvedSnapshotName,
-          snapshotOptions,
-        } = event.detail
-        callback(element, resolvedSnapshotName, snapshotOptions)
+        if (!matches && snapshotOptions.pruneOnReject) {
+          nextSnapshotState = nextSnapshotState.filter((someElement) => {
+            return someElement !== element
+          })
+        }
 
-        this.callbackCounts[resolvedSnapshotName] = true
-      })
+        state[resolvedSnapshotName] = nextSnapshotState
+      },
+      false,
+    )
 
-      return this
-    },
+    return this
   }
 }

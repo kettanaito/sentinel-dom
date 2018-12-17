@@ -25,6 +25,10 @@
       observer.on('visible', (element) => {
         console.warn('visible!', element)
       })
+
+      observer.on('appear', (element) => {
+        console.warn('Appear', element)
+      })
     </script>
   </body>
 </html>
