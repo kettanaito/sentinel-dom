@@ -5,6 +5,10 @@ interface Edges {
   y: number
 }
 
+/**
+ * Determines if the given area contains the edges.
+ * Edge represents an imaginary line drawn on the element's axis.
+ */
 export default function containsEdges(edges: Edges, area: Area): boolean {
   const { x, y } = edges
   const containsX = x ? x >= area.left && x <= area.right : true

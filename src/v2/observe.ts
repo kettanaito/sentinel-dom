@@ -2,8 +2,9 @@ import throttle from './utils/throttle'
 import takeSnapshot, { SnapshotOptions } from './takeSnapshot'
 
 interface ObserveOptions {
-  elements: HTMLElement
-  snapshots: {
+  elements: HTMLElement | HTMLCollection
+  bounds?: HTMLElement
+  snapshots?: {
     [snapshotName: string]: SnapshotOptions
   }
   throttle?: number
@@ -23,7 +24,7 @@ interface Observer {
   once(snapshotName: string, callback: ObserverEventCallback)
 
   /**
-   * Executes the given callback each time the snapshot resolves.
+   * Executes the given callback any time the snapshot resolves.
    */
   on(snapshotName: string, callback: ObserverEventCallback)
 }
@@ -31,9 +32,8 @@ interface Observer {
 const defaultSnapshots = {
   visible: {},
   appear: {
-    pruneOnReject: true,
+    pruneOnReject: true /** @todo Deprecate, not nice */,
     resolve(element, matches, prevState) {
-      console.log('should resolve appear', matches, prevState)
       return matches && !prevState.includes(element)
     },
   },
@@ -42,6 +42,7 @@ const defaultSnapshots = {
 export default function observe(options: ObserveOptions): Observer {
   const {
     elements,
+    bounds,
     snapshots = defaultSnapshots,
     throttle: throttleThreshold,
   } = options
@@ -58,7 +59,11 @@ export default function observe(options: ObserveOptions): Observer {
     (list, [snapshotName, snapshotOptions]) => {
       return list.concat(() => {
         iterableElements.forEach((element) => {
-          const snapshotMatches = takeSnapshot(element, snapshotOptions)
+          const snapshotMatches = takeSnapshot(element, {
+            bounds,
+            ...snapshotOptions,
+          })
+
           const eventPayload = {
             element,
             snapshotName,
@@ -116,7 +121,7 @@ function createHandler(state, predicate: ObserverHandlerPredicate) {
           snapshotOptions,
         } = event.detail
 
-        /* Short curcuit on irrelevant snapshots */
+        /* Short circuit on irrelevant snapshots */
         if (resolvedSnapshotName !== snapshotName) {
           return
         }

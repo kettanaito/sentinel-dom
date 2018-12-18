@@ -36,7 +36,7 @@ export default function takeSnapshot(
   const opStart = performance.now()
 
   const {
-    bounds,
+    bounds = window,
     edgeX,
     edgeY,
     offsetX,
@@ -101,9 +101,7 @@ export default function takeSnapshot(
   const deltaInViewport = containsArea(deltaArea, viewportArea)
   const deltaInBounds = containsArea(deltaArea, boundsArea)
 
-  const opEnd = performance.now()
-
-  console.log('Finished in %sms', (opEnd - opStart).toFixed(2))
+  console.log('Finished in %sms', (performance.now() - opStart).toFixed(2))
 
   return (
     deltaMatches.byX && deltaMatches.byY && deltaInViewport && deltaInBounds

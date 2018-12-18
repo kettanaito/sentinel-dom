@@ -14,21 +14,7 @@ interface AreaLikeObject {
   left: number
 }
 
-type AreaSource = Window | HTMLElement | AreaLikeObject
-
-/**
- * Returns absolute coordinates of the given area
- * (coordinates relatively to the window).
- * @param area Relative area
- */
-const makeAbsolute = (area: Area) => {
-  return Object.assign({}, area, {
-    top: Math.floor(area.top + window.scrollY),
-    right: Math.floor(area.right + window.scrollX),
-    bottom: Math.floor(area.bottom + window.scrollY),
-    left: Math.floor(area.left + window.scrollX),
-  })
-}
+type AreaSource = AreaLikeObject | HTMLElement | Window
 
 export default function createArea(
   source: AreaSource,
@@ -59,4 +45,18 @@ export default function createArea(
   }
 
   return useAbsoluteCoordinates ? makeAbsolute(area) : area
+}
+
+/**
+ * Returns absolute coordinates of the given area
+ * (coordinates relatively to the window).
+ * @param area Relative area
+ */
+const makeAbsolute = (area: Area) => {
+  return Object.assign({}, area, {
+    top: Math.floor(area.top + window.scrollY),
+    right: Math.floor(area.right + window.scrollX),
+    bottom: Math.floor(area.bottom + window.scrollY),
+    left: Math.floor(area.left + window.scrollX),
+  })
 }
